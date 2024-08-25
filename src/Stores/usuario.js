@@ -31,25 +31,28 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 });
             }
 
-            return r.data;
+            return r;
         } catch (error) {
-            console.log(error);
             Notify.create({
                 color: "negative",
-                message: error.response.data.msg || error.response.data.errors[0].msg,
+                message: error.response.data.mensaje || error.response.data.errors[0].msg,
                 icon: "error",
                 timeout: 2500,
             });
+<<<<<<< HEAD
           return error  
         }finally{
             loading.value=false
     }
+=======
+        }
+>>>>>>> main
     }
     const registrar = async (nombre1, email1, password1) => {
         loading.value=true
         try {
 
-            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar', {
+            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar',{
                 Nombre: nombre1,
                 Email: email1,
                 Password: password1
@@ -61,22 +64,26 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 icon: "check_circle",
                 timeout: 2500,
             })
+
             console.log(usuarioRegistro)
             return usuarioRegistro
 
         } catch (error) {
-            console.log(error)
-
             Notify.create({
                 color: "negative",
                 message: error.response.data.errors[0].msg,
                 icon: "error",
                 timeout: 2500,
             })
+<<<<<<< HEAD
           return error  
         }finally{
             loading.value=false
     }
+=======
+
+        }
+>>>>>>> main
     }
 
     const listarUsuarios = async () => {
