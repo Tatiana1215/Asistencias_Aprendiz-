@@ -7,8 +7,10 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
 
     let xtoken = ref('')
     let usuario = ref('')
+    let loading = ref (false)
 
     const Login = async (email, password) => {
+        loading.value=true
         try {
             const r = await axios.post('http://localhost:4000/api/Usuario/login', {
                 Email: email,
@@ -39,9 +41,12 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 timeout: 2500,
             });
           return error  
-        }
+        }finally{
+            loading.value=false
+    }
     }
     const registrar = async (nombre1, email1, password1) => {
+        loading.value=true
         try {
 
             const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar', {
@@ -69,7 +74,9 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 timeout: 2500,
             })
           return error  
-        }
+        }finally{
+            loading.value=false
+    }
     }
 
     const listarUsuarios = async () => {
@@ -129,6 +136,6 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     }
 
     return {
-        xtoken, Login, registrar, listarUsuarios ,actualizarUsuario
+        xtoken, Login, registrar, listarUsuarios ,actualizarUsuario,loading
     }
 });

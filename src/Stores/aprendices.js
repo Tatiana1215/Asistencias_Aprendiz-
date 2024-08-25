@@ -8,8 +8,10 @@ import { UseUsuarioStore } from "./usuario.js";
 export const UseAprendizStore = defineStore("aprendiz", () => {
     let aprendiz = ref(false)
     const UseUsuario= UseUsuarioStore()
+    let loading =ref (false)
 
     const listarAprediz = async () => {
+
         try {
             let res = await axios.get('http://localhost:4000/api/Aprendiz/ListarTodo', {
                 headers:{
@@ -26,6 +28,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     }
 
     const registrarAprendiz = async (nombre, telefono, documento, email, ficha) => {
+        loading.value=true
         try {
             let inf = await axios.post('http://localhost:4000/api/Aprendiz/Insertar', {
                 Nombre: nombre,
@@ -59,6 +62,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
 
         } finally {
             aprendiz.value = false
+            loading.value=false
         }
     }
 
@@ -99,6 +103,6 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
 
 
     return {
-        registrarAprendiz, listarAprediz, editarAprendiz,
+        registrarAprendiz, listarAprediz, editarAprendiz,loading
     }
 })
