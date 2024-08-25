@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <div>
         <div class="q-pa-md">
             <q-table title="Treats" :rows="rows" :columns="columns" row-key="name" >
@@ -112,11 +112,11 @@ async function Eliminar(id) {
         
     }
 }
- -->
 
 
-<!-- </script> -->
 
+</script>
+<!-- 
 <template>
-    
-</template>
+
+</template> -->

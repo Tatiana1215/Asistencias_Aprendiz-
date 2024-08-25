@@ -101,24 +101,22 @@ function limpiarCampos() {
 
 //Registro de usuario
 async function registrar() {
-
   let registroUsuario = await useUsuario.registrar(nombre1.value, email1.value, password1.value)
-  
-   if (registroUsuario && registroUsuario.success) {
+      // Si la respuesta indica un error de validación
+      if (!registroUsuario) {
+      // Aquí podrías manejar los errores específicos si es necesario
+      AbrirModal.value = true; // Mantiene el modal abierto
+      return;
+    } 
     AbrirModal.value = false;  // Cierra el modal si el registro es exitoso
     limpiarCampos();
-  } else {
-    AbrirModal.value = true;   // Mantén el modal abierto si hay un error
-  }
 }
 
 
 async function secionIniciada() {
   let res = await useUsuario.Login(email.value, password.value)
-  if (res && res.respuesta) {//Esta condición verifica dos cosas:Que res no sea null o undefined.
-    // Que res tenga una propiedad respuesta que sea verdadera.Si ambas condiciones se cumplen, significa que la autenticación fue exitosa.
+  if (res ) {
     Usuario.value = true
-    inicio.value = false
     router.push('/Home');
   }
 }
