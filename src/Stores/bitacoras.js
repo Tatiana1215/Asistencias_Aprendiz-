@@ -9,9 +9,11 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
 
     const UseUsuario = UseUsuarioStore()
 
+    let loading =ref (false)
     
     
     const listarBitacora = async (fechaInicial, fechaFinal) => {
+        loading.value=true
         try {
             console.log(UseUsuario);
             console.log(UseUsuario.value);
@@ -35,10 +37,13 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
         } catch (error) {
             console.log('No hay biatacoras', error)
             return error
+        } finally {
+            loading.value=false
         }
     }
 
     const registrarAprendiz = async (Aprendiz, fechaHora) => {
+        loading.value=true
         try {
             let res = await axios.post('http://localhost:4000/api/Bitacora/Insertar', {
                 Id_Aprendiz: Aprendiz,
@@ -61,12 +66,14 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             });
 
             return error
+        } finally {
+            loading.value=false
         }
     }
 
 
     return {
-        listarBitacora, registrarAprendiz
+        listarBitacora, registrarAprendiz,loading
     }
 })
 

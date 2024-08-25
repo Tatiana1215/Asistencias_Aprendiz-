@@ -17,8 +17,14 @@
         <q-table title="Asistencia" :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-btn icon="edit" round color="blue" @click="Abrir(props.row)" />
-              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+              <q-btn
+                round
+                color="white"
+                :style="{ border: '2px solid green' }"
+                @click="Abrir(props.row)"
+              >
+                <q-icon name="edit" style="color: green" />
+              </q-btn>              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
               <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
             </q-td>
           </template>
@@ -81,7 +87,21 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
-          <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
+
+          <q-btn
+                :loading="useAprendiz.loading"
+                color="green"
+                @click="agregarAprendiz(), (p = false)"
+              >
+                Guardar
+                <template v-slot:loading>
+                  <q-spinner color="white" size="1em" />
+                </template>
+              </q-btn>
+
+
+          <!--           <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
+ -->          <!-- <q-btn :loading="aprendiz" color="secondary" @click="agregarAprendiz(),(p=false)" label="Button"   /> -->
 
         </q-card-actions>
       </q-card>
