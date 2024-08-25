@@ -101,15 +101,9 @@ function limpiarCampos() {
 
 //Registro de usuario
 async function registrar() {
-  // let registroUsuario = ref(null)
+
   let registroUsuario = await useUsuario.registrar(nombre1.value, email1.value, password1.value)
-  //  if(registroUsuario){
-  //   AbrirModal.value = false
-  //   limpiarCampos()
-  //  }else{
-  //   AbrirModal.value= true
-  //  }
-   // Asegúrate de que 'registroUsuario' contenga la información correcta sobre éxito o error
+  
    if (registroUsuario && registroUsuario.success) {
     AbrirModal.value = false;  // Cierra el modal si el registro es exitoso
     limpiarCampos();
