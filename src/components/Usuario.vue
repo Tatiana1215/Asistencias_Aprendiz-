@@ -92,8 +92,6 @@ async function Desactivar(id){
     await traer()   
     } catch (error) {
         console.log(error.message);
-        
-        
     }
    
 }
