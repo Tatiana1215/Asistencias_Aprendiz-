@@ -29,26 +29,27 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 });
             }
 
-            return r.data;
+            return r;
         } catch (error) {
             console.log(error);
+          
             Notify.create({
                 color: "negative",
-                message: error.response.data.msg || error.response.data.errors[0].msg,
+                message: error.response?.data.mensaje || error.response?.data?.errors[0]?.msg,
                 icon: "error",
                 timeout: 2500,
             });
-          return error  
+        //   return error  
         }
     }
     const registrar = async (nombre1, email1, password1) => {
         try {
 
-            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar', {
+            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar',{
                 Nombre: nombre1,
                 Email: email1,
                 Password: password1
-            })
+            },)
 
             Notify.create({
                 color: "positive",

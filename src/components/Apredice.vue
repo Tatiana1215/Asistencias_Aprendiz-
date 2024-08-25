@@ -82,7 +82,7 @@
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
           <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
-          <!-- <q-btn :loading="aprendiz" color="secondary" @click="agregarAprendiz(),(p=false)" label="Button"   /> -->
+
         </q-card-actions>
       </q-card>
     </q-dialog>

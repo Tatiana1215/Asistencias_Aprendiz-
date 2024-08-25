@@ -20,12 +20,12 @@
 
         <q-card-actions align="center" class="text-primary">
           <q-btn unelevated label="Iniciar Seción" color="green" @click="secionIniciada" />
+
           <div id="registro">
             <div class="q-pa-md">
-              <q-btn class="registrar" v-for="filter in backdropFilterList" :key="filter.label" color="green"
-                :label="filter.label" no-caps @click="filter.onClick" />
+              <q-btn class="registrar" label="Registrar" color="green" @click="AbrirModal = true" />
 
-              <q-dialog v-model="dialog" :backdrop-filter="backdropFilter">
+              <q-dialog v-model="AbrirModal" :backdrop-filter="backdropFilter">
                 <q-card class="dialogRegistrar">
                   <q-card-section>
                     <div class="iconoAprendiz">
@@ -53,7 +53,8 @@
             </div>
           </div>
 
-      <router-link to="/OlvidoContrasena"> <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi contraseña</a></router-link>
+          <router-link to="/OlvidoContrasena"> <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi
+              contraseña</a></router-link>
         </q-card-actions>
       </q-card>
     </div>
@@ -86,35 +87,42 @@ let password1 = ref('')
 
 const useUsuario = UseUsuarioStore()
 
-const list = [
-  'REGISTRAR'
-]
 
-const dialog = ref(false)
-const backdropFilter = ref(null)
+const AbrirModal = ref(false)
 
-const backdropFilterList = list.map(filter => ({
-  label: filter,
-  onClick: () => {
-    backdropFilter.value = filter
-    dialog.value = true
-  }
-}))
+
+
+
+function limpiarCampos() {
+  nombre1.value = "",
+    email1.value = ""
+  password1.value = ""
+}
 
 //Registro de usuario
 async function registrar() {
+  // let registroUsuario = ref(null)
   let registroUsuario = await useUsuario.registrar(nombre1.value, email1.value, password1.value)
-  if (registroUsuario) {
-    nombre1.value = "",
-      email1.value = ""
-    password1.value = ""
+  //  if(registroUsuario){
+  //   AbrirModal.value = false
+  //   limpiarCampos()
+  //  }else{
+  //   AbrirModal.value= true
+  //  }
+   // Asegúrate de que 'registroUsuario' contenga la información correcta sobre éxito o error
+   if (registroUsuario && registroUsuario.success) {
+    AbrirModal.value = false;  // Cierra el modal si el registro es exitoso
+    limpiarCampos();
+  } else {
+    AbrirModal.value = true;   // Mantén el modal abierto si hay un error
   }
 }
 
 
 async function secionIniciada() {
-  respuesta = await useUsuario.Login(email.value, password.value)
-  if (respuesta) {
+  let res = await useUsuario.Login(email.value, password.value)
+  if (res && res.respuesta) {//Esta condición verifica dos cosas:Que res no sea null o undefined.
+    // Que res tenga una propiedad respuesta que sea verdadera.Si ambas condiciones se cumplen, significa que la autenticación fue exitosa.
     Usuario.value = true
     inicio.value = false
     router.push('/Home');
