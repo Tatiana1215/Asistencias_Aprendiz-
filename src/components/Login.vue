@@ -140,33 +140,64 @@ const useUsuario = UseUsuarioStore();
 
 const list = ["REGISTRAR"];
 
+const dialog = ref(false);
+const backdropFilter = ref(null);
 
-const AbrirModal = ref(false)
+const backdropFilterList = list.map((filter) => ({
+  label: filter,
+  onClick: () => {
+    backdropFilter.value = filter;
+    dialog.value = true;
+  },
+}));
+
+/* //Registro de usuario
+async function registrar() {
+  let registroUsuario = await useUsuario.registrar(
+    nombre1.value,
+    email1.value,
+    password1.value
+  );
+  if (registroUsuario) {
+    (nombre1.value = ""), (email1.value = "");
+    password1.value = "";
+  } */
+
+const AbrirModal = ref(false);
 
 function limpiarCampos() {
-  nombre1.value = "",
-    email1.value = ""
-  password1.value = ""
+  (nombre1.value = ""), (email1.value = "");
+  password1.value = "";
 }
 
 //Registro de usuario
 async function registrar() {
-  let registroUsuario = await useUsuario.registrar(nombre1.value, email1.value, password1.value)
-      // Si la respuesta indica un error de validación
-      if (!registroUsuario) {
-      // Aquí podrías manejar los errores específicos si es necesario
-      AbrirModal.value = true; // Mantiene el modal abierto
-      return;
-    } 
-    AbrirModal.value = false;  // Cierra el modal si el registro es exitoso
-    limpiarCampos();
+  let registroUsuario = await useUsuario.registrar(
+    nombre1.value,
+    email1.value,
+    password1.value
+  );
+  // Si la respuesta indica un error de validación
+  if (!registroUsuario) {
+    // Aquí podrías manejar los errores específicos si es necesario
+    AbrirModal.value = true; // Mantiene el modal abierto
+    return;
+  }
+  AbrirModal.value = false; // Cierra el modal si el registro es exitoso
+  limpiarCampos();
 }
 
+/*  respuesta = await useUsuario.Login(email.value, password.value);
+  if (respuesta) {
+    Usuario.value = true;
+    inicio.value = false;
+    router.push("/Home"); */
+
 async function secionIniciada() {
-  let res = await useUsuario.Login(email.value, password.value)
+  let res = await useUsuario.Login(email.value, password.value);
   if (res) {
-    Usuario.value = true
-    router.push('/Home');
+    Usuario.value = true;
+    router.push("/Home");
   }
 }
 </script>
