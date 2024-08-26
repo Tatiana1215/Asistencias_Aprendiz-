@@ -33,7 +33,6 @@
         </q-card-section>
 
         <q-card-actions align="center" class="text-primary">
-<<<<<<< HEAD
           <q-btn
             :loading="useUsuario.loading"
             color="green"
@@ -56,13 +55,6 @@
                 no-caps
                 @click="filter.onClick"
               />
-=======
-          <q-btn unelevated label="Iniciar Seción" color="green" @click="secionIniciada" />
-
-          <div id="registro">
-            <div class="q-pa-md">
-              <q-btn class="registrar" label="Registrar" color="green" @click="AbrirModal = true" />
->>>>>>> main
 
               <q-dialog v-model="AbrirModal" :backdrop-filter="backdropFilter">
                 <q-card class="dialogRegistrar">
@@ -123,16 +115,11 @@
             </div>
           </div>
 
-<<<<<<< HEAD
           <router-link to="/OlvidoContrasena">
             <a href="/OlvidoContrasena" class="contraseñaRecuperar"
               >Olvidé mi contraseña</a
             ></router-link
           >
-=======
-          <router-link to="/OlvidoContrasena"> <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi
-              contraseña</a></router-link>
->>>>>>> main
         </q-card-actions>
       </q-card>
     </div>
@@ -166,7 +153,6 @@ const useUsuario = UseUsuarioStore();
 
 const list = ["REGISTRAR"];
 
-<<<<<<< HEAD
 const dialog = ref(false);
 const backdropFilter = ref(null);
 
@@ -178,7 +164,7 @@ const backdropFilterList = list.map((filter) => ({
   },
 }));
 
-//Registro de usuario
+/* //Registro de usuario
 async function registrar() {
   let registroUsuario = await useUsuario.registrar(
     nombre1.value,
@@ -188,49 +174,47 @@ async function registrar() {
   if (registroUsuario) {
     (nombre1.value = ""), (email1.value = "");
     password1.value = "";
-  }
-=======
+  } */
 
-const AbrirModal = ref(false)
-
-
-
+const AbrirModal = ref(false);
 
 function limpiarCampos() {
-  nombre1.value = "",
-    email1.value = ""
-  password1.value = ""
+  (nombre1.value = ""), (email1.value = "");
+  password1.value = "";
 }
 
 //Registro de usuario
 async function registrar() {
-  let registroUsuario = await useUsuario.registrar(nombre1.value, email1.value, password1.value)
-      // Si la respuesta indica un error de validación
-      if (!registroUsuario) {
-      // Aquí podrías manejar los errores específicos si es necesario
-      AbrirModal.value = true; // Mantiene el modal abierto
-      return;
-    } 
-    AbrirModal.value = false;  // Cierra el modal si el registro es exitoso
-    limpiarCampos();
->>>>>>> main
+  let registroUsuario = await useUsuario.registrar(
+    nombre1.value,
+    email1.value,
+    password1.value
+  );
+  // Si la respuesta indica un error de validación
+  if (!registroUsuario) {
+    // Aquí podrías manejar los errores específicos si es necesario
+    AbrirModal.value = true; // Mantiene el modal abierto
+    return;
+  }
+  AbrirModal.value = false; // Cierra el modal si el registro es exitoso
+  limpiarCampos();
 }
 
-async function secionIniciada() {
-<<<<<<< HEAD
-  respuesta = await useUsuario.Login(email.value, password.value);
+/*  respuesta = await useUsuario.Login(email.value, password.value);
   if (respuesta) {
     Usuario.value = true;
     inicio.value = false;
-    router.push("/Home");
-=======
+    router.push("/Home"); */
+
+    async function secionIniciada() {
   let res = await useUsuario.Login(email.value, password.value)
   if (res ) {
     Usuario.value = true
     router.push('/Home');
->>>>>>> main
   }
 }
+
+
 </script>
 
 
