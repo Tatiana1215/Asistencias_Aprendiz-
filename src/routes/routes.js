@@ -15,11 +15,12 @@ import { createRouter, createWebHashHistory } from "vue-router"
 const routes = [
     {
         path: "/Home", component: Home, children: [
-            { path: "/InicioH", component: InicioH },
-            { path: "/Bitacora", component: Bitacora },
-            { path: "/Aprendiz", component: Aprendiz },
-            { path: "/Ficha", component: Ficha },
-            {path:"/Usuario", component: Usuario},   
+            { path: "", redirect: "/Home/InicioH" },
+            { path: "InicioH", component: InicioH },
+            { path: "Bitacora", component: Bitacora },
+            { path: "Aprendiz", component: Aprendiz },
+            { path: "Ficha", component: Ficha },
+            {path:"Usuario", component: Usuario},   
                  
         ]
     },

@@ -7,6 +7,7 @@ import { UseUsuarioStore } from "./usuario"
 export const UseFichaStore = defineStore("ficha", () => {
 
     const UseUsuario = UseUsuarioStore()
+    let loading =ref (false)
 
     const listarFicha = async () => {
         try {
@@ -23,6 +24,8 @@ export const UseFichaStore = defineStore("ficha", () => {
         }
     }
     const crearFicha = async (codigo, nombre) => {
+        loading.value=true
+
         try {
             let inf = await axios.post("http://localhost:4000/api/Ficha/crear", {
                 Codigo: codigo,
@@ -50,9 +53,12 @@ export const UseFichaStore = defineStore("ficha", () => {
             });
 
             return error
+        }finally{
+            loading.value=false
         }
     }
     const EditarFicha = async (id,nombre,codigo) => {
+        loading.value=true
         try {
             let inf = await axios.put(`http://localhost:4000/api/Ficha/Actualizar/${id}`,{
                 Nombre:nombre,
@@ -77,11 +83,13 @@ export const UseFichaStore = defineStore("ficha", () => {
                 icon:"error",
                 timeout: 2500
             })
+        }finally{
+            loading.value=false
         }
 
     }
 
     return {
-    listarFicha, crearFicha, EditarFicha
+    listarFicha, crearFicha, EditarFicha,loading
     }
 })

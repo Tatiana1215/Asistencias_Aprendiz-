@@ -7,42 +7,44 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
 
     let xtoken = ref('')
     let usuario = ref('')
+    let loading = ref(false)
 
     const Login = async (email, password) => {
+        loading.value = true;
         try {
             const r = await axios.post('http://localhost:4000/api/Usuario/login', {
                 Email: email,
                 Password: password
             });
-
-            xtoken.value = r.data.token
-            usuario.value = r.data
-            console.log(r);
+    
+            xtoken.value = r.data.token;
+            usuario.value = r.data;
             console.log(xtoken.value);
-
-            if (r) {
-                Notify.create({
-                    color: "positive",
-                    message: "Inicio de sesión exitoso",
-                    icon: "check_circle",
-                    timeout: 2500,
-                });
-            }
-
+    
+            Notify.create({
+                color: "positive",
+                message: "Inicio de sesión exitoso",
+                icon: "check_circle",
+                timeout: 2500,
+            });
+    
             return r;
         } catch (error) {
+
             Notify.create({
                 color: "negative",
                 message: error.response.data.mensaje || error.response.data.errors[0].msg,
                 icon: "error",
                 timeout: 2500,
             });
+        } finally {
+            loading.value = false;
         }
     }
     const registrar = async (nombre1, email1, password1) => {
         try {
 
-            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar',{
+            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar', {
                 Nombre: nombre1,
                 Email: email1,
                 Password: password1
@@ -116,16 +118,16 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
             console.log(error);
 
             Notify.create({
-                color:"negative",
+                color: "negative",
                 message: error.response.data.errors[0].msg,
-                icon:"error",
-                timeout:2500
+                icon: "error",
             })
             return error
         }
     }
 
     return {
-        xtoken, Login, registrar, listarUsuarios ,actualizarUsuario
+        xtoken, Login, registrar, listarUsuarios, actualizarUsuario
     }
 });
+

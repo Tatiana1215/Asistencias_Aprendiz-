@@ -22,11 +22,11 @@
                         <P>senapruebas123@gmail.com</P>
                     </div>
                     <div class="Botones">
-                    <q-btn id="boton" to="/InicioH" rounded color="green" label="Inicio" /> <br>
-                    <q-btn id="boton" to="/Bitacora" rounded color="green" label="Bitacora" /> <br>
-                    <q-btn id="boton" to="/Ficha" rounded color="green" label="Ficha" /> <br>
-                    <q-btn id="boton" to="/Aprendiz" rounded color="green" label="Aprendiz" /> <br>
-                    <q-btn id="boton" to="/Usuario" rounded color="green" label="Usuario" /> <br>
+                    <q-btn id="boton" to="/Home/InicioH" rounded color="green" label="Inicio" /> <br>
+                    <q-btn id="boton" to="/Home/Bitacora" rounded color="green" label="Bitacora" /> <br>
+                    <q-btn id="boton" to="/Home/Ficha" rounded color="green" label="Ficha" /> <br>
+                    <q-btn id="boton" to="/Home/Aprendiz" rounded color="green" label="Aprendiz" /> <br>
+                    <q-btn id="boton" to="/Home/Usuario" rounded color="green" label="Usuario" /> <br>
                </div>
                 </div>
             </q-drawer>

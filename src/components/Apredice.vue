@@ -17,8 +17,10 @@
         <q-table title="Asistencia" :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-btn icon="edit" round color="blue" @click="Abrir(props.row)" />
-              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
+                <q-icon name="edit" style="color: green" />
+              </q-btn> <q-btn icon="close" round color="red" @click="Activar(props.row._id)"
+                v-if="props.row.Estado == 1" />
               <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
             </q-td>
           </template>
@@ -45,7 +47,7 @@
           <div class="iconoAprendiz">
             <img src="https://cdn-icons-png.flaticon.com/256/72/72648.png" alt="">
           </div>
-           <div class="text" >
+          <div class="text">
             {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
           </div>
         </q-card-section>
@@ -53,35 +55,37 @@
         <q-card-section class="q-pt-none">
           <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green" @keyup.enter="prompt = false" />
           <br>
-          <q-input dense v-model="telefono" placeholder="Telefono" autofocus color="green" @keyup.enter="prompt = false" />
+          <q-input dense v-model="telefono" placeholder="Telefono" autofocus color="green"
+            @keyup.enter="prompt = false" />
           <br>
-          <q-input dense v-model="documento" placeholder="Documento" autofous color="green" @keyup.enter="prompt = false" /> <br>
+          <q-input dense v-model="documento" placeholder="Documento" autofous color="green"
+            @keyup.enter="prompt = false" />
+          <br>
           <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false" />
           <br>
           <!-- <q-input dense v-model="ficha" placeholder="Id_Ficha" autofocus @keyup.enter="prompt = false" />
           <br> -->
 
-          <q-select
-          dense 
-          v-model="ficha" 
-          :options="filterOptions" 
-          label="Id_Ficha" 
-          color="green" 
-          emit-value 
-          map-options
-          option-label="Codigo" 
-          option-value="_id" 
-          use-input 
-          @filter="filterFunction" 
-          class="custom-select" 
-          use-chips />
+          <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value map-options
+            option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
+            use-chips />
 
         </q-card-section>
 
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
-          <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
+
+          <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz(), (p = false)">
+            Guardar
+            <template v-slot:loading>
+              <q-spinner color="white" size="1em" />
+            </template>
+          </q-btn>
+
+
+          <!--           <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
+ --> <!-- <q-btn :loading="aprendiz" color="secondary" @click="agregarAprendiz(),(p=false)" label="Button"   /> -->
 
         </q-card-actions>
       </q-card>
@@ -107,7 +111,7 @@ let id = ref('')
 
 
 const useAprendiz = UseAprendizStore()
-const UseUsuario =  UseUsuarioStore()
+const UseUsuario = UseUsuarioStore()
 
 const rows = ref([
 ]);
@@ -133,22 +137,22 @@ function limpiarCampos() {
 
 async function agregarAprendiz() {
   if (p.value == false) {
- let res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
- if(!res){
-  AbrirModal.value = true;
- }else{
-   AbrirModal.value = false; 
-  limpiarCampos()
- }
- 
+    let res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
+    if (!res) {
+      AbrirModal.value = true;
+    } else {
+      AbrirModal.value = false;
+      limpiarCampos()
+    }
+
   } else {
     let res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value)
-    if(!res){
-  AbrirModal.value = true;
- }else{
-   AbrirModal.value = false; 
-  limpiarCampos()
- }
+    if (!res) {
+      AbrirModal.value = true;
+    } else {
+      AbrirModal.value = false;
+      limpiarCampos()
+    }
   }
   await traer()
 }
@@ -156,8 +160,8 @@ async function agregarAprendiz() {
 
 
 async function fetchData() {
-  const response = await fetch('http://localhost:4000/api/Ficha/ListarTodo',{
-    headers:{
+  const response = await fetch('http://localhost:4000/api/Ficha/ListarTodo', {
+    headers: {
       "x-token": UseUsuario.xtoken
     }
   }
@@ -236,7 +240,6 @@ const columns = ref([
 
 
 <style>
-
 .iconoAprendiz {
   width: 40%;
   margin: 0 auto;
@@ -250,11 +253,13 @@ const columns = ref([
 .iconoAprendiz img {
   width: 100%;
 }
-.tituloAprendiz, .text {
+
+.tituloAprendiz,
+.text {
   font-weight: 900;
-  font-size:24px;
+  font-size: 24px;
   color: darkgreen;
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  text-align: center;
 }
 </style>
