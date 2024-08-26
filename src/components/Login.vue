@@ -206,15 +206,13 @@ async function registrar() {
     inicio.value = false;
     router.push("/Home"); */
 
-    async function secionIniciada() {
-  let res = await useUsuario.Login(email.value, password.value)
-  if (res ) {
-    Usuario.value = true
-    router.push('/Home');
+async function secionIniciada() {
+  let res = await useUsuario.Login(email.value, password.value);
+  if (res) {
+    Usuario.value = true;
+    router.push("/Home");
   }
 }
-
-
 </script>
 
 

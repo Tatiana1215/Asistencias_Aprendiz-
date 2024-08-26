@@ -43,17 +43,32 @@
               />
             </q-td>
           </template>
+          
           <template v-slot:body-cell-Estado1="props">
             <q-td :props="props">
-              <p style="color: green" v-if="props.row.Estado == 1">Activo</p>
-              <p style="color: red" v-else>Inactivo</p>
+              <p v-if="props.row.Estado == 1" class="custom-font" style="color: green">Activo</p>
+              <p v-else class="custom-font" style="color: red">Inactivo</p>
             </q-td>
           </template>
+
           <template v-slot:body-cell-Numero="props">
             <q-td :props="props">
-              {{ props.pageIndex + 1 }}
+              <span class="custom-font">{{ props.pageIndex + 1 }}</span>
             </q-td>
           </template>
+          
+          <template v-slot:body-cell-Nombre1="props">
+            <q-td :props="props">
+              <span class="custom-font">{{ props.row.Nombre }}</span>
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-Codigo1="props">
+            <q-td :props="props">
+              <span class="custom-font">{{ props.row.Codigo }}</span>
+            </q-td>
+          </template>
+          
         </q-table>
       </div>
 
@@ -72,7 +87,6 @@
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            <!-- <label for="codigo">Nombre</label> -->
             <q-input
               dense
               v-model="nombre"
@@ -83,7 +97,6 @@
             />
             <br />
 
-            <!-- <label for="codigo">codigo</label> -->
             <q-input
               dense
               v-model="codigo"
@@ -114,16 +127,12 @@
                 <q-spinner color="white" size="1em" />
               </template>
             </q-btn>
-
-            <!--             <q-btn flat label="Enviar" @click="CrearFicha()" color="green" />
- -->
           </q-card-actions>
         </q-card>
       </q-dialog>
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, onBeforeMount } from "vue";
@@ -156,26 +165,6 @@ function limpiarCampos() {
 }
 
 async function CrearFicha() {
-  console.log(p.value);
-  // if (p.value == false) {
-  //   // console.log(estoy editando.. ${editId.value})
-  //   let res = await useFicha.crearFicha(codigo.value, nombre.value);
-  //   if(!res){
-  //       AbrirModal.value = true;
-  //   }else{
-  //     AbrirModal.value = false;
-  //     limpiarCampos()
-  //   }
-  // } else {
-  //    let res = await useFicha.EditarFicha(id.value, nombre.value, codigo.value);
-  //   if(!res){
-  //       AbrirModal.value = true;
-  //   }else{
-  //     AbrirModal.value = false;
-  //     limpiarCampos()
-  //   }
-  // }
-
   let res;
   if (p.value == false) {
     // Creando una nueva Ficha
@@ -186,7 +175,6 @@ async function CrearFicha() {
   }
 
   if (res && res.success) {
-    // Suponiendo que `res.success` sea verdadero si la operación fue exitosa
     AbrirModal.value = false; // Cierra el modal
     limpiarCampos(); // Limpia los campos
     p.value = false;
@@ -195,7 +183,6 @@ async function CrearFicha() {
   }
 
   await traer(); // Refresca los datos
-  // await traer();
 }
 
 function Abrir(row) {
@@ -219,8 +206,6 @@ async function Desactivar(id) {
   console.log(id);
   try {
     inf = await axios.put(`http://localhost:4000/api/Ficha/Activar/${id}`);
-    //   traer()
-    // Actualizar la fila modificada directamente
     traer();
   } catch (error) {
     console.log(error);
@@ -230,13 +215,6 @@ async function Desactivar(id) {
 const columns = ref([
   { name: "Numero", align: "center", label: "N°", field: "Numero" },
 
-  {
-    name: "Codigo1",
-    align: "center",
-    label: "Codigo",
-    field: "Codigo",
-    sortable: true,
-  },
   {
     name: "Nombre1",
     required: true,
@@ -286,7 +264,12 @@ const columns = ref([
 
 .q-table {
   width: 100%;
-  /* Asegura que la tabla ocupe el 100% del contenedor */
+}
+
+/* Define una clase para el estilo de la fuente y tamaño de la letra */
+.custom-font {
+  font-family: "Arial", sans-serif; /* Cambia "Arial" por la fuente que prefieras */
+  font-size: 20px; /* Cambia a tu tamaño de letra preferido */
 }
 
 .q-btn {
@@ -294,12 +277,7 @@ const columns = ref([
 }
 
 .q-dialog__backdrop {
-  backdrop-filter: blur(5px); /* Ajusta el nivel de desenfoque */
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.5
-  ); /* Opcional: Ajusta la opacidad del fondo */
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>
