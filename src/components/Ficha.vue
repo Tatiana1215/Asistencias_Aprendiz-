@@ -238,6 +238,7 @@ const columns = ref([
 <style>
 * {
   margin: 0%;
+  font-family: 'Roboto', Arial, sans-serif
 }
 
 .container {
@@ -249,7 +250,7 @@ const columns = ref([
   margin: 15px 15px;
   display: flex;
   justify-content: center;
-  font-family: "Kanit", sans-serif;
+  font-family: 'Roboto', Arial, sans-serif
 }
 
 .divider {
@@ -269,7 +270,17 @@ const columns = ref([
 /* Define una clase para el estilo de la fuente y tamaño de la letra */
 .custom-font {
   font-family: "Arial", sans-serif; /* Cambia "Arial" por la fuente que prefieras */
-  font-size: 20px; /* Cambia a tu tamaño de letra preferido */
+  font-size: 16px; /* Cambia a tu tamaño de letra preferido */
+}
+
+/* Estilos para los encabezados de la tabla */
+.q-table th {
+  background-color: rgb(81, 204, 81); /* Cambia esto por el color de fondo que prefieras */
+  color: #333; /* Cambia esto por el color de texto que prefieras */
+  font-size: 15px; /* Ajusta el tamaño de la letra */
+  font-family: 'Roboto', Arial, sans-serif; /* Cambia "Arial" por la fuente que prefieras */
+  font-weight: bold;
+  padding: 10px; /* Ajusta el padding si es necesario */
 }
 
 .q-btn {
