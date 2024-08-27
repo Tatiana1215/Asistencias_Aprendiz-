@@ -14,33 +14,62 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const listarBitacora = async (fechaInicial, fechaFinal) => {
         loading.value=true
         try {
-            console.log(UseUsuario);
-            console.log(UseUsuario.value);
             let res = await axios.get('http://localhost:4000/api/Bitacora/ListarBitacoras', {
                 params: {
-                    FechaInicial: fechaInicial,
-                    FechaFinal: fechaFinal
+                    FechaInicial: new Date(fechaInicial).toISOString(),
+                    FechaFinal: new Date(fechaFinal).toISOString()
                 },
-            headers: {
-                "xtoken": UseUsuario.xtoken
-            }
-        });
+                headers: {
+                    "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
+                }
+            });
             Notify.create({
                 color: "positive",
                 message: "Datos entre estas fechas",
                 icon: "check_circle",
                 timeout: 2500,
             });
-            console.log(res)
-            return res
+            return res;
         } catch (error) {
-            console.log('No hay biatacoras', error)
-            return error
+            console.log('No hay bitácoras', error);
+            Notify.create({
+                color: "negative",
+                message: "Error al listar bitácoras",
+                icon: "error",
+                timeout: 2500,
+            });
+            return error;
         } finally {
-            loading.value=false
+            loading.value = false;
         }
     }
 
+    const listar= async (fechaInicial, fechaFinal) => {
+       
+        try {
+            let res = await axios.get('http://localhost:4000/api/Bitacora/listar', {
+                headers: {
+                    "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
+                }
+            });
+            Notify.create({
+                color: "positive",
+                message: "Datos entre estas fechas",
+                icon: "check_circle",
+                timeout: 2500,
+            });
+            return res;
+        } catch (error) {
+            console.log('No hay bitácoras', error);
+            Notify.create({
+                color: "negative",
+                message: "Error al listar bitácoras",
+                icon: "error",
+                timeout: 2500,
+            });
+            return error;
+        }
+    }
     const registrarAprendiz = async (Aprendiz, fechaHora) => {
         loading.value=true
         try {
@@ -72,7 +101,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
 
 
     return {
-        listarBitacora, registrarAprendiz,loading
+        listarBitacora,listar, registrarAprendiz,loading
     }
 })
 

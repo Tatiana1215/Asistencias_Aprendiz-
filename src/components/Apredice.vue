@@ -14,12 +14,13 @@
 
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
-        <q-table title="Asistencia" :rows="rows" :columns="columns" row-key="name">
+        <q-table :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
                 <q-icon name="edit" style="color: green" />
-              </q-btn> <q-btn icon="close" round color="red" @click="Activar(props.row._id)"
+              </q-btn> 
+              <q-btn icon="close" round color="red" @click="Activar(props.row._id)"
                 v-if="props.row.Estado == 1" />
               <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
             </q-td>

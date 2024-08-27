@@ -49,6 +49,10 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 Nombre: nombre1,
                 Email: email1,
                 Password: password1
+            },{
+                headers:{
+                    "x-token": xtoken.value
+                }
             })
 
             Notify.create({
@@ -103,11 +107,12 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
         }
     }
 
-    const actualizarUsuario = async (id, nombre, email, ) => {
+    const actualizarUsuario = async (id, nombre, email) => {
+        // console.log('Request received:', req.params.id, req.body);
         try {
             const actualizar = await axios.put(`http://localhost:4000/api/Usuario/Actualizar/${id}`,{
-                Nombre:nombre,
                 Email:email,
+                Nombre:nombre,
             },{
                 headers: {
                     "x-token": xtoken.value
@@ -119,19 +124,18 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 icon: "check_circle",
                 timeout: 2500
             })
+            console.log(actualizar)
             return actualizar
         } catch (error) {
             // console.log(error);
-            const mensajeError = error.response && error.response.data && Array.isArray(error.response.data.errors)
-            ? error.response.data.errors[0].msg
-            : error.response.data.mensaje || "Error desconocido";
+            console.log("Error:", error.response.data);
             Notify.create({
                 color: "negative",
                 message: error.response.data.errors[0].msg,
                 icon: "error",
                 timeout:2500
             })
-          
+          return error
         }
     }
 

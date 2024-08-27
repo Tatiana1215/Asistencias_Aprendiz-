@@ -1,20 +1,27 @@
 <template>
-    <div>
-        <div class="q-pa-md">
-            <q-table title="Treats" :rows="rows" :columns="columns" row-key="name" >
+ <div class="container">
+    <div class="titleFirst">
+      <h3>Usuarios</h3>
+    </div>
+
+    <hr class="divider" />
+      <div class="q-pa-md">
+            <q-table :rows="rows" :columns="columns" row-key="name" >
         <template v-slot:body-cell-Opciones="props">
             <q-td :props="props">
-            <q-btn icon="edit" round color="blue" @click="Abrir(props.row), AbrirModal = true" />
-            <q-btn icon="close" round color="blue" @click="Activar(props.row._id)" />
-            <q-btn icon="check" round color="blue" @click="Desactivar(props.row._id)" />
-            <q-btn icon="delete" round color="blue" @click="Eliminar(props.row._id)" />
+              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row) , AbrirModal = true" >
+                <q-icon name="edit" style="color: green" />
+              </q-btn>
+            <q-btn icon="close" round color="red"  @click="Activar(props.row._id)"    v-if="props.row.Estado == 1" />
+            <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
+            <q-btn icon="delete" round color="red" @click="Eliminar(props.row._id)" />
        </q-td>
         </template>
 
         <template v-slot:body-cell-Estado="props">
             <q-td :props="props">
                 <p style="color: green;" v-if="props.row.Estado == 1 ">Activo</p>
-                <p style="color: red;" v-if="props.row.Estado == 0">Inactivo</p>
+                <p style="color: red;" v-else >Inactivo</p>
             </q-td>
         </template>
 
@@ -35,21 +42,23 @@
 
           <q-card-section class="q-pt-none">
             <!-- <label for="codigo">Nombre</label> -->
-            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
-              @keyup.enter="prompt = false" />
-            <br />
-
+          
             <!-- <label for="codigo">codigo</label> -->
             <q-input dense v-model="email" placeholder="Editar" autofocus color="green"
               @keyup.enter="prompt = false" />
             <br />
             
+             <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
+              @keyup.enter="prompt = false" />
+            <br />
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
 
-            <q-btn  label="Enviar" color="green" @click="EditarUsuario()">
+            <!-- <q-btn  label="Enviar" color="green" @click="EditarUsuario()"> -->
+              <q-btn label="Enviar" color="green" @click="console.log('Botón clickeado'); EditarUsuario()">
+
               <!-- <template v-slot:loading>
                 <q-spinner color="white" size="1em" />
               </template> -->
@@ -67,6 +76,7 @@
 import { ref, onBeforeMount, warn} from 'vue';
 import axios from 'axios';
 import { UseUsuarioStore } from '../Stores/usuario';
+
 
 
 let res = ref('')
@@ -90,23 +100,31 @@ async function  traer() {
  rows.value=res.data
 }
 
+async function Abrir(row) {
+  console.log("Abrir:", row);
+    AbrirModal.value = true
+    nombre.value=row.Nombre
+    email.value = row.Email
+    id.value = row._id;
+    
+
+}
+
 async function EditarUsuario() {
+    console.log("Entrando a EditarUsuario"); // Verifica que esta línea se imprime
+  console.log("ID:", id.value);
+    console.log("Nombre:", nombre.value);
+    console.log("Email:", email.value);
     const res = await UseUsuario.actualizarUsuario(id.value,nombre.value,email.value)
     if(res ){
         AbrirModal.value = false
         limpiarCampos()
+        await traer()
     }else{
         AbrirModal.value = true
     }
 }
 
-async function Abrir(row) {
-    AbrirModal.value = true
-    nombre.value=row.Nombre
-    email.value = row.Email
-    
-
-}
 
 const rows = ref([])
 const columns = ref([
@@ -121,7 +139,21 @@ const columns = ref([
 
 
 async function Activar(id) {
-    console.log(id);
+  console.log(id)
+    try {
+      let res = await axios.put(`http://localhost:4000/api/Usuario/Desactivar/${id}`,{
+                headers:{
+                    "x-token":UseUsuario.xtoken
+                }
+            })
+    await traer()   
+    } catch (error) {
+        console.log(error.message);
+    }  
+}
+
+async function Desactivar(id){
+      console.log(id);
     try {
           let res = await axios.put(`http://localhost:4000/api/Usuario/Activar/${id}`, {
                 headers: {
@@ -133,21 +165,6 @@ async function Activar(id) {
     } catch (error) {
         console.log(error);
         
-    }
-  
-}
-
-async function Desactivar(id){
-    console.log(id)
-    try {
-      let res = await axios.put(`http://localhost:4000/api/Usuario/Desactivar/${id}`,{
-                headers:{
-                    "x-token":UseUsuario.xtoken
-                }
-            })
-    await traer()   
-    } catch (error) {
-        console.log(error.message);
     }
    
 }

@@ -56,8 +56,15 @@ let FechaHora = ref();
 
 const UseBitacora = UseBitacoraStore();
 onBeforeMount(() => {
-  Buscar();
+  // Buscar();
+  traer()
+
 });
+
+async function traer() {
+  let res = await UseBitacora.listar()
+  rows.value = res.data
+}
 
 const rows = ref([]);
 
@@ -72,8 +79,10 @@ async function Buscar() {
       ...item,
       numero: index + 1,
     }));
+ 
+    // traer()
   } catch (error) {
-    console.error("Error al listar bitácoras:", error);
+    console.log("Error al listar bitácoras:", error);
     // rows.value = []; // Asegúrate de que rows siempre sea un array
   }
 }

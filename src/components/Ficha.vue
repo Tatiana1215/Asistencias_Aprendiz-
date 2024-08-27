@@ -121,22 +121,22 @@ async function CrearFicha() {
   console.log(p.value);
   
 let res;
-if (p.value == true) {
+if (p.value ) {
     // Editando una ficha existente
     res = await useFicha.EditarFicha(id.value, nombre.value, codigo.value);
   } else {
     // Creando una nueva ficha
     res = await useFicha.crearFicha(codigo.value, nombre.value);
+
   }
 
   // Verificar el estado de la respuesta
-  if (res && res.status === 200) {
+  if (res) {
     await traer(); // Refrescar los datos
     AbrirModal.value = false; // Cerrar modal en caso de éxito
+    p.value = false
     limpiarCampos(); // Limpiar campos
   } else {
-    // Mostrar mensaje de error si la respuesta indica fallo
-    mensajeError.value = "Ocurrió un error al procesar la ficha. Por favor, inténtelo nuevamente.";
     AbrirModal.value = true; // Mantener modal abierto en caso de error
   }
 }

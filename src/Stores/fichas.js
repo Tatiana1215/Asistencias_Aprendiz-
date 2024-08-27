@@ -3,6 +3,7 @@ import axios from "axios"
 import { ref } from "vue"
 import { Notify } from "quasar"
 import { UseUsuarioStore } from "./usuario"
+import Usuario from "../components/Usuario.vue"
 
 export const UseFichaStore = defineStore("ficha", () => {
 
@@ -25,9 +26,8 @@ export const UseFichaStore = defineStore("ficha", () => {
     }
     const crearFicha = async (codigo, nombre) => {
         loading.value=true
-
         try {
-            let inf = await axios.post("http://localhost:4000/api/Ficha/crear", {
+            let inf = await axios.post('http://localhost:4000/api/Ficha/crear',{
                 Codigo: codigo,
                 Nombre: nombre
             },{
@@ -47,7 +47,7 @@ export const UseFichaStore = defineStore("ficha", () => {
             console.log(error);
             Notify.create({
                 color: "negative",
-                message: error.response.data.errors[0].msg,
+            message: error?.response?.data?.errors[0]?.msg,
                 icon: "error",
                 timeout: 2500,
             });
