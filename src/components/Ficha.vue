@@ -20,17 +20,32 @@
               <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
             </q-td>
           </template>
+          
           <template v-slot:body-cell-Estado1="props">
             <q-td :props="props">
-              <p style="color: green" v-if="props.row.Estado == 1">Activo</p>
-              <p style="color: red" v-else>Inactivo</p>
+              <p v-if="props.row.Estado == 1" class="custom-font" style="color: green">Activo</p>
+              <p v-else class="custom-font" style="color: red">Inactivo</p>
             </q-td>
           </template>
+
           <template v-slot:body-cell-Numero="props">
             <q-td :props="props">
-              {{ props.pageIndex + 1 }}
+              <span class="custom-font">{{ props.pageIndex + 1 }}</span>
             </q-td>
           </template>
+          
+          <template v-slot:body-cell-Nombre1="props">
+            <q-td :props="props">
+              <span class="custom-font">{{ props.row.Nombre }}</span>
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-Codigo1="props">
+            <q-td :props="props">
+              <span class="custom-font">{{ props.row.Codigo }}</span>
+            </q-td>
+          </template>
+          
         </q-table>
       </div>
 
@@ -71,7 +86,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, onBeforeMount } from "vue";
@@ -157,8 +171,6 @@ async function Desactivar(id) {
   console.log(id);
   try {
     inf = await axios.put(`http://localhost:4000/api/Ficha/Activar/${id}`);
-    //   traer()
-    // Actualizar la fila modificada directamente
     traer();
   } catch (error) {
     console.log(error);
@@ -168,13 +180,6 @@ async function Desactivar(id) {
 const columns = ref([
   { name: "Numero", align: "center", label: "N°", field: "Numero" },
 
-  {
-    name: "Codigo1",
-    align: "center",
-    label: "Codigo",
-    field: "Codigo",
-    sortable: true,
-  },
   {
     name: "Nombre1",
     required: true,
@@ -198,6 +203,7 @@ const columns = ref([
 <style>
 * {
   margin: 0%;
+  font-family: 'Roboto', Arial, sans-serif
 }
 
 .container {
@@ -209,7 +215,7 @@ const columns = ref([
   margin: 15px 15px;
   display: flex;
   justify-content: center;
-  font-family: "Kanit", sans-serif;
+  font-family: 'Roboto', Arial, sans-serif
 }
 
 .divider {
@@ -224,7 +230,22 @@ const columns = ref([
 
 .q-table {
   width: 100%;
-  /* Asegura que la tabla ocupe el 100% del contenedor */
+}
+
+/* Define una clase para el estilo de la fuente y tamaño de la letra */
+.custom-font {
+  font-family: "Arial", sans-serif; /* Cambia "Arial" por la fuente que prefieras */
+  font-size: 16px; /* Cambia a tu tamaño de letra preferido */
+}
+
+/* Estilos para los encabezados de la tabla */
+.q-table th {
+  background-color: rgb(81, 204, 81); /* Cambia esto por el color de fondo que prefieras */
+  color: #333; /* Cambia esto por el color de texto que prefieras */
+  font-size: 15px; /* Ajusta el tamaño de la letra */
+  font-family: 'Roboto', Arial, sans-serif; /* Cambia "Arial" por la fuente que prefieras */
+  font-weight: bold;
+  padding: 10px; /* Ajusta el padding si es necesario */
 }
 
 .q-btn {

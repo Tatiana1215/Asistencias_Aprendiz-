@@ -33,15 +33,36 @@
         </q-card-section>
 
         <q-card-actions align="center" class="text-primary">
-          <q-btn unelevated :loading="useUsuario.loading" label="Iniciar Seción" color="green" @click="secionIniciada" />
-        
+<<<<<<< HEAD
+          <q-btn
+            :loading="useUsuario.loading"
+            color="green"
+            @click="secionIniciada()"
+          >
+            Inicio de sesion
             <template v-slot:loading>
               <q-spinner color="white" size="1em" />
             </template>
+          </q-btn>
+
+          <div id="registro">
+            <div class="q-pa-md">
+              <q-btn
+                class="registrar"
+                v-for="filter in backdropFilterList"
+                :key="filter.label"
+                color="green"
+                :label="filter.label"
+                no-caps
+                @click="filter.onClick"
+              />
+=======
+          <q-btn unelevated label="Iniciar Seción" color="green" @click="secionIniciada" />
 
           <div id="registro">
             <div class="q-pa-md">
               <q-btn class="registrar" label="Registrar" color="green" @click="AbrirModal = true" />
+>>>>>>> main
 
               <q-dialog v-model="AbrirModal" :backdrop-filter="backdropFilter">
                 <q-card class="dialogRegistrar">

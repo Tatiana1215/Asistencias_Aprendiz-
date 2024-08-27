@@ -37,9 +37,14 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 icon: "error",
                 timeout: 2500,
             });
-        } finally {
-            loading.value = false;
+<<<<<<< HEAD
+          return error  
+        }finally{
+            loading.value=false
+    }
+=======
         }
+>>>>>>> main
     }
     const registrar = async (nombre1, email1, password1) => {
         try {
@@ -67,8 +72,15 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 icon: "error",
                 timeout: 2500,
             })
+<<<<<<< HEAD
+          return error  
+        }finally{
+            loading.value=false
+    }
+=======
 
         }
+>>>>>>> main
     }
 
     const listarUsuarios = async () => {
