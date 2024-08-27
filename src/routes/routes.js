@@ -7,12 +7,15 @@ import Ficha from "../components/Ficha.vue"
 import Usuario from "../components/Usuario.vue"
 import InicioH from "../components/InicioH.vue"
 import OlvidoContrasena from "../components/OlvidoContraseña.vue"
+import RegistroA from "../components/RegistroA.vue"
+import Main from "../components/Main.vue"
 
 
 import { createRouter, createWebHashHistory } from "vue-router"
 
 
 const routes = [
+    { path: "/", component: Main },
     {
         path: "/Home", component: Home, children: [
             { path: "/InicioH", component: InicioH },
@@ -25,9 +28,8 @@ const routes = [
     },
     {path:"/Login", component:Login},
     {path:"/OlvidoContrasena", component: OlvidoContrasena},
-    {path:"/", redirect: "/Login"}, 
- 
    
+    { path: "/RegistroA", component: RegistroA }
 
 ]
 
