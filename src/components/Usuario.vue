@@ -4,7 +4,7 @@
             <q-table title="Treats" :rows="rows" :columns="columns" row-key="name" >
         <template v-slot:body-cell-Opciones="props">
             <q-td :props="props">
-            <q-btn icon="edit" round color="blue" @click="Abrir(props.row)" />
+            <q-btn icon="edit" round color="blue" @click="Abrir(props.row), AbrirModal = true" />
             <q-btn icon="close" round color="blue" @click="Activar(props.row._id)" />
             <q-btn icon="check" round color="blue" @click="Desactivar(props.row._id)" />
             <q-btn icon="delete" round color="blue" @click="Eliminar(props.row._id)" />
@@ -25,33 +25,86 @@
         </template>
             </q-table>
         </div>
+        <q-dialog v-model="AbrirModal" persistent>
+        <q-card style="min-width: 350px; margin-top: 0">
+          <q-card-section>
+            <div class="iconoAprendiz">
+              <img src="https://cdn-icons-png.flaticon.com/512/5825/5825337.png" alt="" />
+            </div>
+          </q-card-section>
 
+          <q-card-section class="q-pt-none">
+            <!-- <label for="codigo">Nombre</label> -->
+            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
+              @keyup.enter="prompt = false" />
+            <br />
 
+            <!-- <label for="codigo">codigo</label> -->
+            <q-input dense v-model="email" placeholder="Editar" autofocus color="green"
+              @keyup.enter="prompt = false" />
+            <br />
+            
+          </q-card-section>
+
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
+
+            <q-btn  label="Enviar" color="green" @click="EditarUsuario()">
+              <!-- <template v-slot:loading>
+                <q-spinner color="white" size="1em" />
+              </template> -->
+            </q-btn>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+ 
 
     </div>
 </template>
 
 
 <script setup>
-import { ref, onBeforeMount} from 'vue';
+import { ref, onBeforeMount, warn} from 'vue';
 import axios from 'axios';
 import { UseUsuarioStore } from '../Stores/usuario';
 
 
 let res = ref('')
 let id = ref('')
+let nombre = ref ('')
+let email = ref('')
+let AbrirModal = ref(false)
 const UseUsuario = UseUsuarioStore()
 
 onBeforeMount(() => {
   traer();
 });
 
+function limpiarCampos(){
+    nombre.value = "",
+    email.value = ""
+}
+
 async function  traer() {
   res = await UseUsuario.listarUsuarios()
  rows.value=res.data
 }
 
-async function Abrir() {
+async function EditarUsuario() {
+    const res = await UseUsuario.actualizarUsuario(id.value,nombre.value,email.value)
+    if(res ){
+        AbrirModal.value = false
+        limpiarCampos()
+    }else{
+        AbrirModal.value = true
+    }
+}
+
+async function Abrir(row) {
+    AbrirModal.value = true
+    nombre.value=row.Nombre
+    email.value = row.Email
+    
 
 }
 
@@ -63,6 +116,9 @@ const columns = ref([
   { name: 'Estado', label: 'Estado', field: 'Estado', sortable: true },
   { name: 'Opciones', label: 'Opciones' },
 ])
+
+
+
 
 async function Activar(id) {
     console.log(id);

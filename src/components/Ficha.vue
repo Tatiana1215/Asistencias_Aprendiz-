@@ -120,15 +120,6 @@ function limpiarCampos() {
 async function CrearFicha() {
   console.log(p.value);
   
-//   if (p.value == true) {
-//   // Editando una Ficha existente
-//   const res = await useFicha.EditarFicha(id.value, nombre.value, codigo.value);
-//   } else {
-//      // Creando una nueva Ficha
-//     const res = await useFicha.crearFicha(codigo.value, nombre.value);
-//   } 
-// await traer();
-//   // Refresca los datos
 let res;
 if (p.value == true) {
     // Editando una ficha existente
@@ -139,7 +130,7 @@ if (p.value == true) {
   }
 
   // Verificar el estado de la respuesta
-  if (res && res.success) {
+  if (res && res.status === 200) {
     await traer(); // Refrescar los datos
     AbrirModal.value = false; // Cerrar modal en caso de éxito
     limpiarCampos(); // Limpiar campos

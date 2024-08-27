@@ -5,40 +5,20 @@
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="iconoAprendiz">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/73/73199.png"
-              alt=""
-            />
+            <img src="https://cdn-icons-png.flaticon.com/512/73/73199.png" alt="" />
           </div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input
-            dense
-            v-model="email"
-            placeholder="Email"
-            autofocus
-            color="green"
-            @keyup.enter="inicioSecion = false"
-          />
+          <q-input dense v-model="email" placeholder="Email" autofocus color="green"
+            @keyup.enter="inicioSecion = false" />
           <br />
-          <q-input
-            dense
-            v-model="password"
-            placeholder="Password"
-            autofocus
-            color="green"
-            @keyup.enter="inicioSecion = false"
-          />
+          <q-input dense v-model="password" placeholder="Password" autofocus color="green"
+            @keyup.enter="inicioSecion = false" />
         </q-card-section>
 
         <q-card-actions align="center" class="text-primary">
-<<<<<<< HEAD
-          <q-btn
-            :loading="useUsuario.loading"
-            color="green"
-            @click="secionIniciada()"
-          >
+          <q-btn :loading="useUsuario.loading" color="green" @click="secionIniciada()">
             Inicio de sesion
             <template v-slot:loading>
               <q-spinner color="white" size="1em" />
@@ -47,70 +27,31 @@
 
           <div id="registro">
             <div class="q-pa-md">
-              <q-btn
-                class="registrar"
-                v-for="filter in backdropFilterList"
-                :key="filter.label"
-                color="green"
-                :label="filter.label"
-                no-caps
-                @click="filter.onClick"
-              />
-=======
-          <q-btn unelevated label="Iniciar Seción" color="green" @click="secionIniciada" />
-
-          <div id="registro">
-            <div class="q-pa-md">
-              <q-btn class="registrar" label="Registrar" color="green" @click="AbrirModal = true" />
->>>>>>> main
+              <q-btn class="registrar" v-for="filter in backdropFilterList" :key="filter.label" color="green"
+                :label="filter.label" no-caps @click="filter.onClick" />
 
               <q-dialog v-model="AbrirModal" :backdrop-filter="backdropFilter">
                 <q-card class="dialogRegistrar">
                   <q-card-section>
                     <div class="iconoAprendiz">
-                      <img
-                        src="https://cdn-icons-png.flaticon.com/512/72/72648.png"
-                        alt=""
-                      />
+                      <img src="https://cdn-icons-png.flaticon.com/512/72/72648.png" alt="" />
                     </div>
                   </q-card-section>
 
                   <q-card-section>
-                    <q-input
-                      dense
-                      v-model="nombre1"
-                      placeholder="Nombre"
-                      autofocus
-                      color="green"
-                      @keyup.enter="inicioSecion = false"
-                    />
+                    <q-input dense v-model="nombre1" placeholder="Nombre" autofocus color="green"
+                      @keyup.enter="inicioSecion = false" />
                     <br />
-                    <q-input
-                      dense
-                      v-model="email1"
-                      placeholder="Email"
-                      autofocus
-                      color="green"
-                      @keyup.enter="inicioSecion = false"
-                    />
+                    <q-input dense v-model="email1" placeholder="Email" autofocus color="green"
+                      @keyup.enter="inicioSecion = false" />
                     <br />
-                    <q-input
-                      dense
-                      v-model="password1"
-                      placeholder="Password"
-                      autofocus
-                      color="green"
-                      @keyup.enter="inicioSecion = false"
-                    />
+                    <q-input dense v-model="password1" placeholder="Password" autofocus color="green"
+                      @keyup.enter="inicioSecion = false" />
                     <br />
                   </q-card-section>
 
                   <q-card-actions align="right">
-                    <q-btn
-                      :loading="useUsuario.loading"
-                      color="green"
-                      @click="registrar()"
-                    >
+                    <q-btn :loading="useUsuario.loading" color="green" @click="registrar()">
                       Registar
                       <template v-slot:loading>
                         <q-spinner color="white" size="1em" />
@@ -124,10 +65,7 @@
           </div>
 
           <router-link to="/OlvidoContrasena">
-            <a href="/OlvidoContrasena" class="contraseñaRecuperar"
-              >Olvidé mi contraseña</a
-            ></router-link
-          >
+            <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi contraseña</a></router-link>
         </q-card-actions>
       </q-card>
     </div>
@@ -216,7 +154,7 @@ async function registrar() {
 
 async function secionIniciada() {
   let res = await useUsuario.Login(email.value, password.value);
-  if (res) {
+  if (res && res.status === 200) {
     Usuario.value = true;
     router.push("/Home");
   }

@@ -37,14 +37,10 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 icon: "error",
                 timeout: 2500,
             });
-<<<<<<< HEAD
           return error  
         }finally{
             loading.value=false
     }
-=======
-        }
->>>>>>> main
     }
     const registrar = async (nombre1, email1, password1) => {
         try {
@@ -72,15 +68,10 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
                 icon: "error",
                 timeout: 2500,
             })
-<<<<<<< HEAD
           return error  
         }finally{
             loading.value=false
     }
-=======
-
-        }
->>>>>>> main
     }
 
     const listarUsuarios = async () => {
@@ -112,9 +103,12 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
         }
     }
 
-    const actualizarUsuario = async (id, nombre1, email1, password1) => {
+    const actualizarUsuario = async (id, nombre, email, ) => {
         try {
-            const actualizar = await axios.put(`http://localhost:4000/api/Usuario/Actualizar/${id}`, {
+            const actualizar = await axios.put(`http://localhost:4000/api/Usuario/Actualizar/${id}`,{
+                Nombre:nombre,
+                Email:email,
+            },{
                 headers: {
                     "x-token": xtoken.value
                 }
@@ -127,14 +121,17 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
             })
             return actualizar
         } catch (error) {
-            console.log(error);
-
+            // console.log(error);
+            const mensajeError = error.response && error.response.data && Array.isArray(error.response.data.errors)
+            ? error.response.data.errors[0].msg
+            : error.response.data.mensaje || "Error desconocido";
             Notify.create({
                 color: "negative",
                 message: error.response.data.errors[0].msg,
                 icon: "error",
+                timeout:2500
             })
-            return error
+          
         }
     }
 
