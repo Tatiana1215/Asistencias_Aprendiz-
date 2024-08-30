@@ -27,6 +27,7 @@
                     <q-btn id="boton" to="/Home/Ficha" rounded color="green" label="Ficha" /> <br>
                     <q-btn id="boton" to="/Home/Aprendiz" rounded color="green" label="Aprendiz" /> <br>
                     <q-btn id="boton" to="/Home/Usuario" rounded color="green" label="Usuario" /> <br>
+                    <q-btn id="boton" to="/Home/Informes" rounded color="green" label="Informes" /> <br>
                </div>
                 </div>
             </q-drawer>
