@@ -255,4 +255,7 @@ const columns = ref([
       0.5);
   /* Opcional: Ajusta la opacidad del fondo */
 }
+.container{
+  
+}
 </style>

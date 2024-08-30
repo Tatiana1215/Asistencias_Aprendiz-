@@ -21,7 +21,22 @@
 
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
-        <q-table title="Asistencia" :rows="rows" :columns="columns" row-key="name">
+        <q-table
+          title="Asistencia"
+          :rows="rows"
+          :columns="columns"
+          row-key="name"
+        >
+          <template v-slot:body-cell-Estado="props">
+            <q-select
+              v-model="props.row.estado"
+              :options="estadoOptions"
+              label="Seleccione estado"
+              dense
+              outlined
+              @update:model-value="actualizarEstado(props.row)"
+            />
+          </template>
         </q-table>
       </div>
     </div>
@@ -31,14 +46,12 @@
       <!-- <input type="datetime-local" v-model="FechaHora" name="" id="fecha" /> -->
 
       <q-btn :loading="UseBitacora.loading" color="green" @click="guardar(), (p = false)">
-        Registar
+        Registrar
         <template v-slot:loading>
           <q-spinner color="white" size="1em" />
         </template>
       </q-btn>
-
-      <!--    <button @click="guardar">Registrar</button> -->
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -52,12 +65,16 @@ let fechaFinal = ref("");
 // Registrar la hora de llegada
 let Aprendiz = ref();
 let FechaHora = ref();
+const estadoOptions = [
+  { label: "Asistió", value: "asistio" },
+  { label: "No asistió", value: "no_asistio" },
+  { label: "Excusa", value: "excusa" },
+  { label: "Pendiente", value: "pendiente" }
+];
 
 const UseBitacora = UseBitacoraStore();
 onBeforeMount(() => {
-  // Buscar();
-  traer()
-
+  traer();
 });
 
 
@@ -75,14 +92,10 @@ async function Buscar() {
     rows.value = res.data.map((item, index) => ({
       ...item,
       numero: index + 1,
+      estado: item.estado || "pendiente"  // Valor por defecto
     }));
  
-    // traer()
-  } catch (error) {
-    console.log("Error al listar bitácoras:", error);
-    // rows.value = []; // Asegúrate de que rows siempre sea un array
   }
-}
 
 async function guardar() {
   let res = await UseBitacora.registrarAprendiz(
@@ -91,6 +104,12 @@ async function guardar() {
   );
   await Buscar();
 }
+
+function actualizarEstado(row) {
+  // Aquí podrías agregar lógica para actualizar el estado en el backend
+  console.log(`Estado actualizado para el aprendiz ${row.nombreAprendiz}: ${row.estado}`);
+}
+
 const columns = ref([
   {
     name: "Numero",
