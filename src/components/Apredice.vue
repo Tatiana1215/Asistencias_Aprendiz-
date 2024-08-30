@@ -67,7 +67,8 @@
           <!-- <q-input dense v-model="ficha" placeholder="Id_Ficha" autofocus @keyup.enter="prompt = false" />
           <br> -->
 
-          <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value map-options
+          <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value 
+          map-options
             option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
             use-chips />
 

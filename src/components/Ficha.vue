@@ -7,13 +7,13 @@
     <hr class="divider" />
 
     <div class="q-pa-md q-gutter-sm">
-      <q-btn  label="Crear" icon="add_circle" color="green" @click="AbrirModal = true" />
+      <q-btn  label="Crear" icon="add_circle" color="green" @click="AbrirModal = true" p="false" />
 
       <div class="table-container">
         <q-table :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
+              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)" p="true">
                 <q-icon name="edit" style="color: green" />
               </q-btn>
               <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
@@ -117,6 +117,16 @@ function limpiarCampos() {
   codigo.value = "";
 }
 
+
+async function Abrir(row) {
+
+  AbrirModal.value = true;
+  p.value = true;
+  codigo.value = row.Codigo;
+  nombre.value = row.Nombre;
+  id.value = row._id;
+}
+
 async function CrearFicha() {
   console.log(p.value);
   
@@ -131,7 +141,7 @@ if (p.value ) {
   }
 
   // Verificar el estado de la respuesta
-  if (res) {
+  if (res && res.status == 200) {
     await traer(); // Refrescar los datos
     AbrirModal.value = false; // Cerrar modal en caso de éxito
     p.value = false
@@ -141,13 +151,6 @@ if (p.value ) {
   }
 }
 
-function Abrir(row) {
-  AbrirModal.value = true;
-  p.value = true;
-  codigo.value = row.Codigo;
-  nombre.value = row.Nombre;
-  id.value = row._id;
-}
 
 async function Activar(id) {
   console.log(id);

@@ -28,7 +28,7 @@
           <div id="registro">
             <div class="q-pa-md">
               <q-btn class="registrar" v-for="filter in backdropFilterList" :key="filter.label" color="green"
-                :label="filter.label" no-caps @click="filter.onClick" />
+                :label="filter.label" no-caps  @click="AbrirModal = true" />
 
               <q-dialog v-model="AbrirModal" :backdrop-filter="backdropFilter">
                 <q-card class="dialogRegistrar">
@@ -136,13 +136,12 @@ async function registrar() {
     email1.value,
     password1.value
   );
-  // Si la respuesta indica un error de validación
-  if (!registroUsuario) {
-    // Aquí podrías manejar los errores específicos si es necesario
-    AbrirModal.value = true; // Mantiene el modal abierto
+
+  if (registroUsuario && registroUsuario.status == 200) {
+    AbrirModal.value = false; 
     return;
   }
-  AbrirModal.value = false; // Cierra el modal si el registro es exitoso
+  AbrirModal.value = true; 
   limpiarCampos();
 }
 

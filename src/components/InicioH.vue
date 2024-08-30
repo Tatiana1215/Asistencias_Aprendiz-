@@ -25,7 +25,8 @@
               <img src="imagenes/fichas.jpeg" alt="Fichas" class="my-card-image">
             </q-card-section>
             <q-card-actions align="center">
-              <q-btn flat label="VER" to="/Ficha" color="green" />
+              <router-link to="/Home/Ficha" ><q-btn flat label="VER"  color="green" /></router-link>
+              
             </q-card-actions>
           </q-card>
         </div>

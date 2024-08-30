@@ -44,7 +44,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
         }
     }
 
-    const listar= async (fechaInicial, fechaFinal) => {
+    const listar= async () => {
        
         try {
             let res = await axios.get('http://localhost:4000/api/Bitacora/listar', {
@@ -70,18 +70,19 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             return error;
         }
     }
-    const registrarAprendiz = async (Aprendiz, fechaHora) => {
+    const registrarAprendiz = async (Aprendiz) => {
         loading.value=true
         try {
             let res = await axios.post('http://localhost:4000/api/Bitacora/Insertar', {
                 Id_Aprendiz: Aprendiz,
-                FechaHora: fechaHora
-            }, {
-                headers: {
-                    "xtoken": UseUsuario.xtoken
-                }
-            }
+            },
             )
+            Notify.create({
+                color: "positive",
+                message:"exotoso",
+                icon: "error",
+                timeout: 2500,
+            });
             console.log(res)
             return res
         } catch (error) {

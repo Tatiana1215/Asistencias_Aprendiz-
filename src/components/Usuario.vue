@@ -116,7 +116,7 @@ async function EditarUsuario() {
     console.log("Nombre:", nombre.value);
     console.log("Email:", email.value);
     const res = await UseUsuario.actualizarUsuario(id.value,nombre.value,email.value)
-    if(res ){
+    if(res && res.status == 200 ){
         AbrirModal.value = false
         limpiarCampos()
         await traer()

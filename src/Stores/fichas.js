@@ -32,7 +32,7 @@ export const UseFichaStore = defineStore("ficha", () => {
                 Nombre: nombre
             },{
                 headers:{
-                    "xtoken": UseUsuario.xtoken
+                    "x-token": UseUsuario.xtoken
                 }
             })
             Notify.create({

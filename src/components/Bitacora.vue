@@ -8,8 +8,8 @@
     <hr class="divider" />
 
     <div class="date">
-      <input type="datetime-local" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
-      <input type="datetime-local" v-model="fechaFinal" name="fechaFinal" id="fechaFinal" />
+      <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
+      <input type="date" v-model="fechaFinal" name="fechaFinal" id="fechaFinal" />
 
       <q-btn :loading="UseBitacora.loading" color="green" @click="Buscar(), (p = false)">
         Buscar
@@ -22,24 +22,29 @@
     </div>
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
-        <q-table title="Asistencia" :rows="rows" :columns="columns" row-key="name">
+        <q-table :rows="rows" :columns="columns" row-key="name">
+          <template v-slot:body-cell-Numero="props">
+            <q-td :props="props">
+              {{ props.pageIndex + 1 }}
+            </q-td>
+          </template>
         </q-table>
       </div>
     </div>
 
-    <div class="date">
-      <input type="text" v-model="Aprendiz" name="" id="aprendiz" />
-      <input type="datetime-local" v-model="FechaHora" name="" id="fecha" />
+    <!-- <div class="date">
+      <input type="text" v-model="Aprendiz" name="" id="aprendiz" /> -->
+      <!-- <input type="datetime-local" v-model="FechaHora" name="" id="fecha" /> -->
 
-      <q-btn :loading="UseBitacora.loading" color="green" @click="guardar(), (p = false)">
+      <!-- <q-btn :loading="UseBitacora.loading" color="green" @click="guardar(), (p = false)">
         Registar
         <template v-slot:loading>
           <q-spinner color="white" size="1em" />
         </template>
-      </q-btn>
+      </q-btn> -->
 
-      <!--    <button @click="guardar">Registrar</button> -->
-    </div>
+      <!--    <button @click="guardar">Registra</button> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -52,14 +57,14 @@ let fechaFinal = ref("");
 
 // Registrar la hora de llegada
 let Aprendiz = ref();
-let FechaHora = ref();
+// let FechaHora = ref();
 
 const UseBitacora = UseBitacoraStore();
 onBeforeMount(() => {
-  // Buscar();
-  traer()
-
+    traer()
 });
+
+
 
 async function traer() {
   let res = await UseBitacora.listar()
@@ -69,31 +74,19 @@ async function traer() {
 const rows = ref([]);
 
 async function Buscar() {
-  try {
-    let res = await UseBitacora.listarBitacora(
-      fechaInicial.value,
-      fechaFinal.value
-    );
+    let res = await UseBitacora.listarBitacora(fechaInicial.value,fechaFinal.value);
     console.log(res);
-    rows.value = res.data.map((item, index) => ({
-      ...item,
-      numero: index + 1,
-    }));
- 
-    // traer()
-  } catch (error) {
-    console.log("Error al listar bitácoras:", error);
-    // rows.value = []; // Asegúrate de que rows siempre sea un array
-  }
+    rows.value = res.data
+    // console.log(res);
 }
 
-async function guardar() {
-  let res = await UseBitacora.registrarAprendiz(
-    Aprendiz.value,
-    FechaHora.value
-  );
-  await Buscar();
-}
+
+// async function guardar() {
+//   let res = await UseBitacora.registrarAprendiz(
+//     Aprendiz.value,
+//   );
+//   await traer();
+// }
 const columns = ref([
   {
     name: "Numero",
@@ -135,10 +128,10 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "FechaHora",
+    name: "createdAt",
     align: "center",
     label: "Fecha y Hora",
-    field: "FechaHora",
+    field: "createdAt",
     sortable: true,
   },
 ]);
