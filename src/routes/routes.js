@@ -9,6 +9,7 @@ import InicioH from "../components/InicioH.vue"
 import OlvidoContrasena from "../components/OlvidoContraseña.vue"
 import RegistroA from "../components/RegistroA.vue"
 import Main from "../components/Main.vue"
+import Informes from "../components/Informes.vue"
 
 
 import { createRouter, createWebHashHistory } from "vue-router"
@@ -23,7 +24,9 @@ const routes = [
             { path: "Bitacora", component: Bitacora },
             { path: "Aprendiz", component: Aprendiz },
             { path: "Ficha", component: Ficha },
-            {path:"Usuario", component: Usuario},   
+            { path: "Usuario", component: Usuario}, 
+            { path: "Informes", component: Informes}, 
+           
                  
         ]
     },

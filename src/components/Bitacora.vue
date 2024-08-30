@@ -17,17 +17,11 @@
           <q-spinner color="white" size="1em" />
         </template>
       </q-btn>
-      <!--       <q-btn push color="primary" @click="Buscar" label="Buscar" />
- -->
     </div>
+
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
-        <q-table :rows="rows" :columns="columns" row-key="name">
-          <template v-slot:body-cell-Numero="props">
-            <q-td :props="props">
-              {{ props.pageIndex + 1 }}
-            </q-td>
-          </template>
+        <q-table title="Asistencia" :rows="rows" :columns="columns" row-key="name">
         </q-table>
       </div>
     </div>
@@ -36,15 +30,15 @@
       <input type="text" v-model="Aprendiz" name="" id="aprendiz" /> -->
       <!-- <input type="datetime-local" v-model="FechaHora" name="" id="fecha" /> -->
 
-      <!-- <q-btn :loading="UseBitacora.loading" color="green" @click="guardar(), (p = false)">
+      <q-btn :loading="UseBitacora.loading" color="green" @click="guardar(), (p = false)">
         Registar
         <template v-slot:loading>
           <q-spinner color="white" size="1em" />
         </template>
-      </q-btn> -->
+      </q-btn>
 
-      <!--    <button @click="guardar">Registra</button> -->
-    <!-- </div> -->
+      <!--    <button @click="guardar">Registrar</button> -->
+    </div>
   </div>
 </template>
 
@@ -57,18 +51,20 @@ let fechaFinal = ref("");
 
 // Registrar la hora de llegada
 let Aprendiz = ref();
-// let FechaHora = ref();
+let FechaHora = ref();
 
 const UseBitacora = UseBitacoraStore();
 onBeforeMount(() => {
-    traer()
+  // Buscar();
+  traer()
+
 });
 
 
 
 async function traer() {
-  let res = await UseBitacora.listar()
-  rows.value = res.data
+  let res = await UseBitacora.listar();
+  rows.value = res.data;
 }
 
 const rows = ref([]);
@@ -76,17 +72,25 @@ const rows = ref([]);
 async function Buscar() {
     let res = await UseBitacora.listarBitacora(fechaInicial.value,fechaFinal.value);
     console.log(res);
-    rows.value = res.data
-    // console.log(res);
+    rows.value = res.data.map((item, index) => ({
+      ...item,
+      numero: index + 1,
+    }));
+ 
+    // traer()
+  } catch (error) {
+    console.log("Error al listar bitácoras:", error);
+    // rows.value = []; // Asegúrate de que rows siempre sea un array
+  }
 }
 
-
-// async function guardar() {
-//   let res = await UseBitacora.registrarAprendiz(
-//     Aprendiz.value,
-//   );
-//   await traer();
-// }
+async function guardar() {
+  let res = await UseBitacora.registrarAprendiz(
+    Aprendiz.value,
+    FechaHora.value
+  );
+  await Buscar();
+}
 const columns = ref([
   {
     name: "Numero",
@@ -107,7 +111,7 @@ const columns = ref([
   {
     name: "telefonoAprendiz",
     required: true,
-    label: "Numero de Telefono",
+    label: "Número de Teléfono",
     align: "left",
     field: "telefonoAprendiz",
     sortable: true,
@@ -134,6 +138,13 @@ const columns = ref([
     field: "createdAt",
     sortable: true,
   },
+  {
+    name: "Estado",
+    align: "center",
+    label: "Estado",
+    field: "estado",
+    sortable: true,
+  }
 ]);
 </script>
 
@@ -166,21 +177,17 @@ const columns = ref([
   justify-content: center;
   display: flex;
   gap: 10px;
-
 }
 
-.tabla .q-table__title {
+.table .q-table__title {
   font-size: 1.5rem !important;
-  /* Agrandar título */
   text-align: center;
-  /* Centrar título */
   font-weight: bold;
 }
 
-.tabla .q-table__cell,
-.tabla .q-table__row {
+.table .q-table__cell,
+.table .q-table__row {
   font-size: 1.2rem !important;
-  /* Agrandar letra en la tabla */
 }
 
 .btn {
