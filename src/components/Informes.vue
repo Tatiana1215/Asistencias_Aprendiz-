@@ -48,8 +48,8 @@ export default {
   setup() {
     return {
       model: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
-      date: ref('2019/02/01')
+      options: ["5874255", "7885212525", "36974562", "14578522", "65414522225"],
+      date: ref('2024/09/05')
     };
   }
 };
