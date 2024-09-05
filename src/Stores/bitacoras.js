@@ -23,12 +23,14 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
             });
+            // bitacoras.value = res.data; // Update bitacoras state
             Notify.create({
                 color: "positive",
-                message: "Datos entre estas fechas",
+                message: "Datos entre estas fechas1",
                 icon: "check_circle",
                 timeout: 2500,
             });
+            // bitacoras.value = res.data; // Update bitacoras state
             return res;
         } catch (error) {
             console.log('No hay bitácoras', error);
@@ -52,6 +54,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
             });
+            // bitacoras.value = res.data; // Update bitacoras state
             Notify.create({
                 color: "positive",
                 message: "Datos entre estas fechas",
@@ -79,7 +82,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             )
             Notify.create({
                 color: "positive",
-                message:"exotoso",
+                message:"Registro Exitoso",
                 icon: "error",
                 timeout: 2500,
             });

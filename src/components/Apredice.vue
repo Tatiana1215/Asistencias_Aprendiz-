@@ -78,7 +78,7 @@
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
 
-          <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz(), (p = false)">
+          <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz()">
             Guardar
             <template v-slot:loading>
               <q-spinner color="white" size="1em" />
@@ -138,24 +138,22 @@ function limpiarCampos() {
 }
 
 async function agregarAprendiz() {
-  if (p.value == false) {
-    let res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
-    if (!res) {
-      AbrirModal.value = true;
-    } else {
-      AbrirModal.value = false;
-      limpiarCampos()
-    }
 
+  let res;
+  if (p.value == false) {
+    res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
   } else {
-    let res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value)
-    if (!res) {
-      AbrirModal.value = true;
-    } else {
-      AbrirModal.value = false;
-      limpiarCampos()
-    }
+   res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value)
   }
+
+if(res && res.status == 200){
+  AbrirModal.value = false;
+  p.value = false
+  limpiarCampos()
+}else{
+  AbrirModal.value = true;
+}
+
   await traer()
 }
 
@@ -255,7 +253,10 @@ const columns = ref([
 .iconoAprendiz img {
   width: 100%;
 }
-
+/* .table{
+  width: 100%;
+  margin: 0 auto;
+} */
 .tituloAprendiz,
 .text {
   font-weight: 900;

@@ -6,7 +6,14 @@
         <label for="Aprendiz">Número de Documento:</label>
         <input v-model="Aprendiz" type="text" id="documento" required />
 
-        <button type="submit" class="btn">Registrar Llegada</button>
+        <q-btn :loading="UseBitacora.loading" color="green" @click="registrarLlegada()">
+        Registrar
+        <template v-slot:loading>
+          <q-spinner color="white" size="1em" />
+        </template>
+        </q-btn>
+
+        <!-- <button type="submit" class="btn">Registrar Llegada</button> -->
       </form>
     </div>
   </div>
@@ -27,6 +34,9 @@ async function registrarLlegada() {
   let res = await UseBitacora.registrarAprendiz(
     Aprendiz.value,
   );
+  if ( res && res.status == 200){
+    Aprendiz.value = ""
+  }
   traer()
 }
 
