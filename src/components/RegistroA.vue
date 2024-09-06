@@ -25,10 +25,13 @@ import axios from 'axios'
 import { Notify } from 'quasar';
 // import { UseBitacoraStore } from '../Stores/bitacoras';
 import { UseBitacoraStore } from '../Stores/bitacoras';
+import { useRoute } from 'vue-router';
+
 
 const UseBitacora = UseBitacoraStore()
+let Aprendiz = ref('')
 
-const Aprendiz = ref('')
+
 
 async function registrarLlegada() {
   let res = await UseBitacora.registrarAprendiz(

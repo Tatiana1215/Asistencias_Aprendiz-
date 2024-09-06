@@ -8,8 +8,10 @@ import { UseUsuarioStore } from "./usuario";
 export const UseOlvidoContraseñaStore = defineStore("usuario", () => {
 // const UseUsuario = UseUsuarioStore()
 let id = ref('')
+let loading =ref (false)
 
     const CorreoMensaje = async (email) => {
+        loading.value = true;
 
         try {
             let res = await axios.post('http://localhost:4000/api/Usuario/solicitar-recuperacion',{
@@ -31,6 +33,8 @@ let id = ref('')
                 icon:"error",
                 timeout:2500
             }) 
+        }finally{
+            loading.value= false;
         }
         // console.log(`${error.response.data.msg}`)
 
@@ -40,6 +44,8 @@ let id = ref('')
 
 
     const verificarCodigo = async ( email1 , codigo) => {
+        loading.value = true;
+
         try {
             let res = await axios.post('http://localhost:4000/api/Usuario/Verificacion',{
                 Email : email1,
@@ -60,10 +66,14 @@ let id = ref('')
                 message: error.response.data.mensaje || error.response.data.errors[0].msg,
                 timeout:2500
             })
+        }finally{
+            loading.value= false
         }
     }
 
     const nuevaContraseña = async (email1, contrasenaActual, contrasenaNueva) =>{
+        loading.value = true;
+
         try {
             // Obtener la lista de usuarios
             let list = await axios.get('http://localhost:4000/api/Usuario/listarTodos');
@@ -102,6 +112,8 @@ let id = ref('')
                 icon:"error",
                 timeout:2500
             })
+        }finally{
+            loading.value = false;
         }
     }
 
