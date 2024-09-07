@@ -14,7 +14,7 @@ let loading =ref (false)
         loading.value = true;
 
         try {
-            let res = await axios.post('http://localhost:4000/api/Usuario/solicitar-recuperacion',{
+            let res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/solicitar-recuperacion',{
                 Email:email
             })
         Notify.create({
@@ -47,7 +47,7 @@ let loading =ref (false)
         loading.value = true;
 
         try {
-            let res = await axios.post('http://localhost:4000/api/Usuario/Verificacion',{
+            let res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Verificacion',{
                 Email : email1,
                 Codigo: codigo
             })
@@ -76,7 +76,7 @@ let loading =ref (false)
 
         try {
             // Obtener la lista de usuarios
-            let list = await axios.get('http://localhost:4000/api/Usuario/listarTodos');
+            let list = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/listarTodos');
             
             // Buscar el usuario con el correo proporcionado
             let usuario = list.data.find(user => user.Email === email1);
@@ -90,7 +90,7 @@ let loading =ref (false)
             id.value = usuario._id;
     
             // Hacer la solicitud POST para cambiar la contraseña
-            let res = await axios.post(`http://localhost:4000/api/Usuario/reset/${id.value}`, {
+            let res = await axios.post(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/reset/${id.value}`, {
                 oldpassword: contrasenaActual,
                 Password: contrasenaNueva
             });

@@ -14,7 +14,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const listarBitacora = async (fechaInicial, fechaFinal) => {
         loading.value=true
         try {
-            let res = await axios.get('http://localhost:4000/api/Bitacora/ListarBitacoras', {
+            let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/ListarBitacoras', {
                 params: {
                     FechaInicial: new Date(fechaInicial).toISOString(),
                     FechaFinal: new Date(fechaFinal).toISOString()
@@ -49,7 +49,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const listar= async () => {
        
         try {
-            let res = await axios.get('http://localhost:4000/api/Bitacora/listar', {
+            let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/listar', {
                 headers: {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
@@ -76,7 +76,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const registrarAprendiz = async (Aprendiz) => {
         loading.value=true
         try {
-            let res = await axios.post('http://localhost:4000/api/Bitacora/Insertar', {
+            let res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/Insertar', {
                 Id_Aprendiz: Aprendiz,
             },
             )

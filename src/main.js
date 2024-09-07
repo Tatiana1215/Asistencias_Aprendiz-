@@ -9,7 +9,7 @@ import { router } from './routes/routes'
 import axios from 'axios'
 
 
-axios.defaults.baseURL='https://aprendices-asistencia-bd-3.onrender.com'
+axios.defaults.baseURL='https://aprendices-asistencia-bd-3.onrender.com/api'
 
 const pinia = createPinia()
 const myApp = createApp(App)
