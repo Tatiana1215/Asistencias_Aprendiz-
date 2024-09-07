@@ -160,7 +160,7 @@ if(res && res.status == 200){
 
 
 async function fetchData() {
-  const response = await fetch('http://localhost:4000/api/Ficha/ListarTodo', {
+  const response = await fetch('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
     headers: {
       "x-token": UseUsuario.xtoken
     }
@@ -210,7 +210,7 @@ function Abrir(row) {
 async function Activar(id) {
   console.log(id);
   try {
-    inf = await axios.put(`http://localhost:4000/api/Aprendiz/Desactivar/${id}`)
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`)
     traer();
   } catch (error) {
     console.log(error);
@@ -219,7 +219,7 @@ async function Activar(id) {
 async function Desactivar(id) {
   console.log(id);
   try {
-    inf = await axios.put(`http://localhost:4000/api/Aprendiz/Activar/${id}`)
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`)
     traer();
   } catch (error) {
     console.log(error);

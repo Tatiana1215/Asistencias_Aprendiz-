@@ -89,7 +89,7 @@ async function Buscar() {
 async function actualizarEstado(row) {
   try {
     console.log("Estado enviado:", row.Estado); // Verifica el valor que estás enviando
-    let res = await axios.put(`http://localhost:4000/api/Bitacora/actualizarEstado/${row._id}`, {
+    let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/actualizarEstado/${row._id}`, {
       Estado: row.Estado
     });
     rows.value = res.data;

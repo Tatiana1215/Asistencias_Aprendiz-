@@ -141,7 +141,7 @@ const columns = ref([
 async function Activar(id) {
   console.log(id)
     try {
-      let res = await axios.put(`http://localhost:4000/api/Usuario/Desactivar/${id}`,{
+      let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Desactivar/${id}`,{
                 headers:{
                     "x-token":UseUsuario.xtoken
                 }
@@ -155,7 +155,7 @@ async function Activar(id) {
 async function Desactivar(id){
       console.log(id);
     try {
-          let res = await axios.put(`http://localhost:4000/api/Usuario/Activar/${id}`, {
+          let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`, {
                 headers: {
                     "x-token": UseUsuario.xtoken
                 }
@@ -171,7 +171,7 @@ async function Desactivar(id){
 
 async function Eliminar(id) {
     try {
-        let res = await axios.delete(`http://localhost:4000/api/Usuario/Eliminar/${id}`,{
+        let res = await axios.delete(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Eliminar/${id}`,{
             headers:{
                 "x-token": UseUsuario.xtoken
             }
