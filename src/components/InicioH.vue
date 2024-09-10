@@ -1,77 +1,135 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row q-col-gutter-lg q-mb-md justify-center">
-      <div class="col-xs-12 col-sm-6">
-        <q-card class="my-card">
-          <q-card-section class="text-center bg-green text-white">
-            BITACORA
-          </q-card-section>
-          <q-card-section class="text-center">
-            <img src="imagenes/Bitacora.jpeg" alt="Bitacora" class="my-card-image">
-          </q-card-section>
-          <q-card-actions align="center">
-            <q-btn flat label="VER" to="/Home/Bitacora" color="green" />
-          </q-card-actions>
-        </q-card>
-      </div>
+  <div class="Container">
+    <q-card 
+      class="my-card" 
+      flat 
+      bordered 
+      @mouseover="hoverCard(0, true)" 
+      @mouseleave="hoverCard(0, false)"
+      :style="{ backgroundColor: hoverIndex === 0 ?  '#edffed' : '#ffffff' }"
+    >
+      <q-img 
+        src="imagenes/Bitacora.jpeg" 
+        alt="Imagen" 
+        style="height: 180px;" 
+      />
+      <q-card-section class="text-center">
+        <div class="text-h6">BITACORA</div>
+        <div class="text-subtitle2"></div> <!-- Descripción agregada -->
+      </q-card-section>
+      <q-card-actions align="center">
+        <q-btn 
+          label="Ver" 
+          color="green" 
+          to = './Bitacora'
+        />
+      </q-card-actions>
+    </q-card>
 
-      <div class="col-xs-12 col-sm-6">
-        <q-card class="my-card">
-          <q-card-section class="text-center bg-green text-white">
-            FICHA
-          </q-card-section>
-          <q-card-section class="text-center">
-            <img src="imagenes/fichas.jpeg" alt="Fichas" class="my-card-image">
-          </q-card-section>
-          <q-card-actions align="center">
-            <router-link to="/Home/Ficha"><q-btn flat label="VER" color="green" /></router-link>
-          </q-card-actions>
-        </q-card>
-      </div>
+    <q-card 
+      class="my-card" 
+      flat 
+      bordered 
+      @mouseover="hoverCard(1, true)" 
+      @mouseleave="hoverCard(1, false)"
+      :style="{ backgroundColor: hoverIndex === 1 ? '#edffed' : '#ffffff'}"
+    >
+      <q-img 
+        src="imagenes/fichas.jpeg" 
+        alt="Imagen" 
+        style="height: 180px;" 
+      />
+      <q-card-section class="text-center">
+        <div class="text-h6">FICHA</div>
+        <div class="text-subtitle2"></div> <!-- Descripción agregada -->
+      </q-card-section>
+      <q-card-actions align="center">
+        <q-btn 
+          label="Ver" 
+          color="green" 
+          to = './Ficha'
+        />
+      </q-card-actions>
+    </q-card>
 
-      <div class="col-xs-12 col-sm-6">
-        <q-card class="my-card">
-          <q-card-section class="text-center bg-green text-white">
-            APRENDIZ
-          </q-card-section>
-          <q-card-section class="text-center">
-            <img src="imagenes/Aprendiz.jpeg" alt="Aprendiz" class="my-card-image">
-          </q-card-section>
-          <q-card-actions align="center">
-            <q-btn flat label="VER" to="/Home/Aprendiz" color="green" />
-          </q-card-actions>
-        </q-card>
-      </div>
+    <q-card 
+      class="my-card" 
+      flat 
+      bordered 
+      @mouseover="hoverCard(2, true)" 
+      @mouseleave="hoverCard(2, false)"
+      :style="{ backgroundColor: hoverIndex === 2 ? '#edffed' : '#ffffff'}"
+    >
+      <q-img 
+        src="imagenes/Aprendiz.jpeg" 
+        alt="Imagen" 
+        style="height: 180px;" 
+      />
+      <q-card-section class="text-center">
+        <div class="text-h6">APRENDIZ</div>
+        <div class="text-subtitle2"></div> <!-- Descripción agregada -->
+      </q-card-section>
+      <q-card-actions align="center">
+        <q-btn 
+          label="Ver" 
+          color="green" 
+          to = './Apredice'
+        />
+      </q-card-actions>
+    </q-card>
 
-      <div class="col-xs-12 col-sm-6">
-        <q-card class="my-card">
-          <q-card-section class="text-center bg-green text-white">
-            USUARIO
-          </q-card-section>
-          <q-card-section class="text-center">
-            <img src="imagenes/Usuario.jpeg" alt="Usuario" class="my-card-image">
-          </q-card-section>
-          <q-card-actions align="center">
-            <q-btn flat label="VER" to="/Home/Usuario" color="green" />
-          </q-card-actions>
-        </q-card>
-      </div>
+    <q-card 
+      class="my-card" 
+      flat 
+      bordered 
+      @mouseover="hoverCard(3, true)" 
+      @mouseleave="hoverCard(3, false)"
+      :style="{ backgroundColor: hoverIndex === 3 ?  '#edffed' : '#ffffff' }"
+    >
+      <q-img 
+        src="imagenes/Usuario.jpeg" 
+        alt="Imagen" 
+        style="height: 180px;" 
+      />
+      <q-card-section class="text-center">
+        <div class="text-h6">USUARIO</div>
+        <div class="text-subtitle2"></div> <!-- Descripción agregada -->
+      </q-card-section>
+      <q-card-actions align="center">
+        <q-btn 
+          label="Ver" 
+          color="green" 
+          to = './Usuario'
+        />
+      </q-card-actions>
+    </q-card>
 
-      <div class="col-xs-12 col-sm-6">
-        <q-card class="my-card">
-          <q-card-section class="text-center bg-green text-white">
-            INFORMES
-          </q-card-section>
-          <q-card-section class="text-center">
-            <img src="imagenes/Usuario.jpeg" alt="Usuario" class="my-card-image">
-          </q-card-section>
-          <q-card-actions align="center">
-            <q-btn flat label="VER" to="/Home/Informes" color="green" />
-          </q-card-actions>
-        </q-card>
-      </div>
-    </div>
-  </q-page>
+    <q-card 
+      class="my-card" 
+      flat 
+      bordered 
+      @mouseover="hoverCard(4, true)" 
+      @mouseleave="hoverCard(4, false)"
+      :style="{ backgroundColor: hoverIndex === 4 ? '#edffed' : '#ffffff' }"
+    >
+      <q-img 
+        src="imagenes/Informes.webp" 
+        alt="Imagen" 
+        style="height: 180px;" 
+      />
+      <q-card-section class="text-center">
+        <div class="text-h6">INFORMES</div>
+        <div class="text-subtitle2"></div> <!-- Descripción agregada -->
+      </q-card-section>
+      <q-card-actions align="center">
+        <q-btn 
+          label="Ver" 
+          color="green" 
+          to = './Informes'
+        />
+      </q-card-actions>
+    </q-card>
+  </div>
 </template>
 
 <script>
@@ -117,21 +175,6 @@ export default {
   .Container {
     grid-template-columns: 1fr; 
   }
-<style >
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: 0;
-}
-
-.my-card {
-  width: 100%;
-}
-
-.my-card-image {
-  width: 100%;
-  max-height: 170px;
-  object-fit: cover;
 }
 
 .my-card {
@@ -147,4 +190,4 @@ export default {
 .text-center {
   text-align: center;
 }
-</style>
+</style> 
