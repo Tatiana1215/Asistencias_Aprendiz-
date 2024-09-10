@@ -14,7 +14,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const listarBitacora = async (fechaInicial, fechaFinal) => {
         loading.value=true
         try {
-            let res = await axios.get('http://localhost:4000/api/Bitacora/ListarBitacoras', {
+            let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/ListarBitacoras', {
                 params: {
                     FechaInicial: new Date(fechaInicial).toISOString(),
                     FechaFinal: new Date(fechaFinal).toISOString()
@@ -23,12 +23,14 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
             });
+            // bitacoras.value = res.data; // Update bitacoras state
             Notify.create({
                 color: "positive",
-                message: "Datos entre estas fechas",
+                message: "Datos entre estas fechas1",
                 icon: "check_circle",
                 timeout: 2500,
             });
+            // bitacoras.value = res.data; // Update bitacoras state
             return res;
         } catch (error) {
             console.log('No hay bitácoras', error);
@@ -47,11 +49,12 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const listar= async () => {
        
         try {
-            let res = await axios.get('http://localhost:4000/api/Bitacora/listar', {
+            let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/listar', {
                 headers: {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
             });
+            // bitacoras.value = res.data; // Update bitacoras state
             Notify.create({
                 color: "positive",
                 message: "Datos entre estas fechas",
@@ -73,13 +76,13 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const registrarAprendiz = async (Aprendiz) => {
         loading.value=true
         try {
-            let res = await axios.post('http://localhost:4000/api/Bitacora/Insertar', {
+            let res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/Insertar', {
                 Id_Aprendiz: Aprendiz,
             },
             )
             Notify.create({
                 color: "positive",
-                message:"exotoso",
+                message:"Registro Exitoso",
                 icon: "error",
                 timeout: 2500,
             });

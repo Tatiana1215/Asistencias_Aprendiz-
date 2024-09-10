@@ -6,7 +6,7 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 
 export default defineConfig({
   plugins: [
-    'Notify',
+    Notify,
     vue({
       template: { transformAssetUrls }
     }),

@@ -12,7 +12,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     const Login = async (email, password) => {
         loading.value = true;
         try {
-            const r = await axios.post('http://localhost:4000/api/Usuario/login', {
+            const r = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/login', {
                 Email: email,
                 Password: password
             });
@@ -45,7 +45,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     const registrar = async (nombre1, email1, password1) => {
         try {
 
-            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar', {
+            const usuarioRegistro = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/insertar', {
                 Nombre: nombre1,
                 Email: email1,
                 Password: password1
@@ -80,7 +80,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
 
     const listarUsuarios = async () => {
         try {
-            const listar = await axios.get('http://localhost:4000/api/Usuario/listarTodos', {
+            const listar = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/listarTodos', {
                 headers: {
                     "x-token": xtoken.value
                 }
@@ -110,7 +110,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     const actualizarUsuario = async (id, nombre, email) => {
         // console.log('Request received:', req.params.id, req.body);
         try {
-            const actualizar = await axios.put(`http://localhost:4000/api/Usuario/Actualizar/${id}`,{
+            const actualizar = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Actualizar/${id}`,{
                 Email:email,
                 Nombre:nombre,
             },{

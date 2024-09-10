@@ -46,6 +46,9 @@
 import { ref } from 'vue';
 import { UseUsuarioStore } from '../Stores/usuario';
 
+import { useRoute } from 'vue-router';
+
+let router = useRoute()
 const leftDrawerOpen = ref(false)
 const nombreAdministrador = ref("")
 
@@ -53,6 +56,10 @@ const nombreAdministrador = ref("")
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+function salir(){
+ router.pust("/Login")
 }
 
 

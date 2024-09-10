@@ -155,7 +155,7 @@ if (p.value ) {
 async function Activar(id) {
   console.log(id);
   try {
-    inf = await axios.put(`http://localhost:4000/api/Ficha/Desactivar/${id}`);
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Desactivar/${id}`);
     traer();
   } catch (error) {
     console.log(error);
@@ -164,7 +164,7 @@ async function Activar(id) {
 async function Desactivar(id) {
   console.log(id);
   try {
-    inf = await axios.put(`http://localhost:4000/api/Ficha/Activar/${id}`);
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Activar/${id}`);
     traer();
   } catch (error) {
     console.log(error);

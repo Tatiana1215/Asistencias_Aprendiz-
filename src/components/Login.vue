@@ -138,11 +138,14 @@ async function registrar() {
   );
 
   if (registroUsuario && registroUsuario.status == 200) {
-    AbrirModal.value = false; 
-    return;
+    AbrirModal.value = false;
+    limpiarCampos();
+    return
+  }else{
+AbrirModal.value = true; 
   }
-  AbrirModal.value = true; 
-  limpiarCampos();
+  
+
 }
 
 /*  respuesta = await useUsuario.Login(email.value, password.value);
