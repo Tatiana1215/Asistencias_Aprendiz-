@@ -140,7 +140,8 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     }
 
     return {
-        xtoken, Login, registrar, listarUsuarios, actualizarUsuario
+            
+            xtoken, Login, registrar, listarUsuarios, actualizarUsuario,loading
     }
 });
 
