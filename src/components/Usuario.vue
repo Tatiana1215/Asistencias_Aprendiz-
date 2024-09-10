@@ -73,119 +73,113 @@
 
 
 <script setup>
-import { ref, onBeforeMount, warn} from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import axios from 'axios';
 import { UseUsuarioStore } from '../Stores/usuario';
 
+let res = ref('');
+let id = ref('');
+let nombre = ref('');
+let email = ref('');
+let AbrirModal = ref(false);
+const UseUsuario = UseUsuarioStore();
 
-
-let res = ref('')
-let id = ref('')
-let nombre = ref ('')
-let email = ref('')
-let AbrirModal = ref(false)
-const UseUsuario = UseUsuarioStore()
+// Guardar valores originales para comparación
+let originalNombre = ref('');
+let originalEmail = ref('');
 
 onBeforeMount(() => {
   traer();
 });
 
-function limpiarCampos(){
-    nombre.value = "",
-    email.value = ""
+function limpiarCampos() {
+  nombre.value = '';
+  email.value = '';
+  originalNombre.value = '';
+  originalEmail.value = '';
 }
 
-async function  traer() {
-  res = await UseUsuario.listarUsuarios()
- rows.value=res.data
+async function traer() {
+  res.value = await UseUsuario.listarUsuarios();
+  rows.value = res.value.data;
 }
 
 async function Abrir(row) {
-  console.log("Abrir:", row);
-    AbrirModal.value = true
-    nombre.value=row.Nombre
-    email.value = row.Email
-    id.value = row._id;
-    
+  AbrirModal.value = true;
+  nombre.value = row.Nombre;
+  email.value = row.Email;
+  id.value = row._id;
 
+  // Guardar valores originales
+  originalNombre.value = row.Nombre;
+  originalEmail.value = row.Email;
 }
 
 async function EditarUsuario() {
-    console.log("Entrando a EditarUsuario"); // Verifica que esta línea se imprime
-  console.log("ID:", id.value);
-    console.log("Nombre:", nombre.value);
-    console.log("Email:", email.value);
-    const res = await UseUsuario.actualizarUsuario(id.value,nombre.value,email.value)
-    if(res ){
-        AbrirModal.value = false
-        limpiarCampos()
-        await traer()
-    }else{
-        AbrirModal.value = true
-    }
+  // Verificar si se realizaron cambios
+  if (nombre.value === originalNombre.value && email.value === originalEmail.value) {
+    alert('No se hizo ningún cambio.');
+    AbrirModal.value = false;
+    return;
+  }
+
+  const res = await UseUsuario.actualizarUsuario(id.value, nombre.value, email.value);
+  if (res) {
+    AbrirModal.value = false;
+    limpiarCampos();
+    await traer();
+  } else {
+    AbrirModal.value = true;
+  }
 }
 
-
-const rows = ref([])
+const rows = ref([]);
 const columns = ref([
-{ name: 'Numero', align: 'center', label: 'N°', field: 'Numero', sortable: true },
+  { name: 'Numero', align: 'center', label: 'N°', field: 'Numero', sortable: true },
   { name: 'Nombre', align: 'center', label: 'Usuario', field: 'Nombre', sortable: true },
   { name: 'Email', label: 'Email', field: 'Email', sortable: true },
   { name: 'Estado', label: 'Estado', field: 'Estado', sortable: true },
   { name: 'Opciones', label: 'Opciones' },
-])
-
-
-
+]);
 
 async function Activar(id) {
-  console.log(id)
-    try {
-      let res = await axios.put(`http://localhost:4000/api/Usuario/Desactivar/${id}`,{
-                headers:{
-                    "x-token":UseUsuario.xtoken
-                }
-            })
-    await traer()   
-    } catch (error) {
-        console.log(error.message);
-    }  
+  try {
+    await axios.put(`http://localhost:4000/api/Usuario/Desactivar/${id}`, {
+      headers: {
+        'x-token': UseUsuario.xtoken,
+      },
+    });
+    await traer();
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
-async function Desactivar(id){
-      console.log(id);
-    try {
-          let res = await axios.put(`http://localhost:4000/api/Usuario/Activar/${id}`, {
-                headers: {
-                    "x-token": UseUsuario.xtoken
-                }
-            })
-
-    await traer()
-    } catch (error) {
-        console.log(error);
-        
-    }
-   
+async function Desactivar(id) {
+  try {
+    await axios.put(`http://localhost:4000/api/Usuario/Activar/${id}`, {
+      headers: {
+        'x-token': UseUsuario.xtoken,
+      },
+    });
+    await traer();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function Eliminar(id) {
-    try {
-        let res = await axios.delete(`http://localhost:4000/api/Usuario/Eliminar/${id}`,{
-            headers:{
-                "x-token": UseUsuario.xtoken
-            }
-        })
-
-        await traer()
-    } catch (error) {
-        console.log(error);
-        
-    }
+  try {
+    await axios.delete(`http://localhost:4000/api/Usuario/Eliminar/${id}`, {
+      headers: {
+        'x-token': UseUsuario.xtoken,
+      },
+    });
+    await traer();
+  } catch (error) {
+    console.log(error);
+  }
 }
-
-
-
 </script>
 <!-- 
 <template>
