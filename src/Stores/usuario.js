@@ -2,11 +2,12 @@ import { defineStore } from "pinia"
 import axios from "axios"
 import { normalizeClass, ref, registerRuntimeCompiler } from "vue"
 import { useQuasar, Notify } from "quasar"
+import Usuario from "../components/Usuario.vue";
 
 export const UseUsuarioStore = defineStore("Usuario", () => {
 
     let xtoken = ref('')
-    let usuario = ref('')
+    const  usuario = ref('')
     let loading = ref(false)
 
     const Login = async (email, password) => {
@@ -18,9 +19,10 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
             });
     
             xtoken.value = r.data.token;
-            usuario.value = r.data;
+            usuario.value = r.data.usuario
+            console.log(usuario.value)
             console.log(xtoken.value);
-    
+             
             Notify.create({
                 color: "positive",
                 message: "Inicio de sesión exitoso",
@@ -140,7 +142,6 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     }
 
     return {
-        xtoken, Login, registrar, listarUsuarios, actualizarUsuario
-    }
+        xtoken, Login, registrar, listarUsuarios, actualizarUsuario, usuario, loading    }
 });
 

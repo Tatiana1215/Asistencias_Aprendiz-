@@ -59,10 +59,21 @@
                         </q-card-section>
 
                         <q-card-section class="q-pt-none">
-                            <q-input dense v-model="contrasenaActual" placeholder="Contraseña Actual" autofocus
-                                color="green" /> <br>
-                            <q-input dense v-model="contrasenaNueva" placeholder="Contraseña Nueva" autofocus
-                                color="green" />
+                            <q-input dense v-model="contrasenaActual" placeholder="Contraseña Actual" autofocus filled
+                                :type="isPwd1 ? 'password' : 'text'"  color="green">
+                                <template v-slot:append>
+                                    <q-icon :name="isPwd1 ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                                        @click="isPwd1 = !isPwd1" />
+                                </template>
+                            </q-input>
+                            <br>
+                            <q-input dense v-model="contrasenaNueva" placeholder="Contraseña Nueva" autofocus filled
+                                :type="isPwd2 ? 'password' : 'text'" color="green">
+                                <template v-slot:append>
+                                    <q-icon :name="isPwd2 ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                                        @click="isPwd2 = !isPwd2" />
+                                </template>
+                            </q-input>
                         </q-card-section>
                         <q-card-actions align="right" class="text-primary">
                             <q-btn unelevated label="Enviar" :loading="useOlvidoContrasena.loading" @click="guardar()"
@@ -99,7 +110,8 @@ let contrasenaActual = ref('')
 let contrasenaNueva = ref('')
 let codigoEnvido = ref(false)
 let codigoCorrecto = ref(false)
-
+let isPwd1 = ref(true)
+let isPwd2 = ref(true)
 const useOlvidoContrasena = UseOlvidoContraseñaStore()
 
 

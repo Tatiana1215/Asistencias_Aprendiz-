@@ -1,38 +1,80 @@
 <template>
- <div class="container">
+  <div class="container">
     <div class="titleFirst">
       <h3>Usuarios</h3>
     </div>
 
     <hr class="divider" />
+
+    <div class="q-pa-md">
+      <q-btn class="btnA" label="Crear" icon="add_circle" color="green" @click="AbrirModal2 = true" />
+      <!-- <q-btn class="registrar" v-for="filter in backdropFilterList" :key="filter.label" color="green"
+          :label="filter.label" no-caps @click="AbrirModal2 = true" /> -->
+
+
+      <q-dialog v-model="AbrirModal2" :backdrop-filter="backdropFilter">
+        <q-card class="dialogRegistrar">
+          <q-card-section>
+            <div class="iconoAprendiz">
+              <img src="https://cdn-icons-png.flaticon.com/512/72/72648.png" alt="" />
+            </div>
+          </q-card-section>
+
+          <q-card-section>
+            <q-input dense v-model="nombre1" placeholder="Nombre" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
+            <br />
+            <q-input dense v-model="email1" placeholder="Email" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
+            <br />
+            <q-input dense v-model="password1" placeholder="Password" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
+            <br />
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn :loading="UseUsuario.loading" color="green" @click="registrar()">
+              Registar
+              <template v-slot:loading>
+                <q-spinner color="white" size="1em" />
+              </template>
+            </q-btn>
+            <q-btn flat label="Close" color="red" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+      <!-- </div> -->
+
+
       <div class="q-pa-md">
-            <q-table :rows="rows" :columns="columns" row-key="name" >
-        <template v-slot:body-cell-Opciones="props">
+        <q-table :rows="rows" :columns="columns" row-key="name">
+          <template v-slot:body-cell-Opciones="props">
             <q-td :props="props">
-              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row) , AbrirModal = true" >
+              <q-btn round color="white" :style="{ border: '2px solid green' }"
+                @click="Abrir(props.row), AbrirModal = true">
                 <q-icon name="edit" style="color: green" />
               </q-btn>
-            <q-btn icon="close" round color="red"  @click="Activar(props.row._id)"    v-if="props.row.Estado == 1" />
-            <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
-            <q-btn icon="delete" round color="red" @click="Eliminar(props.row._id)" />
-       </q-td>
-        </template>
-
-        <template v-slot:body-cell-Estado="props">
-            <q-td :props="props">
-                <p style="color: green;" v-if="props.row.Estado == 1 ">Activo</p>
-                <p style="color: red;" v-else >Inactivo</p>
+              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+              <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
+              <q-btn icon="delete" round color="red" @click="Eliminar(props.row._id)" />
             </q-td>
-        </template>
+          </template>
 
-        <template v-slot:body-cell-Numero="props">
+          <template v-slot:body-cell-Estado="props">
+            <q-td :props="props">
+              <p style="color: green;" v-if="props.row.Estado == 1">Activo</p>
+              <p style="color: red;" v-else>Inactivo</p>
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-Numero="props">
             <q-td :props="props">
               {{ props.pageIndex + 1 }}
             </q-td>
-        </template>
-            </q-table>
-        </div>
-        <q-dialog v-model="AbrirModal" persistent>
+          </template>
+        </q-table>
+      </div>
+      <q-dialog v-model="AbrirModal" persistent>
         <q-card style="min-width: 350px; margin-top: 0">
           <q-card-section>
             <div class="iconoAprendiz">
@@ -42,13 +84,12 @@
 
           <q-card-section class="q-pt-none">
             <!-- <label for="codigo">Nombre</label> -->
-          
+
             <!-- <label for="codigo">codigo</label> -->
-            <q-input dense v-model="email" placeholder="Editar" autofocus color="green"
-              @keyup.enter="prompt = false" />
+            <q-input dense v-model="email" placeholder="Editar" autofocus color="green" @keyup.enter="prompt = false" />
             <br />
-            
-             <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
+
+            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
               @keyup.enter="prompt = false" />
             <br />
           </q-card-section>
@@ -57,7 +98,7 @@
             <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
 
             <!-- <q-btn  label="Enviar" color="green" @click="EditarUsuario()"> -->
-              <q-btn label="Enviar" color="green" @click="console.log('Botón clickeado'); EditarUsuario()">
+            <q-btn label="Enviar" color="green" @click="console.log('Botón clickeado'); EditarUsuario()">
 
               <!-- <template v-slot:loading>
                 <q-spinner color="white" size="1em" />
@@ -66,14 +107,14 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
- 
-
     </div>
+  </div>
+
 </template>
 
 
 <script setup>
-import { ref, onBeforeMount, warn} from 'vue';
+import { ref, onBeforeMount, warn } from 'vue';
 import axios from 'axios';
 import { UseUsuarioStore } from '../Stores/usuario';
 
@@ -81,54 +122,91 @@ import { UseUsuarioStore } from '../Stores/usuario';
 
 let res = ref('')
 let id = ref('')
-let nombre = ref ('')
+let nombre = ref('')
 let email = ref('')
 let AbrirModal = ref(false)
+let AbrirModal2 = ref(false)
+let nombre1 = ref("");
+let email1 = ref("");
+let password1 = ref("");
+
 const UseUsuario = UseUsuarioStore()
 
 onBeforeMount(() => {
   traer();
 });
+const list = ["REGISTRAR"];
 
-function limpiarCampos(){
-    nombre.value = "",
+const dialog = ref(false);
+const backdropFilter = ref(null);
+
+const backdropFilterList = list.map((filter) => ({
+  label: filter,
+  onClick: () => {
+    backdropFilter.value = filter;
+    dialog.value = true;
+  },
+}));
+function limpiarCampos() {
+  nombre.value = "",
     email.value = ""
 }
 
-async function  traer() {
+async function traer() {
   res = await UseUsuario.listarUsuarios()
- rows.value=res.data
+  rows.value = res.data
 }
 
 async function Abrir(row) {
   console.log("Abrir:", row);
-    AbrirModal.value = true
-    nombre.value=row.Nombre
-    email.value = row.Email
-    id.value = row._id;
-    
+  AbrirModal.value = true
+  nombre.value = row.Nombre
+  email.value = row.Email
+  id.value = row._id;
 
 }
 
+
+function limpiarCampos2() {
+  (nombre1.value = ""), (email1.value = "");
+  password1.value = "";
+}
+
+//Registro de usuario
+async function registrar() {
+  let registroUsuario = await UseUsuario.registrar(
+    nombre1.value,
+    email1.value,
+    password1.value
+  );
+  if (registroUsuario && registroUsuario.status == 200) {
+    AbrirModal2.value = false
+    limpiarCampos2()
+    await traer()
+  } else {
+    AbrirModal2.value = true
+  }
+}
+
 async function EditarUsuario() {
-    console.log("Entrando a EditarUsuario"); // Verifica que esta línea se imprime
+  console.log("Entrando a EditarUsuario"); // Verifica que esta línea se imprime
   console.log("ID:", id.value);
-    console.log("Nombre:", nombre.value);
-    console.log("Email:", email.value);
-    const res = await UseUsuario.actualizarUsuario(id.value,nombre.value,email.value)
-    if(res && res.status == 200 ){
-        AbrirModal.value = false
-        limpiarCampos()
-        await traer()
-    }else{
-        AbrirModal.value = true
-    }
+  console.log("Nombre:", nombre.value);
+  console.log("Email:", email.value);
+  const res = await UseUsuario.actualizarUsuario(id.value, nombre.value, email.value)
+  if (res && res.status == 200) {
+    AbrirModal.value = false
+    limpiarCampos()
+    await traer()
+  } else {
+    AbrirModal.value = true
+  }
 }
 
 
 const rows = ref([])
 const columns = ref([
-{ name: 'Numero', align: 'center', label: 'N°', field: 'Numero', sortable: true },
+  { name: 'Numero', align: 'center', label: 'N°', field: 'Numero', sortable: true },
   { name: 'Nombre', align: 'center', label: 'Usuario', field: 'Nombre', sortable: true },
   { name: 'Email', label: 'Email', field: 'Email', sortable: true },
   { name: 'Estado', label: 'Estado', field: 'Estado', sortable: true },
@@ -140,53 +218,60 @@ const columns = ref([
 
 async function Activar(id) {
   console.log(id)
-    try {
-      let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Desactivar/${id}`,{
-                headers:{
-                    "x-token":UseUsuario.xtoken
-                }
-            })
-    await traer()   
-    } catch (error) {
-        console.log(error.message);
-    }  
+  try {
+    let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Desactivar/${id}`, {
+      headers: {
+        "x-token": UseUsuario.xtoken
+      }
+    })
+    await traer()
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
-async function Desactivar(id){
-      console.log(id);
-    try {
-          let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`, {
-                headers: {
-                    "x-token": UseUsuario.xtoken
-                }
-            })
+async function Desactivar(id) {
+  console.log(id);
+  try {
+    let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`, {
+      headers: {
+        "x-token": UseUsuario.xtoken
+      }
+    })
 
     await traer()
-    } catch (error) {
-        console.log(error);
-        
-    }
-   
+  } catch (error) {
+    console.log(error);
+
+  }
+
 }
 
 async function Eliminar(id) {
-    try {
-        let res = await axios.delete(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Eliminar/${id}`,{
-            headers:{
-                "x-token": UseUsuario.xtoken
-            }
-        })
+  try {
+    let res = await axios.delete(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Eliminar/${id}`, {
+      headers: {
+        "x-token": UseUsuario.xtoken
+      }
+    })
 
-        await traer()
-    } catch (error) {
-        console.log(error);
-        
-    }
+    await traer()
+  } catch (error) {
+    console.log(error);
+
+  }
 }
 
 
 
 </script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+</style>
 <!-- 
 <template>
 
