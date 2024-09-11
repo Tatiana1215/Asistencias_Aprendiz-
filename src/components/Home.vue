@@ -22,8 +22,8 @@
             </q-avatar>
 
 
-            <h6>{{ useUsuario.usuario.Nombre }}</h6>
-            <P>{{ useUsuario.usuario.Email }}</P>
+            <h6>{{ useUsuario.usuario.Nombre}}</h6>
+            <P>{{ useUsuario.usuario.Email}}</P>
           </div>
 
           <div class="Botones">
