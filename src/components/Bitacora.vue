@@ -30,12 +30,12 @@
               'estado-pendiente': props.row.Estado === 'Pendiente'
             }" label="Seleccione Estado" dense outlined @update:model-value="actualizarEstado(props.row)" emit-value
               map-options></q-select>
-            <!-- <div>{{props.row.Estado}}</div>  -->
-            <!-- <div>Estado actual: {{ props.row.Estado }}</div> -->
-            <!-- Estado actual en select: {{ estadoOptions.find(option => option.value === props.row.Estado)?.label }} -->
           </template>
-
-
+          <template v-slot:body-cell-Numero="props">
+              <q-td :props="props">
+                {{ props.pageIndex + 1 }}
+              </q-td>
+            </template>
         </q-table>
       </div>
     </div>
@@ -108,7 +108,7 @@ const columns = ref([
     required: true,
     label: "N°",
     align: "left",
-    field: "numero",
+    field: "Numero",
     sortable: true,
   },
   {
