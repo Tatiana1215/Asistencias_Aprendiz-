@@ -1,58 +1,87 @@
-<template>
-  <!-- Sección de INFORMES -->
+ <template>
+<div>
   <div class="titleFirst">
     <h3>INFORMES</h3>
     <hr class="divider" />
   </div>
 
-  <!-- Controles de selección y búsqueda uno al lado del otro -->
+
   <div class="q-pa-md centered-row">
     <div class="q-gutter-md inline-flex">
-      <!-- Selector de Ficha -->
-      <q-select
-        rounded
-        filled
-        v-model="model"
-        :options="options"
-        label="Selecciona la Ficha"
-      />
+  
+      <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value 
+          map-options
+            option-label="Codigo" option-value="_id" use-input @filter="filterONE" class="custom-select"
+            use-chips />
 
-      <!-- Cuadro de búsqueda de fecha única -->
-      <q-input filled v-model="date" mask="date" :rules="['date']">
-        <template v-slot:append>
-          <q-icon name="event" class="cursor-pointer">
-            <q-popup-proxy
-              cover
-              transition-show="scale"
-              transition-hide="scale"
-              anchor="center middle"
-              position="top"
-            >
-              <q-date v-model="date" color="green">
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Cerrar" color="green" flat />
-                </div>
-              </q-date>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
+      <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />  
     </div>
+  </div>
+
+  <q-card-actions align="center">
+        <q-btn 
+          label="Ver" 
+          color="green" 
+          to = './Tabla'
+        />
+      </q-card-actions>
+
+
   </div>
 </template>
 
-<script>
-import { ref } from "vue";
+<script setup >
 
-export default {
-  setup() {
-    return {
-      model: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
-      date: ref('2019/02/01')
-    };
+import { ref, onBeforeMount } from 'vue';
+import axios from 'axios'
+import { UseAprendizStore } from '../Stores/aprendices';
+import { UseUsuarioStore } from '../Stores/usuario';
+import { UseFichaStore} from "../Stores/fichas"
+import { UseInformeStore } from '../Stores/informes';
+
+/*  const useAprendiz = UseAprendizStore() */
+/* const useFicha = UseFichaStore()  */
+
+ const UseUsuario = UseUsuarioStore() 
+
+const options = ref(null)
+
+
+
+async function fetchData() {
+  const response = await fetch('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
+    headers: {
+      "x-token": UseUsuario.xtoken
+    }
   }
-};
+  )
+  options.value = await response.json()
+}
+
+fetchData()
+
+const filterOptions = ref([])
+
+async function filterONE(val, update) {
+  if (val === '') {
+    console.log(val);
+
+    update(() => {
+      filterOptions.value = options.value;
+
+    });
+  }
+
+  update(() => {
+    const needle = val.toLowerCase()
+    filterOptions.value = options.value.filter(option => {
+      return option._id.toLowerCase().includes(needle)
+    })
+  })
+}
+
+
+
 </script>
 
 <style scoped>
@@ -78,7 +107,7 @@ export default {
 
 .inline-flex {
   display: inline-flex;
-  gap: 20px; /* Espacio entre los seleccionadores */
+  gap: 20px; 
 }
 
 .q-popup-proxy {

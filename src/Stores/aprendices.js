@@ -8,6 +8,8 @@ import { UseUsuarioStore } from "./usuario.js";
 export const UseAprendizStore = defineStore("aprendiz", () => {
     let aprendiz = ref(false)
     const UseUsuario= UseUsuarioStore()
+
+    
     let loading =ref (false)
 
     const listarAprediz = async () => {
