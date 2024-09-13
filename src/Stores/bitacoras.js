@@ -10,6 +10,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     const UseUsuario = UseUsuarioStore()
 
     let loading =ref (false)
+    let bitacora = ref ("")
 
     const listarBitacora = async (fechaInicial, fechaFinal) => {
         loading.value=true
