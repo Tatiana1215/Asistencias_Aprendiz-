@@ -114,10 +114,25 @@
 
 
 <script setup>
+
+import { ref, onBeforeMount } from 'vue';
+
 import { ref, onBeforeMount, warn } from 'vue';
+
 import axios from 'axios';
 import { UseUsuarioStore } from '../Stores/usuario';
 
+let res = ref('');
+let id = ref('');
+let nombre = ref('');
+let email = ref('');
+let AbrirModal = ref(false);
+const UseUsuario = UseUsuarioStore();
+
+
+// Guardar valores originales para comparación
+let originalNombre = ref('');
+let originalEmail = ref('');
 
 
 let res = ref('')
@@ -132,9 +147,51 @@ let password1 = ref("");
 
 const UseUsuario = UseUsuarioStore()
 
+
 onBeforeMount(() => {
   traer();
 });
+
+
+function limpiarCampos() {
+  nombre.value = '';
+  email.value = '';
+  originalNombre.value = '';
+  originalEmail.value = '';
+}
+
+async function traer() {
+  res.value = await UseUsuario.listarUsuarios();
+  rows.value = res.value.data;
+}
+
+async function Abrir(row) {
+  AbrirModal.value = true;
+  nombre.value = row.Nombre;
+  email.value = row.Email;
+  id.value = row._id;
+
+  // Guardar valores originales
+  originalNombre.value = row.Nombre;
+  originalEmail.value = row.Email;
+}
+
+async function EditarUsuario() {
+  // Verificar si se realizaron cambios
+  if (nombre.value === originalNombre.value && email.value === originalEmail.value) {
+    alert('No se hizo ningún cambio.');
+    AbrirModal.value = false;
+    return;
+  }
+
+  const res = await UseUsuario.actualizarUsuario(id.value, nombre.value, email.value);
+  if (res) {
+    AbrirModal.value = false;
+    limpiarCampos();
+    await traer();
+  } else {
+    AbrirModal.value = true;
+
 const list = ["REGISTRAR"];
 
 const dialog = ref(false);
@@ -203,20 +260,25 @@ async function EditarUsuario() {
   }
 }
 
-
-const rows = ref([])
+const rows = ref([]);
 const columns = ref([
   { name: 'Numero', align: 'center', label: 'N°', field: 'Numero', sortable: true },
   { name: 'Nombre', align: 'center', label: 'Usuario', field: 'Nombre', sortable: true },
   { name: 'Email', label: 'Email', field: 'Email', sortable: true },
   { name: 'Estado', label: 'Estado', field: 'Estado', sortable: true },
   { name: 'Opciones', label: 'Opciones' },
-])
-
-
-
+]);
 
 async function Activar(id) {
+
+  try {
+    await axios.put(`http://localhost:4000/api/Usuario/Desactivar/${id}`, {
+      headers: {
+        'x-token': UseUsuario.xtoken,
+      },
+    });
+    await traer();
+
   console.log(id)
   try {
     let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Desactivar/${id}`, {
@@ -225,12 +287,25 @@ async function Activar(id) {
       }
     })
     await traer()
+
   } catch (error) {
     console.log(error.message);
   }
 }
 
 async function Desactivar(id) {
+
+  try {
+    await axios.put(`http://localhost:4000/api/Usuario/Activar/${id}`, {
+      headers: {
+        'x-token': UseUsuario.xtoken,
+      },
+    });
+    await traer();
+  } catch (error) {
+    console.log(error);
+  }
+
   console.log(id);
   try {
     let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`, {
@@ -249,6 +324,16 @@ async function Desactivar(id) {
 
 async function Eliminar(id) {
   try {
+
+    await axios.delete(`http://localhost:4000/api/Usuario/Eliminar/${id}`, {
+      headers: {
+        'x-token': UseUsuario.xtoken,
+      },
+    });
+    await traer();
+  } catch (error) {
+    console.log(error);
+
     let res = await axios.delete(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Eliminar/${id}`, {
       headers: {
         "x-token": UseUsuario.xtoken
@@ -259,11 +344,9 @@ async function Eliminar(id) {
   } catch (error) {
     console.log(error);
 
+
   }
 }
-
-
-
 </script>
 <style>
 * {
@@ -272,7 +355,4 @@ async function Eliminar(id) {
   box-sizing: border-box;
 }
 </style>
-<!-- 
-<template>
 
-</template> -->

@@ -99,6 +99,10 @@ let nombre = ref("");
 let p = ref(false);
 let id = ref("");
 
+// Guardar valores originales para comparación
+let originalCodigo = ref("");
+let originalNombre = ref("");
+
 const useFicha = UseFichaStore();
 
 const rows = ref([]);
@@ -115,6 +119,8 @@ async function traer() {
 function limpiarCampos() {
   nombre.value = "";
   codigo.value = "";
+  originalNombre.value = "";
+  originalCodigo.value = "";
 }
 
 
@@ -129,27 +135,34 @@ async function Abrir(row) {
 
 async function CrearFicha() {
   console.log(p.value);
+
+  // Verificar si se realizaron cambios
+  if (p.value && nombre.value === originalNombre.value && codigo.value === originalCodigo.value) {
+    alert("No se hizo ningún cambio.");
+    AbrirModal.value = false;
+    return;
+  }
   
-let res;
-if (p.value ) {
+  let res;
+  if (p.value) {
     // Editando una ficha existente
     res = await useFicha.EditarFicha(id.value, nombre.value, codigo.value);
   } else {
     // Creando una nueva ficha
     res = await useFicha.crearFicha(codigo.value, nombre.value);
-
   }
 
   // Verificar el estado de la respuesta
   if (res && res.status == 200) {
     await traer(); // Refrescar los datos
     AbrirModal.value = false; // Cerrar modal en caso de éxito
-    p.value = false
+    p.value = false;
     limpiarCampos(); // Limpiar campos
   } else {
     AbrirModal.value = true; // Mantener modal abierto en caso de error
   }
 }
+
 
 
 async function Activar(id) {
@@ -161,6 +174,7 @@ async function Activar(id) {
     console.log(error);
   }
 }
+
 async function Desactivar(id) {
   console.log(id);
   try {
@@ -173,7 +187,6 @@ async function Desactivar(id) {
 
 const columns = ref([
   { name: "Numero", align: "center", label: "N°", field: "Numero" },
-
   {
     name: "Nombre1",
     required: true,
