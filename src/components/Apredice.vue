@@ -72,8 +72,13 @@
           </q-card-section>
 
 
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
+
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
+
 
             <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz()">
               Guardar
