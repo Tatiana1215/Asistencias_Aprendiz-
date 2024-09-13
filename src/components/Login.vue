@@ -1,6 +1,7 @@
 <template>
   <div id="login">
     <div class="InicioSecion">
+
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="iconoAprendiz">
@@ -68,6 +69,39 @@
           </router-link>
         </q-card-actions>
       </q-card>
+
+      <div class="q-pa-md ">
+        <q-card style="min-width: 350px">
+        <q-card-section>
+            <div class="iconoAprendiz">
+              <img src="https://cdn-icons-png.flaticon.com/512/73/73199.png" alt="" />
+            </div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            <q-input dense v-model="email" placeholder="Email" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
+            <br />
+            <q-input dense v-model="password" placeholder="Password" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
+          </q-card-section>
+
+          <q-card-actions align="center" class="text-primary">
+            <q-btn :loading="useUsuario.loading" color="green" @click="secionIniciada()">
+              Inicio de sesion
+              <template v-slot:loading>
+                <q-spinner color="white" size="1em" />
+              </template>
+            </q-btn>
+
+
+
+            <router-link to="/OlvidoContrasena">
+              <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi contraseña</a></router-link>
+          </q-card-actions>
+        </q-card>
+      </div>
+
     </div>
   </div>
 </template>
@@ -87,6 +121,7 @@ let router = useRouter();
 let email = ref("");
 let password = ref("");
 let inicio = ref(true);
+
 
 // Rrgistro
 let nombre1 = ref("");
@@ -147,6 +182,10 @@ async function registrar() {
   limpiarCampos();
 }
 
+const useUsuario = UseUsuarioStore();
+
+
+
 async function secionIniciada() {
   let res = await useUsuario.Login(email.value, password.value);
   if (res && res.status === 200) {
@@ -159,6 +198,7 @@ async function secionIniciada() {
 
 <style>
 #login {
+  display: flex;
   justify-content: center;
   width: 100%;
   background-image: url("https://imagenes.eltiempo.com/files/image_1200_600/uploads/2024/04/03/660d5b9fc3744.jpeg");
@@ -169,12 +209,9 @@ async function secionIniciada() {
 }
 
 .InicioSecion {
-  display: grid;
-  width: 100%;
+  display: flex;
   justify-content: center;
-  /* Centra horizontalmente */
   align-items: center;
-  /* Centra verticalmente */
 }
 
 .registrar {
@@ -183,5 +220,9 @@ async function secionIniciada() {
 
 .contraseñaRecuperar {
   color: #008000;
+}
+
+.q-card {
+  width: 350px;
 }
 </style>

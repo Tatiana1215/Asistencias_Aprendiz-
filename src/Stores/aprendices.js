@@ -13,7 +13,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     const listarAprediz = async () => {
 
         try {
-            let res = await axios.get('http://localhost:4000/api/Aprendiz/ListarTodo', {
+            let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/ListarTodo', {
                 headers:{
                     "x-token": UseUsuario.xtoken
                 }
@@ -30,7 +30,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     const registrarAprendiz = async (nombre, telefono, documento, email, ficha) => {
         loading.value=true
         try {
-            let inf = await axios.post('http://localhost:4000/api/Aprendiz/Insertar', {
+            let inf = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Insertar', {
                 Nombre: nombre,
                 Telefono: telefono,
                 Documento: documento,
@@ -68,7 +68,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
 
     const editarAprendiz = async (id, nombre, telefono, documento, email, ficha) => {
         try {
-            let inf = await axios.put(`http://localhost:4000/api/Aprendiz/Actualizar/${id}`, {
+            let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Actualizar/${id}`, {
                 Nombre: nombre,
                 Telefono: telefono,
                 Documento: documento,

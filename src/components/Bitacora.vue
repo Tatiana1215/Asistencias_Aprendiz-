@@ -8,37 +8,36 @@
     <hr class="divider" />
 
     <div class="date">
-      <input type="datetime-local" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
-      <input type="datetime-local" v-model="fechaFinal" name="fechaFinal" id="fechaFinal" />
+      <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
+      <input type="date" v-model="fechaFinal" name="fechaFinal" id="fechaFinal" />
 
-      <q-btn :loading="UseBitacora.loading" color="green" @click="Buscar(), (p = false)">
+      <q-btn :loading="UseBitacora.loading" color="green" @click="Buscar()">
         Buscar
         <template v-slot:loading>
           <q-spinner color="white" size="1em" />
         </template>
       </q-btn>
-      <!--       <q-btn push color="primary" @click="Buscar" label="Buscar" />
- -->
     </div>
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
-        <q-table title="Asistencia" :rows="rows" :columns="columns" row-key="name">
+        <q-table :rows="rows" :columns="columns" row-key="name" >
+
+          <template v-slot:body-cell-Estado="props">
+            <q-select v-model="props.row.Estado" :options="estadoOptions" :class="{
+              'estado-asistio': props.row.Estado === 'Asistio',
+              'estado-no-asistio': props.row.Estado === 'No Asistio',
+              'estado-excusa': props.row.Estado === 'Excusa',
+              'estado-pendiente': props.row.Estado === 'Pendiente'
+            }" label="Seleccione Estado" dense outlined @update:model-value="actualizarEstado(props.row)" emit-value
+              map-options></q-select>
+          </template>
+          <template v-slot:body-cell-Numero="props">
+              <q-td :props="props">
+                {{ props.pageIndex + 1 }}
+              </q-td>
+            </template>
         </q-table>
       </div>
-    </div>
-
-    <div class="date">
-      <input type="text" v-model="Aprendiz" name="" id="aprendiz" />
-      <input type="datetime-local" v-model="FechaHora" name="" id="fecha" />
-
-      <q-btn :loading="UseBitacora.loading" color="green" @click="guardar(), (p = false)">
-        Registar
-        <template v-slot:loading>
-          <q-spinner color="white" size="1em" />
-        </template>
-      </q-btn>
-
-      <!--    <button @click="guardar">Registrar</button> -->
     </div>
   </div>
 </template>
@@ -46,61 +45,70 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { UseBitacoraStore } from "../Stores/bitacoras";
+import axios from "axios";
 
 let fechaInicial = ref("");
 let fechaFinal = ref("");
+let Estado = ref("")
 
 // Registrar la hora de llegada
-let Aprendiz = ref();
-let FechaHora = ref();
+// let Aprendiz = ref();
+// let createdAt = ref();
+
+const estadoOptions = [
+  { label: "Asistio", value: "Asistio" },
+  { label: "No asistio", value: "No Asistio" },
+  { label: "Excusa", value: "Excusa" },
+  { label: "Pendiente", value: "Pendiente" }
+];
 
 const UseBitacora = UseBitacoraStore();
 onBeforeMount(() => {
-  // Buscar();
   traer()
-
+  // actualizarEstado()
 });
 
+
+
 async function traer() {
-  let res = await UseBitacora.listar()
-  rows.value = res.data
+  let res = await UseBitacora.listar();
+  rows.value = res.data;
+  // rows.value = res.Estado;
+
 }
 
 const rows = ref([]);
 
 async function Buscar() {
+  let res = await UseBitacora.listarBitacora(fechaInicial.value, fechaFinal.value);
+  console.log('Datos recibidos:', res.data);
+  rows.value = res.data;
+}
+
+
+async function actualizarEstado(row) {
   try {
-    let res = await UseBitacora.listarBitacora(
-      fechaInicial.value,
-      fechaFinal.value
-    );
-    console.log(res);
-    rows.value = res.data.map((item, index) => ({
-      ...item,
-      numero: index + 1,
-    }));
- 
-    // traer()
+    console.log("Estado enviado:", row.Estado); // Verifica el valor que estás enviando
+    let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/actualizarEstado/${row._id}`, {
+      Estado: row.Estado
+    });
+    rows.value = res.data;
+    console.log('Estado actualizado:', res.data);
+    traer()
   } catch (error) {
-    console.log("Error al listar bitácoras:", error);
-    // rows.value = []; // Asegúrate de que rows siempre sea un array
+    console.log('Error al actualizar el estado:', error);
   }
 }
 
-async function guardar() {
-  let res = await UseBitacora.registrarAprendiz(
-    Aprendiz.value,
-    FechaHora.value
-  );
-  await Buscar();
-}
+
+
 const columns = ref([
   {
     name: "Numero",
     required: true,
     label: "N°",
     align: "left",
-    field: "numero",
+    field: "Numero",
     sortable: true,
   },
   {
@@ -114,7 +122,7 @@ const columns = ref([
   {
     name: "telefonoAprendiz",
     required: true,
-    label: "Numero de Telefono",
+    label: "Número de Teléfono",
     align: "left",
     field: "telefonoAprendiz",
     sortable: true,
@@ -135,12 +143,26 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "FechaHora",
+    name: "createdAt",
     align: "center",
     label: "Fecha y Hora",
-    field: "FechaHora",
+    field: "createdAt",
     sortable: true,
   },
+  // {
+  //   name: "Estado",
+  //   align: "center",
+  //   label: "Estado",
+  //   field: "Estado",
+  //   sortable: true,
+  // },
+  {
+    name: "Estado",
+    align: "center",
+    label: "Estados",
+    field: "Estado",
+    sortable: true,
+  }
 ]);
 </script>
 
@@ -148,6 +170,8 @@ const columns = ref([
 * {
   font-family: "New Amsterdam", sans-serif;
   font-size: 1.1rem;
+  margin: 0;
+  padding: 0;
 }
 
 .title {
@@ -173,26 +197,38 @@ const columns = ref([
   justify-content: center;
   display: flex;
   gap: 10px;
-
 }
 
-.tabla .q-table__title {
+.table .q-table__title {
   font-size: 1.5rem !important;
-  /* Agrandar título */
   text-align: center;
-  /* Centrar título */
   font-weight: bold;
 }
 
-.tabla .q-table__cell,
-.tabla .q-table__row {
+.table .q-table__cell,
+.table .q-table__row {
   font-size: 1.2rem !important;
-  /* Agrandar letra en la tabla */
 }
 
 .btn {
   background-color: green;
   color: white;
   border: green;
+}
+
+.estado-asistio {
+  background-color: lightgreen;
+}
+
+.estado-no-asistio {
+  background-color: rgb(254, 166, 166);
+}
+
+.estado-excusa {
+  background-color: rgb(133, 230, 230);
+}
+
+.estado-pendiente {
+  background-color: rgb(253, 230, 83);
 }
 </style>

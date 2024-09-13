@@ -12,7 +12,7 @@ export const UseFichaStore = defineStore("ficha", () => {
 
     const listarFicha = async () => {
         try {
-            let inf = await axios.get("http://localhost:4000/api/Ficha/ListarTodo",{
+            let inf = await axios.get("https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo",{
                 headers:{
                 "x-token": UseUsuario.xtoken,
                 }
@@ -27,12 +27,12 @@ export const UseFichaStore = defineStore("ficha", () => {
     const crearFicha = async (codigo, nombre) => {
         loading.value=true
         try {
-            let inf = await axios.post('http://localhost:4000/api/Ficha/crear',{
+            let inf = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/crear',{
                 Codigo: codigo,
                 Nombre: nombre
             },{
                 headers:{
-                    "xtoken": UseUsuario.xtoken
+                    "x-token": UseUsuario.xtoken
                 }
             })
             Notify.create({
@@ -60,7 +60,7 @@ export const UseFichaStore = defineStore("ficha", () => {
     const EditarFicha = async (id,nombre,codigo) => {
         loading.value=true
         try {
-            let inf = await axios.put(`http://localhost:4000/api/Ficha/Actualizar/${id}`,{
+            let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Actualizar/${id}`,{
                 Nombre:nombre,
                 Codigo:codigo,
             },{

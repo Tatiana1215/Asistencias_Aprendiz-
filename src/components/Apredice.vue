@@ -8,89 +8,88 @@
 
     <div class="q-pa-md q-gutter-sm">
       <q-btn class="btnA" label="Crear" icon="add_circle" color="green" @click="AbrirModal = true" />
-    </div>
 
 
-
-    <div class="q-pa-md q-gutter-sm">
-      <div class="table">
-        <q-table :rows="rows" :columns="columns" row-key="name">
-          <template v-slot:body-cell-opciones="props">
-            <q-td :props="props">
-              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
-                <q-icon name="edit" style="color: green" />
-              </q-btn> 
-              <q-btn icon="close" round color="red" @click="Activar(props.row._id)"
-                v-if="props.row.Estado == 1" />
-              <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
-            </q-td>
-          </template>
-          <template v-slot:body-cell-Estado1="props">
-            <q-td :props="props">
-              <p style="color:green" v-if="props.row.Estado == 1">Activo</p>
-              <p style="color:red" v-else>Inactivo</p>
-            </q-td>
-          </template>
-          <template v-slot:body-cell-Numero="props">
-            <q-td :props="props">
-              {{ props.pageIndex + 1 }}
-            </q-td>
-          </template>
-        </q-table>
+      <div class="q-pa-md ">
+        <div class="table">
+          <q-table :rows="rows" :columns="columns" row-key="name">
+            <template v-slot:body-cell-opciones="props">
+              <q-td :props="props">
+                <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
+                  <q-icon name="edit" style="color: green" />
+                </q-btn>
+                <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+                <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
+              </q-td>
+            </template>
+            <template v-slot:body-cell-Estado1="props">
+              <q-td :props="props">
+                <p style="color:green" v-if="props.row.Estado == 1">Activo</p>
+                <p style="color:red" v-else>Inactivo</p>
+              </q-td>
+            </template>
+            <template v-slot:body-cell-Numero="props">
+              <q-td :props="props">
+                {{ props.pageIndex + 1 }}
+              </q-td>
+            </template>
+          </q-table>
+        </div>
       </div>
-    </div>
 
 
 
-    <q-dialog v-model="AbrirModal" persistent>
-      <q-card style="min-width: 350px; margin: 0;">
-        <q-card-section>
-          <div class="iconoAprendiz">
-            <img src="https://cdn-icons-png.flaticon.com/256/72/72648.png" alt="">
-          </div>
-          <div class="text">
-            {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
-          </div>
-        </q-card-section>
+      <q-dialog v-model="AbrirModal" persistent>
+        <q-card style="min-width: 350px; margin: 0;">
+          <q-card-section>
+            <div class="iconoAprendiz">
+              <img src="https://cdn-icons-png.flaticon.com/256/72/72648.png" alt="">
+            </div>
+            <div class="text">
+              {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
+            </div>
+          </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green" @keyup.enter="prompt = false" />
-          <br>
-          <q-input dense v-model="telefono" placeholder="Telefono" autofocus color="green"
-            @keyup.enter="prompt = false" />
-          <br>
-          <q-input dense v-model="documento" placeholder="Documento" autofous color="green"
-            @keyup.enter="prompt = false" />
-          <br>
-          <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false" />
-          <br>
-          <!-- <q-input dense v-model="ficha" placeholder="Id_Ficha" autofocus @keyup.enter="prompt = false" />
+          <q-card-section class="q-pt-none">
+            <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green"
+              @keyup.enter="prompt = false" />
+            <br>
+            <q-input dense v-model="telefono" placeholder="Telefono" autofocus color="green"
+              @keyup.enter="prompt = false" />
+            <br>
+            <q-input dense v-model="documento" placeholder="Documento" autofous color="green"
+              @keyup.enter="prompt = false" />
+            <br>
+            <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false" />
+            <br>
+            <!-- <q-input dense v-model="ficha" placeholder="Id_Ficha" autofocus @keyup.enter="prompt = false" />
           <br> -->
 
-          <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value map-options
-            option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
-            use-chips />
+            <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value
+              map-options option-label="Codigo" option-value="_id" use-input @filter="filterFunction"
+              class="custom-select" use-chips />
 
-        </q-card-section>
-
-
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
-
-          <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz(), (p = false)">
-            Guardar
-            <template v-slot:loading>
-              <q-spinner color="white" size="1em" />
-            </template>
-          </q-btn>
+          </q-card-section>
 
 
-          <!--           <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
+
+            <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz()">
+              Guardar
+              <template v-slot:loading>
+                <q-spinner color="white" size="1em" />
+              </template>
+            </q-btn>
+
+
+            <!--           <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
  --> <!-- <q-btn :loading="aprendiz" color="secondary" @click="agregarAprendiz(),(p=false)" label="Button"   /> -->
 
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+    </div>
   </div>
 </template>
 
@@ -137,31 +136,29 @@ function limpiarCampos() {
 }
 
 async function agregarAprendiz() {
-  if (p.value == false) {
-    let res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
-    if (!res) {
-      AbrirModal.value = true;
-    } else {
-      AbrirModal.value = false;
-      limpiarCampos()
-    }
 
+  let res;
+  if (p.value == false) {
+    res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
   } else {
-    let res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value)
-    if (!res) {
-      AbrirModal.value = true;
-    } else {
-      AbrirModal.value = false;
-      limpiarCampos()
-    }
+    res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value)
   }
+
+  if (res && res.status == 200) {
+    AbrirModal.value = false;
+    p.value = false
+    limpiarCampos()
+  } else {
+    AbrirModal.value = true;
+  }
+
   await traer()
 }
 
 
 
 async function fetchData() {
-  const response = await fetch('http://localhost:4000/api/Ficha/ListarTodo', {
+  const response = await fetch('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
     headers: {
       "x-token": UseUsuario.xtoken
     }
@@ -211,7 +208,7 @@ function Abrir(row) {
 async function Activar(id) {
   console.log(id);
   try {
-    inf = await axios.put(`http://localhost:4000/api/Aprendiz/Desactivar/${id}`)
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`)
     traer();
   } catch (error) {
     console.log(error);
@@ -220,7 +217,7 @@ async function Activar(id) {
 async function Desactivar(id) {
   console.log(id);
   try {
-    inf = await axios.put(`http://localhost:4000/api/Aprendiz/Activar/${id}`)
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`)
     traer();
   } catch (error) {
     console.log(error);
@@ -255,6 +252,10 @@ const columns = ref([
   width: 100%;
 }
 
+/* .table{
+  width: 100%;
+  margin: 0 auto;
+} */
 .tituloAprendiz,
 .text {
   font-weight: 900;

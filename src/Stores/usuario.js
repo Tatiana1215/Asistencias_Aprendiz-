@@ -2,25 +2,27 @@ import { defineStore } from "pinia"
 import axios from "axios"
 import { normalizeClass, ref, registerRuntimeCompiler } from "vue"
 import { useQuasar, Notify } from "quasar"
+import Usuario from "../components/Usuario.vue";
 
 export const UseUsuarioStore = defineStore("Usuario", () => {
 
     let xtoken = ref('')
-    let usuario = ref('')
+    const  usuario = ref('')
     let loading = ref(false)
 
     const Login = async (email, password) => {
         loading.value = true;
         try {
-            const r = await axios.post('http://localhost:4000/api/Usuario/login', {
+            const r = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/login', {
                 Email: email,
                 Password: password
             });
     
             xtoken.value = r.data.token;
-            usuario.value = r.data;
+            usuario.value = r.data.usuario
+            console.log(usuario.value)
             console.log(xtoken.value);
-    
+             
             Notify.create({
                 color: "positive",
                 message: "Inicio de sesión exitoso",
@@ -45,7 +47,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     const registrar = async (nombre1, email1, password1) => {
         try {
 
-            const usuarioRegistro = await axios.post('http://localhost:4000/api/Usuario/insertar', {
+            const usuarioRegistro = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/insertar', {
                 Nombre: nombre1,
                 Email: email1,
                 Password: password1
@@ -80,7 +82,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
 
     const listarUsuarios = async () => {
         try {
-            const listar = await axios.get('http://localhost:4000/api/Usuario/listarTodos', {
+            const listar = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/listarTodos', {
                 headers: {
                     "x-token": xtoken.value
                 }
@@ -110,7 +112,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     const actualizarUsuario = async (id, nombre, email) => {
         // console.log('Request received:', req.params.id, req.body);
         try {
-            const actualizar = await axios.put(`http://localhost:4000/api/Usuario/Actualizar/${id}`,{
+            const actualizar = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Actualizar/${id}`,{
                 Email:email,
                 Nombre:nombre,
             },{
@@ -140,7 +142,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     }
 
     return {
-        xtoken, Login, registrar, listarUsuarios, actualizarUsuario
+        xtoken,loading, Login, registrar, listarUsuarios, actualizarUsuario,usuario
     }
 });
 
