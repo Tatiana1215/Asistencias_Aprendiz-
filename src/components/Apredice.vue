@@ -72,10 +72,9 @@
           </q-card-section>
 
 
-
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
-
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
+          </q-card-actions>
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancelar" @click="p = false" color="grey" v-close-popup />
 
@@ -86,11 +85,6 @@
                 <q-spinner color="white" size="1em" />
               </template>
             </q-btn>
-
-
-            <!--           <q-btn flat label="Guardar" @click="agregarAprendiz(), (p = false)" color="green"  />
- --> <!-- <q-btn :loading="aprendiz" color="secondary" @click="agregarAprendiz(),(p=false)" label="Button"   /> -->
-
           </q-card-actions>
         </q-card>
       </q-dialog>

@@ -27,42 +27,7 @@
             </template>
           </q-btn>
 
-          <div id="registro">
-            <div class="q-pa-md">
-              <q-btn class="registrar" v-for="filter in backdropFilterList" :key="filter.label" color="green" :label="filter.label" no-caps @click="filter.onClick" />
-              <q-dialog v-model="AbrirModal" :backdrop-filter="backdropFilter">
-                <q-card class="dialogRegistrar">
-                  <q-card-section>
-                    <div class="iconoAprendiz">
-                      <img src="https://cdn-icons-png.flaticon.com/512/72/72648.png" alt="" />
-                    </div>
-                  </q-card-section>
-                  <q-card-section>
-                    <q-input dense v-model="nombre1" placeholder="Nombre" autofocus color="green" @keyup.enter="inicioSecion = false" />
-                    <br />
-                    <q-input dense v-model="email1" placeholder="Email" autofocus color="green" @keyup.enter="inicioSecion = false" />
-                    <br />
-                    <q-input dense v-model="password1" placeholder="Password" autofocus color="green" :type="passwordFieldType1" @keyup.enter="inicioSecion = false">
-                      <template v-slot:append>
-                        <q-icon :name="passwordVisible1 ? 'visibility_off' : 'visibility'" @click="togglePasswordVisibility1" class="cursor-pointer" />
-                      </template>
-                    </q-input>
-                    <br />
-                  </q-card-section>
 
-                  <q-card-actions align="right">
-                    <q-btn :loading="useUsuario.loading" color="green" @click="registrar()">
-                      Registrar
-                      <template v-slot:loading>
-                        <q-spinner color="white" size="1em" />
-                      </template>
-                    </q-btn>
-                    <q-btn flat label="Close" color="red" v-close-popup />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
-            </div>
-          </div>
 
           <router-link to="/OlvidoContrasena">
             <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi contraseña</a>
@@ -70,38 +35,7 @@
         </q-card-actions>
       </q-card>
 
-      <div class="q-pa-md ">
-        <q-card style="min-width: 350px">
-        <q-card-section>
-            <div class="iconoAprendiz">
-              <img src="https://cdn-icons-png.flaticon.com/512/73/73199.png" alt="" />
-            </div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <q-input dense v-model="email" placeholder="Email" autofocus color="green"
-              @keyup.enter="inicioSecion = false" />
-            <br />
-            <q-input dense v-model="password" placeholder="Password" autofocus color="green"
-              @keyup.enter="inicioSecion = false" />
-          </q-card-section>
-
-          <q-card-actions align="center" class="text-primary">
-            <q-btn :loading="useUsuario.loading" color="green" @click="secionIniciada()">
-              Inicio de sesion
-              <template v-slot:loading>
-                <q-spinner color="white" size="1em" />
-              </template>
-            </q-btn>
-
-
-
-            <router-link to="/OlvidoContrasena">
-              <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi contraseña</a></router-link>
-          </q-card-actions>
-        </q-card>
-      </div>
-
+  
     </div>
   </div>
 </template>
@@ -182,7 +116,6 @@ async function registrar() {
   limpiarCampos();
 }
 
-const useUsuario = UseUsuarioStore();
 
 
 
