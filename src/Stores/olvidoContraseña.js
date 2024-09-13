@@ -118,7 +118,7 @@ let loading =ref (false)
     }
 
 return {
-    CorreoMensaje, verificarCodigo, nuevaContraseña
+    CorreoMensaje, verificarCodigo, nuevaContraseña, loading
 }
 })
 

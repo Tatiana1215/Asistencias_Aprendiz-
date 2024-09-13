@@ -58,7 +58,6 @@
           </template>
         </q-table>
       </div>
-    </div>
 
     <q-dialog v-model="AbrirModal" persistent>
       <q-card style="min-width: 350px; margin: 0">
@@ -158,6 +157,7 @@
       </q-card>
     </q-dialog>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -356,6 +356,7 @@ const columns = ref([
 .iconoAprendiz img {
   width: 100%;
 }
+
 /* .table{
   width: 100%;
   margin: 0 auto;
