@@ -3,12 +3,15 @@ import axios from "axios";
 import { ref } from "vue";
 import { useQuasar, Notify } from "quasar";
  import { UseUsuarioStore } from "./usuario.js"; 
+ import { UseBitacoraStore } from "./bitacoras.js";
+
 
 
 export const UseInformeStore = defineStore("informes", () => {
 
 
     const UseUsuario= UseUsuarioStore() 
+    let bitacora = ref ("")
 
     const listarAprediz = async () => {
 
@@ -29,4 +32,9 @@ export const UseInformeStore = defineStore("informes", () => {
     return {
      listarAprediz
     }
+
+    
+
+
+
 }) 

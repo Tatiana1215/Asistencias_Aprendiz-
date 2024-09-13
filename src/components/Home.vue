@@ -27,12 +27,15 @@
           </div>
 
           <div class="Botones">
-            <q-btn id="boton" to="/Home/InicioH" rounded color="green" icon="home" label="Inicio" /> <br>
-            <q-btn id="boton" to="/Home/Bitacora" rounded color="green" icon="event" label="Bitacora" /> <br>
-            <q-btn id="boton" to="/Home/Ficha" rounded color="green" icon="school" label="Ficha" /> <br>
-            <q-btn id="boton" to="/Home/Aprendiz" rounded color="green" icon="book" label="Aprendiz" /> <br>
-            <q-btn id="boton" to="/Home/Usuario" rounded color="green" icon="person" label="Usuario" /> <br>
-            <q-btn id="boton" to="/Home/Informes" rounded color="green" icon="description" label="Informes" /> <br>
+            <div class="Botones">
+            <q-btn id="boton" to="/Home/InicioH" rounded color="green" icon="home" label="Inicio" align="left" /> <br>
+            <q-btn id="boton" to="/Home/Bitacora" rounded color="green" icon="event" label="Bitacora" align="left" /> <br>
+            <q-btn id="boton" to="/Home/Ficha" rounded color="green" icon="school" label="Ficha" align="left" /> <br>
+            <q-btn id="boton" to="/Home/Aprendiz" rounded color="green" icon="book" label="Aprendiz" align="left" /> <br>
+            <q-btn id="boton" to="/Home/Usuario" rounded color="green" icon="person" label="Usuario" align="left" /> <br>
+            <q-btn id="boton" to="/Home/Informes" rounded color="green" icon="description" label="Informes" align="left" /> <br>
+          </div>
+
           </div>
 
         </div>
