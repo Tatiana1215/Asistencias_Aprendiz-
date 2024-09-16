@@ -41,14 +41,11 @@
 
       <q-dialog v-model="AbrirModal" persistent>
         <q-card style="min-width: 350px; margin: 0;">
-          <q-card-section>
-            <div class="iconoAprendiz">
-              <img src="https://cdn-icons-png.flaticon.com/256/72/72648.png" alt="">
-            </div>
+          <!-- <q-card-section> -->
             <div class="text">
               {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
             </div>
-          </q-card-section>
+          <!-- </q-card-section> -->
 
           <q-card-section class="q-pt-none">
             <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green"
@@ -233,29 +230,18 @@ const columns = ref([
 
 
 <style>
-.iconoAprendiz {
-  width: 40%;
-  margin: 0 auto;
-  margin-bottom: 5px;
-  /* border:4px solid green ; */
-  /* border-radius: 100%; */
-  /* padding: 5%; */
-  /* background-color: white; */
-}
 
 .iconoAprendiz img {
   width: 100%;
 }
-
-/* .table{
-  width: 100%;
-  margin: 0 auto;
-} */
 .tituloAprendiz,
 .text {
+  background-color: green;
+  color: white;
+  padding: 2%;
+  margin-bottom: 4%;
   font-weight: 900;
-  font-size: 24px;
-  color: darkgreen;
+  font-size: 25px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-align: center;
 }

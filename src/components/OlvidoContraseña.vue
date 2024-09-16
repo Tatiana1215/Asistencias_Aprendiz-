@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="contraseña">
         <q-layout view="hHh lpR fFf">
             <q-header elevated class="bg-darkgreen text-white" style="background-color: green;" height-hint="98">
                 <q-toolbar>
@@ -50,7 +50,7 @@
 
 
                 <div class="cambiarContraseña" v-else="codigoCorrecto">
-                    <!-- <div class="q-pa-md q-gutter-sm"> -->
+                    <div class="q-pa-md ">
                     <q-card style="min-width: 450px; ">
                         <q-card-section>
                             <div class="text">
@@ -80,7 +80,7 @@
                                 color="green" />
                         </q-card-actions>
                     </q-card>
-                    <!-- </div> -->
+                    </div>
                 </div>
             </q-page-container>
         </q-layout>
@@ -150,6 +150,17 @@ function salir() {
 </script>
 
 <style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#contraseña{
+    display: flex;
+    justify-content: center;
+}
+
 .VerificacionEmail {
     display: flex;
     width: 100%;
@@ -181,12 +192,12 @@ function salir() {
 
 }
 
+
 .cambiarContraseña {
     display: flex;
     justify-content: center;
-    align-content: center;
     align-items: center;
+    height: 100vh; /* Ensure full viewport height */
 }
-
 /* .iconContraseñaOlvido {} */
 </style>

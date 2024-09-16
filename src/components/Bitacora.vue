@@ -65,20 +65,13 @@ const estadoOptions = [
 const UseBitacora = UseBitacoraStore();
 onBeforeMount(() => {
   traer()
-  // actualizarEstado()
 });
-
-
+const rows = ref([]);
 
 async function traer() {
   let res = await UseBitacora.listar();
   rows.value = res.data;
-  // rows.value = res.Estado;
-
 }
-
-const rows = ref([]);
-
 async function Buscar() {
   let res = await UseBitacora.listarBitacora(fechaInicial.value, fechaFinal.value);
   console.log('Datos recibidos:', res.data);
@@ -117,6 +110,14 @@ const columns = ref([
     label: "Aprendiz",
     align: "left",
     field: "nombreAprendiz",
+    sortable: true,
+  },
+  {
+    name: "documentoAprendiz",
+    required: true,
+    label: "Número de Documento",
+    align: "left",
+    field: "documentoAprendiz",
     sortable: true,
   },
   {

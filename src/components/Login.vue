@@ -3,11 +3,15 @@
     <div class="InicioSecion">
 
       <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="iconoAprendiz">
-            <img src="https://cdn-icons-png.flaticon.com/512/73/73199.png" alt="" />
+        <div class="text">
+            {{ "Login"}}
           </div>
-        </q-card-section>
+          <q-card-section>
+            <div class="imagenlogo">
+              <img src="https://www.soydebuenaventura.com/media/transparent/20230802_logosena.png" alt="">
+            </div>
+          </q-card-section>
+
 
         <q-card-section class="q-pt-none">
           <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="inicioSecion = false" />
@@ -19,15 +23,13 @@
           </q-input>
         </q-card-section>
 
-        <q-card-actions align="center" class="text-primary">
-          <q-btn :loading="useUsuario.loading" color="green" @click="secionIniciada()">
+        <q-card-actions align="center" class="text-primary" >
+          <q-btn :loading="useUsuario.loading" style="margin-bottom: 2%;" color="green" @click="secionIniciada()">
             Inicio de sesión
             <template v-slot:loading>
               <q-spinner color="white" size="1em" />
             </template>
           </q-btn>
-
-
 
           <router-link to="/OlvidoContrasena">
             <a href="/OlvidoContrasena" class="contraseñaRecuperar">Olvidé mi contraseña</a>
@@ -145,6 +147,7 @@ async function secionIniciada() {
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 .registrar {
@@ -153,9 +156,22 @@ async function secionIniciada() {
 
 .contraseñaRecuperar {
   color: #008000;
-}
+  /* padding-top: 40%;
+  */
+  margin-top: 30px;
+
+} 
 
 .q-card {
   width: 350px;
+}
+.imagenlogo{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.imagenlogo img{
+
+  width: 40%;
 }
 </style>

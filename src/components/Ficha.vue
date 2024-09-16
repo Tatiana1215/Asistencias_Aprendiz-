@@ -7,7 +7,7 @@
     <hr class="divider" />
 
     <div class="q-pa-md q-gutter-sm">
-      <q-btn  label="Crear" icon="add_circle" color="green" @click="AbrirModal = true" p="false" />
+      <q-btn label="Crear" icon="add_circle" color="green" @click="AbrirModal = true" p="false" />
 
       <div class="table-container">
         <q-table :rows="rows" :columns="columns" row-key="name">
@@ -20,7 +20,7 @@
               <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
             </q-td>
           </template>
-          
+
           <template v-slot:body-cell-Estado1="props">
             <q-td :props="props">
               <p v-if="props.row.Estado == 1" class="custom-font" style="color: green">Activo</p>
@@ -33,7 +33,7 @@
               <span class="custom-font">{{ props.pageIndex + 1 }}</span>
             </q-td>
           </template>
-          
+
           <template v-slot:body-cell-Nombre1="props">
             <q-td :props="props">
               <span class="custom-font">{{ props.row.Nombre }}</span>
@@ -45,21 +45,15 @@
               <span class="custom-font">{{ props.row.Codigo }}</span>
             </q-td>
           </template>
-          
+
         </q-table>
       </div>
 
       <q-dialog v-model="AbrirModal" persistent>
         <q-card style="min-width: 350px; margin-top: 0">
-          <q-card-section>
-            <div class="iconoAprendiz">
-              <img src="https://cdn-icons-png.flaticon.com/512/5825/5825337.png" alt="" />
-            </div>
-            <div class="text">
-              {{ p == true ? "Editar Ficha" : "Agregar Ficha" }}
-            </div>
-          </q-card-section>
-
+          <div class="text">
+            {{ p == true ? "Editar Ficha" : "Agregar Ficha" }}
+          </div>
           <q-card-section class="q-pt-none">
             <!-- <label for="codigo">Nombre</label> -->
             <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
@@ -74,7 +68,6 @@
 
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
-
             <q-btn :loading="useFicha.loading" label="Enviar" color="green" @click="CrearFicha()">
               <template v-slot:loading>
                 <q-spinner color="white" size="1em" />
@@ -142,7 +135,7 @@ async function CrearFicha() {
     AbrirModal.value = false;
     return;
   }
-  
+
   let res;
   if (p.value) {
     // Editando una ficha existente
@@ -241,18 +234,25 @@ const columns = ref([
 
 /* Define una clase para el estilo de la fuente y tamaño de la letra */
 .custom-font {
-  font-family: "Arial", sans-serif; /* Cambia "Arial" por la fuente que prefieras */
-  font-size: 16px; /* Cambia a tu tamaño de letra preferido */
+  font-family: "Arial", sans-serif;
+  /* Cambia "Arial" por la fuente que prefieras */
+  font-size: 16px;
+  /* Cambia a tu tamaño de letra preferido */
 }
 
 /* Estilos para los encabezados de la tabla */
 .q-table th {
-  background-color: rgb(81, 204, 81); /* Cambia esto por el color de fondo que prefieras */
-  color: #333; /* Cambia esto por el color de texto que prefieras */
-  font-size: 15px; /* Ajusta el tamaño de la letra */
-  font-family: 'Roboto', Arial, sans-serif; /* Cambia "Arial" por la fuente que prefieras */
+  background-color: rgb(81, 204, 81);
+  /* Cambia esto por el color de fondo que prefieras */
+  color: #333;
+  /* Cambia esto por el color de texto que prefieras */
+  font-size: 15px;
+  /* Ajusta el tamaño de la letra */
+  font-family: 'Roboto', Arial, sans-serif;
+  /* Cambia "Arial" por la fuente que prefieras */
   font-weight: bold;
-  padding: 10px; /* Ajusta el padding si es necesario */
+  padding: 10px;
+  /* Ajusta el padding si es necesario */
 }
 
 .q-btn {
@@ -268,7 +268,6 @@ const columns = ref([
       0.5);
   /* Opcional: Ajusta la opacidad del fondo */
 }
-.container{
-  
-}
+
+.container {}
 </style>

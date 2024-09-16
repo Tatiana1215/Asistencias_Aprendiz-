@@ -55,23 +55,10 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
             });
-            // bitacoras.value = res.data; // Update bitacoras state
-            Notify.create({
-                color: "positive",
-                message: "Datos entre estas fechas",
-                icon: "check_circle",
-                timeout: 2500,
-            });
+     
             return res;
         } catch (error) {
             console.log('No hay bitácoras', error);
-            Notify.create({
-                color: "negative",
-                message: "Error al listar bitácoras",
-                icon: "error",
-                timeout: 2500,
-            });
-            return error;
         }
     }
     const registrarAprendiz = async (Aprendiz) => {
