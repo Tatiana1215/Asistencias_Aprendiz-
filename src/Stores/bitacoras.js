@@ -12,13 +12,22 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     let loading =ref (false)
    
 
-    const listarBitacora = async (fechaInicial, fechaFinal) => {
+    const listarBitacora = async (ficha,fechaInicial, fechaFinal) => {
         loading.value=true
         try {
+
+            console.log(fechaInicial)
+            console.log(fechaFinal);
+            console.log(ficha);
+            
+            
             let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/ListarBitacoras', {
                 params: {
+
+                    fichaNumero: ficha,
                     FechaInicial: new Date(fechaInicial).toISOString(),
-                    FechaFinal: new Date(fechaFinal).toISOString()
+                    FechaFinal: new Date(fechaFinal).toISOString(),
+                   
                 },
                 headers: {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization

@@ -1,41 +1,78 @@
 <template>
   <div>
-
     <div class="title">
       <h3>ASISTENCIA</h3>
     </div>
 
     <hr class="divider" />
 
-    <div class="date">
-      <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
-      <input type="date" v-model="fechaFinal" name="fechaFinal" id="fechaFinal" />
+    <div class="q-pa-md centered-row">
+      <div class="q-gutter-md inline-flex align-center">
+        <q-select
+          dense
+          v-model="ficha"
+          :options="filterOptions"
+          label="Id_Ficha"
+          color="green"
+          emit-value
+          map-options
+          option-label="Codigo"
+          option-value="Codigo"
+          use-input
+          @filter="filterONE"
+          class="custom-select"
+          use-chips
+        />
 
-      <q-btn :loading="UseBitacora.loading" color="green" @click="Buscar()">
-        Buscar
-        <template v-slot:loading>
-          <q-spinner color="white" size="1em" />
-        </template>
-      </q-btn>
+        <div class="Fecha">
+          <input
+            type="date"
+            v-model="fechaInicial"
+            name="fechaInicial"
+            id="fechaInicial"
+          />
+          <input
+            type="date"
+            v-model="fechaFinal"
+            name="fechaFinal"
+            id="fechaFinal"
+          />
+
+          <q-btn :loading="UseBitacora.loading" color="green" @click="Buscar()">
+            Buscar
+            <template v-slot:loading>
+              <q-spinner color="white" size="1em" />
+            </template>
+          </q-btn>
+        </div>
+      </div>
     </div>
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
-        <q-table :rows="rows" :columns="columns" row-key="name" >
-
+        <q-table :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-Estado="props">
-            <q-select v-model="props.row.Estado" :options="estadoOptions" :class="{
-              'estado-asistio': props.row.Estado === 'Asistio',
-              'estado-no-asistio': props.row.Estado === 'No Asistio',
-              'estado-excusa': props.row.Estado === 'Excusa',
-              'estado-pendiente': props.row.Estado === 'Pendiente'
-            }" label="Seleccione Estado" dense outlined @update:model-value="actualizarEstado(props.row)" emit-value
-              map-options></q-select>
+            <q-select
+              v-model="props.row.Estado"
+              :options="estadoOptions"
+              :class="{
+                'estado-asistio': props.row.Estado === 'Asistio',
+                'estado-no-asistio': props.row.Estado === 'No Asistio',
+                'estado-excusa': props.row.Estado === 'Excusa',
+                'estado-pendiente': props.row.Estado === 'Pendiente',
+              }"
+              label="Seleccione Estado"
+              dense
+              outlined
+              @update:model-value="actualizarEstado(props.row)"
+              emit-value
+              map-options
+            ></q-select>
           </template>
           <template v-slot:body-cell-Numero="props">
-              <q-td :props="props">
-                {{ props.pageIndex + 1 }}
-              </q-td>
-            </template>
+            <q-td :props="props">
+              {{ props.pageIndex + 1 }}
+            </q-td>
+          </template>
         </q-table>
       </div>
     </div>
@@ -45,11 +82,13 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { UseBitacoraStore } from "../Stores/bitacoras";
+import { UseUsuarioStore } from "../Stores/usuario";
 import axios from "axios";
 
 let fechaInicial = ref("");
 let fechaFinal = ref("");
-let Estado = ref("")
+let Estado = ref("");
+let ficha = ref("")
 
 // Registrar la hora de llegada
 // let Aprendiz = ref();
@@ -59,16 +98,58 @@ const estadoOptions = [
   { label: "Asistio", value: "Asistio" },
   { label: "No asistio", value: "No Asistio" },
   { label: "Excusa", value: "Excusa" },
-  { label: "Pendiente", value: "Pendiente" }
+  { label: "Pendiente", value: "Pendiente" },
 ];
 
 const UseBitacora = UseBitacoraStore();
+const UseUsuario = UseUsuarioStore()
 
 onBeforeMount(() => {
-  traer()
+  traer();
+  fetchData()
 });
 
+
 const rows = ref([]);
+const options = ref([]); // Opciones de fichas cargadas desde la API
+const filterOptions = ref([]);
+
+async function fetchData() {
+  try {
+    const res = await axios.get(
+      "https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo",
+      {
+        headers: {
+          "x-token": UseUsuario.xtoken,
+        },
+      }
+    );
+    const data = res.data;
+    const activeFichas = data.filter((ficha) => ficha.Estado === 1);
+    options.value = activeFichas;
+    filterOptions.value = activeFichas;
+  } catch (error) {
+    console.error("Error al obtener los datos:", error);
+  }
+}
+
+// Filtrar las fichas según el input del usuario
+async function filterONE(val, update) {
+  if (val === "") {
+    update(() => {
+      filterOptions.value = options.value;
+    });
+    return;
+  }
+
+  update(() => {
+    const needle = val.toLowerCase();
+    filterOptions.value = options.value.filter((option) =>
+      option.Codigo.toLowerCase().includes(needle)
+    );
+  });
+}
+
 
 async function traer() {
   let res = await UseBitacora.listar();
@@ -76,27 +157,34 @@ async function traer() {
 }
 
 async function Buscar() {
-  let res = await UseBitacora.listarBitacora(fechaInicial.value, fechaFinal.value);
-  console.log('Datos recibidos:', res.data);
+
+  let res = await UseBitacora.listarBitacora(
+    fechaInicial.value,
+    fechaFinal.value,
+    ficha.value
+    
+  );
+  console.log("Datos recibidos:", res.data);
+
   rows.value = res.data;
 }
-
 
 async function actualizarEstado(row) {
   try {
     console.log("Estado enviado:", row.Estado); // Verifica el valor que estás enviando
-    let res = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/actualizarEstado/${row._id}`, {
-      Estado: row.Estado
-    });
+    let res = await axios.put(
+      `https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/actualizarEstado/${row._id}`,
+      {
+        Estado: row.Estado,
+      }
+    );
     rows.value = res.data;
-    console.log('Estado actualizado:', res.data);
-    traer()
+    console.log("Estado actualizado:", res.data);
+    traer();
   } catch (error) {
-    console.log('Error al actualizar el estado:', error);
+    console.log("Error al actualizar el estado:", error);
   }
 }
-
-
 
 const columns = ref([
   {
@@ -166,7 +254,7 @@ const columns = ref([
     label: "Estados",
     field: "Estado",
     sortable: true,
-  }
+  },
 ]);
 </script>
 
@@ -196,9 +284,24 @@ const columns = ref([
   border-radius: 10px;
 }
 
-.date {
-  margin: 15px 10px 15px;
+.centered-row {
+  display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.inline-flex {
+  display: flex;
+  gap: 15px; /* Espacio entre los elementos */
+  align-items: center;
+}
+
+.q-mx-sm {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.Fecha{
   display: flex;
   gap: 10px;
 }
