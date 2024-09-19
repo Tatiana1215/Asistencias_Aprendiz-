@@ -63,15 +63,18 @@ const estadoOptions = [
 ];
 
 const UseBitacora = UseBitacoraStore();
+
 onBeforeMount(() => {
   traer()
 });
+
 const rows = ref([]);
 
 async function traer() {
   let res = await UseBitacora.listar();
   rows.value = res.data;
 }
+
 async function Buscar() {
   let res = await UseBitacora.listarBitacora(fechaInicial.value, fechaFinal.value);
   console.log('Datos recibidos:', res.data);

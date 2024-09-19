@@ -3,7 +3,7 @@ import axios from "axios";
 import { ref } from "vue";
 import { useQuasar, Notify } from "quasar";
  import { UseUsuarioStore } from "./usuario.js"; 
- import { UseBitacoraStore } from "./bitacoras.js";
+
 
 
 
@@ -11,7 +11,6 @@ export const UseInformeStore = defineStore("informes", () => {
 
 
     const UseUsuario= UseUsuarioStore() 
-    let bitacora = ref ("")
 
     const listarAprediz = async () => {
 
@@ -28,13 +27,49 @@ export const UseInformeStore = defineStore("informes", () => {
             return error
         }
 
-    }
-    return {
-     listarAprediz
-    }
+   }
 
+
+    const obtenerBitacorasPorFichaYFecha = async (ficha, fechaInicial) => {
+     
+        try {
+
+            console.log('Ficha enviada al backend:', ficha);
+            console.log('Fecha enviada al backend:', fechaInicial);
+
+            let res = await axios.get(`https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/listaFechaFicha`, {
+                params: {
+                    fecha: fechaInicial,  
+                    fichaNumero: ficha  
+                },
+                
+                headers: {
+                    "x-token": UseUsuario.xtoken
+                }
+                
+            });
+            console.log('bitacora:', res.data);
+            console.log("Respuesta completa del servidor:", res);
+            return res; // Devuelve las bitácoras para mostrarlas en la tabla
+        } catch (error) {
+            console.log('Error al obtener bitácoras', error);
+            if (!UseUsuario.xtoken) {
+                Notify.create({
+                    color: "warning",
+                    message: "Token no encontrado. Por favor inicia sesión.",
+                    icon: "warning",
+                    timeout: 2500,
+                });
+                return;
+            }
+            
+        }
+    };
     
 
+return {
+ listarAprediz, obtenerBitacorasPorFichaYFecha
 
+}
 
 }) 
