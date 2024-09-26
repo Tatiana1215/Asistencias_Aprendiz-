@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="main-container">
       <h1>Bienvenido</h1>
       <div class="button-group">
@@ -47,4 +47,5 @@
     background-color: #45a049;
   }
   </style>
-  
+   -->
+  <template></template>

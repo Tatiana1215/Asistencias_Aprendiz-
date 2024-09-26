@@ -28,9 +28,38 @@ export const UseInformeStore = defineStore("informes", () => {
             return error
         }
 
+
+
+        
     }
+
+
+    const ListarFichaFecha = async (Ficha,FechaInicial) => {
+        try {
+               let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/listaFechaFicha',{
+            params:{
+                fichaNumero:Ficha,
+                fecha:new Date(FechaInicial).toISOString()
+            }
+        })
+  
+        console.log(res)
+    return res
+        } catch (error) {
+            console.log(error)
+
+            Notify.create({
+                color:"negative",
+                message: error.response.data.message
+                ,
+                icon:"error",
+                timeout:2500
+            })
+        }
+    }
+
     return {
-     listarAprediz
+     listarAprediz, ListarFichaFecha
     }
 
     

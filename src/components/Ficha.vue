@@ -16,8 +16,10 @@
               <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)" p="true">
                 <q-icon name="edit" style="color: green" />
               </q-btn>
-              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
-              <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
+              <q-btn icon="close" round color="red" :loading="loading[props.row._id]" @click="Desactivar(props.row._id)"
+                v-if="props.row.Estado == 1" />
+              <q-btn icon="check" round color="green" :loading="loading[props.row._id]"
+                @click="Activar(props.row._id)" v-else />
             </q-td>
           </template>
 
@@ -84,20 +86,20 @@
 import { ref, onBeforeMount } from "vue";
 import axios from "axios";
 import { UseFichaStore } from "../Stores/fichas";
-
+import { Notify } from "quasar";
 let inf = ref("");
 let AbrirModal = ref(false);
 let codigo = ref("");
 let nombre = ref("");
 let p = ref(false);
 let id = ref("");
+let loading = ref({})
 
 // Guardar valores originales para comparación
 let originalCodigo = ref("");
 let originalNombre = ref("");
 
 const useFicha = UseFichaStore();
-
 const rows = ref([]);
 // ficha
 onBeforeMount(() => {
@@ -160,21 +162,51 @@ async function CrearFicha() {
 
 async function Activar(id) {
   console.log(id);
+  loading.value[id] = true
   try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Desactivar/${id}`);
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Activar/${id}`);
+    Notify.create({
+      color: 'positive',
+      message: 'La ficha ha sido activada exitosamente',
+      icon: 'check_circle',
+      timeout: 2500
+    })
     traer();
   } catch (error) {
     console.log(error);
+    Notify.create({
+      color: 'negative',
+      message: 'Error al activar la ficha',
+      icon: 'error',
+      timeout: 2500
+    })
+  } finally {
+    loading.value[id] = false
   }
 }
 
 async function Desactivar(id) {
   console.log(id);
+  loading.value[id] = true
   try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Activar/${id}`);
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Desactivar/${id}`);
+    Notify.create({
+  color:'positive',
+  message:'La ficha ha sido inactivada exitosamente',
+  icon:'check_circle',
+  timeout:2500
+})
     traer();
   } catch (error) {
     console.log(error);
+    Notify.create({
+      color: 'negative',
+      message: 'Error al inactivar la ficha',
+      icon: 'error',
+      timeout: 2500
+    })
+  } finally {
+    loading.value[id] = false
   }
 }
 
