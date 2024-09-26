@@ -12,6 +12,7 @@ export const UseInformeStore = defineStore("informes", () => {
 
 
     const UseUsuario= UseUsuarioStore()
+    let Bitacora = ref("")
  
 
     const aprendices = ref([]);
@@ -31,13 +32,53 @@ export const UseInformeStore = defineStore("informes", () => {
             return error
         }
 
+   }
+
+
+    const obtenerBitacorasPorFichaYFecha = async (ficha, fechaInicial) => {
+     
+        try {
+
+            let res = await axios.get(`https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/listaFechaFicha`, {
+                params: {
+                    fecha: fechaInicial,  
+                    fichaNumero: ficha  
+                },
+                
+                headers: {
+                    "x-token": UseUsuario.xtoken
+                }
+                
+            });
+            console.log('bitacora:', res.data);
+            console.log("Respuesta completa del servidor:", res);
+            return res; // Devuelve las bitácoras para mostrarlas en la tabla
+        } catch (error) {
+            console.log('Error al obtener bitácoras', error);
+            if (!UseUsuario.xtoken) {
+                Notify.create({
+                    color: "warning",
+                    message: "Token no encontrado. Por favor inicia sesión.",
+                    icon: "warning",
+                    timeout: 2500,
+                });
+                return;
+            }
+            
+        }
     }
-    return {
-     listarAprediz
-    }
-
-    
 
 
+    const obtenerAprendicesGuardados = () => {
+        return aprendices.value;
+    };
+
+   
+   
+
+return {
+ listarAprediz, obtenerBitacorasPorFichaYFecha, obtenerAprendicesGuardados
+
+}
 
 }) 
