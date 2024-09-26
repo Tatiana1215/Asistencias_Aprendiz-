@@ -24,18 +24,18 @@
         <th>FIRMA O PARTICIPACIÓN VIRTUAL</th>
       </tr>
       <!-- Filas de datos dinámicas -->
-      <tr v-for="(fila, index) in completarFilas" :key="index">
-        <td>{{ index + 1 }}</td>
-        <td>{{ fila.nombre || '' }}</td>
-        <td>{{ fila.documento || '' }}</td>
-        <td>{{ fila.planta || '' }}</td>
-        <td>{{ fila.contratista || '' }}</td>
-        <td>{{ fila.otro || 'Aprendiz' }}</td>
-        <td>{{ fila.dependencia || '' }}</td>
-        <td>{{ fila.emailAprendiz || '' }}</td>
-        <td>{{ fila.telefonoAprendiz || '' }}</td>
-        <td>{{ fila.autoriza || ''}} </td>
-        <td>{{ fila.firma || '' }}</td>
+      <tr v-for="(fila, index) in Bitacoras" :key="index">
+        <td>{{ index + 1 }}</td> <!-- Número de fila -->
+        <td>{{ fila.nombre || '' }}</td> <!-- Nombres y Apellidos -->
+        <td>{{ fila.documento || '' }}</td> <!-- Documento -->
+        <td>{{ fila.planta ||  '' }}</td> <!-- Planta -->
+        <td>{{ fila.contratista || '' }}</td> <!-- Contratista -->
+        <td>{{ fila.otro || 'Aprendiz' }}</td> <!-- Otro -->
+        <td>{{ fila.dependencia || '' }}</td> <!-- Dependencia -->
+        <td>{{ fila.emailAprendiz || '' }}</td> <!-- Correo Electrónico -->
+        <td>{{ fila.telefonoAprendiz || '' }}</td> <!-- Teléfono -->
+        <td>{{ fila.autoriza || ''}}</td> <!-- Autoriza Grabación -->
+        <td>{{ fila.firma || '' }}</td> <!-- Firma -->
       </tr>
     </table>
   </div>
@@ -47,21 +47,14 @@ import { UseInformeStore } from "../Stores/informes"; // Importa el store correc
 
 // Inicializa el store
 const UseStore = UseInformeStore();
-const aprendices = ref([]);
 
-// Función para obtener los datos
-const guardarDatosEImprimir = async () => {
-  try {
-    await UseStore.listarAprediz(); // Llama a la función para listar aprendices
-    aprendices.value = UseStore.obtenerAprendicesGuardados(); // Guarda los aprendices en el ref
-  } catch (error) {
-    console.error('Error al guardar los datos e imprimir:', error);
-  }
-};
+// Ref para guardar los datos de Bitacoras
+const Bitacoras = ref([]); 
 
-// Hook para ejecutar cuando el componente se monta
+// Cargar los datos de Bitacoras antes de montar el componente
 onBeforeMount(() => {
-  guardarDatosEImprimir(); // Cargar datos cuando el componente se monte
+  Bitacoras.value = UseStore.Bitacora; // Obtener los datos desde el store
+  console.log(Bitacoras.value); // Verificar los datos
 });
 </script>
 

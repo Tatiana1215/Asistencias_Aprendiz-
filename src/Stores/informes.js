@@ -12,6 +12,7 @@ export const UseInformeStore = defineStore("informes", () => {
 
 
     const UseUsuario= UseUsuarioStore()
+    let Bitacora = ref("")
  
 
     const aprendices = ref([]);
@@ -49,7 +50,11 @@ export const UseInformeStore = defineStore("informes", () => {
                 }
                 
             });
+            
+            Bitacora.value = res.data
             console.log('bitacora:', res.data);
+            console.log(Bitacora);
+            
             console.log("Respuesta completa del servidor:", res);
             return res; // Devuelve las bitácoras para mostrarlas en la tabla
         } catch (error) {
@@ -66,17 +71,10 @@ export const UseInformeStore = defineStore("informes", () => {
             
         }
     }
-
-
-    const obtenerAprendicesGuardados = () => {
-        return aprendices.value;
-    };
-
-   
    
 
 return {
- listarAprediz, obtenerBitacorasPorFichaYFecha, obtenerAprendicesGuardados
+ listarAprediz, obtenerBitacorasPorFichaYFecha, Bitacora
 
 }
 

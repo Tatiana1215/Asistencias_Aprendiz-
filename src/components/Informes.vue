@@ -38,7 +38,7 @@
           :size="size"
           :label="`${size}`"
           icon="print"
-          @click="guardarDatosEImprimir"
+          to="/Tabla"
         />
       </div>
     </div>
@@ -189,20 +189,6 @@ async function buscarAprendices() {
 }
 
 
-async function guardarDatosEImprimir() {
-  try {
-    await UseStore.obtenerBitacorasPorFichaYFecha(ficha.value, fechaInicial.value);
-    router.push("/Tabla"); // Redirige a la tabla plana después de obtener los datos
-  } catch (error) {
-    console.error("Error al obtener datos para imprimir:", error);
-    Notify.create({
-      color: "negative",
-      message: "Error al obtener datos para imprimir. Intenta de nuevo.",
-      icon: "error",
-      timeout: 2500,
-    });
-  }
-}
 
 
 const columns = ref([
