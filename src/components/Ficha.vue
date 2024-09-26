@@ -301,5 +301,5 @@ const columns = ref([
   /* Opcional: Ajusta la opacidad del fondo */
 }
 
-.container {}
+
 </style>

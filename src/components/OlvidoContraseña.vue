@@ -13,7 +13,7 @@
 
             <q-page-container>
                 <div class="VerificacionEmail" v-if="!codigoCorrecto">
-                    <q-card style="min-width: 450px; margin-top:160px ;">
+                    <q-card style="min-width: 450px; margin-top:80px ;">
                         <q-card-section>
                             <div class="iconContraseñaOlvido">
                                 <img src="https://cdn-icons-png.flaticon.com/512/6357/6357126.png" alt="">
@@ -49,7 +49,7 @@
 
 
 
-                <div class="cambiarContraseña" v-else="codigoCorrecto">
+                <div class="cambiarContraseña" v-else>
                     <div class="q-pa-md ">
                     <q-card style="min-width: 450px; ">
                         <q-card-section>
@@ -156,21 +156,24 @@ function salir() {
     box-sizing: border-box;
 }
 
-#contraseña{
-    display: flex;
-    justify-content: center;
-}
-
 .VerificacionEmail {
     display: flex;
     width: 100%;
     justify-content: center;
     align-items: center;
     align-content: center;
-    /* justify-content: center; */
-    /* margin-left: auto; */
-
+    max-width: 600px; /* Restrict maximum width */
+    margin: 0 auto; /* Center the element */
 }
+
+.cambiarContraseña {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px; /* Set a maximum width */
+    margin: 0 auto; /* Center the element */
+}
+
 
 .text p {
     font-size: 20px;

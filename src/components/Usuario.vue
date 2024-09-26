@@ -11,7 +11,7 @@
       <q-dialog v-model="AbrirModal2" >
         <q-card class="dialogRegistrar">
           <div class="text">
-            {{  "Agregar Ficha" }}
+            {{  "Agregar Usuario" }}
           </div>
           <q-card-section>
             <q-input dense v-model="nombre1" placeholder="Nombre" autofocus color="green"
@@ -47,8 +47,8 @@
                 @click="Abrir(props.row), AbrirModal = true">
                 <q-icon name="edit" style="color: green" />
               </q-btn>
-              <q-btn icon="close" round color="red"  :loading="loading[props.row._id]" @click="Desactivar(props.row._id)" v-if="props.row.Estado == 1" />
-              <q-btn icon="check" round color="green" :loading="loading[props.row._id]" @click="Activar(props.row._id)" v-else />
+              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+              <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
               <q-btn icon="delete" round color="red" @click="Eliminar(props.row._id)" />
             </q-td>
           </template>
@@ -70,7 +70,7 @@
       <q-dialog v-model="AbrirModal" persistent>
         <q-card style="min-width: 350px; margin-top: 0">
           <div class="text">
-            {{ "Editar Ficha"  }}
+            {{ "Editar Usuario"  }}
           </div>
 
           <q-card-section class="q-pt-none">
@@ -201,9 +201,9 @@ const rows = ref([]);
 const columns = ref([
   { name: 'Numero', align: 'center', label: 'N°', field: 'Numero', sortable: true },
   { name: 'Nombre', align: 'center', label: 'Usuario', field: 'Nombre', sortable: true },
-  { name: 'Email', label: 'Email', field: 'Email', sortable: true },
-  { name: 'Estado', label: 'Estado', field: 'Estado', sortable: true },
-  { name: 'Opciones', label: 'Opciones' },
+  { name: 'Email', label: 'Email',align: 'center', field: 'Email', sortable: true },
+  { name: 'Estado', label: 'Estado',align: 'center', field: 'Estado', sortable: true },
+  { name: 'Opciones', label: 'Opciones',align: 'center' },
 ]);
 
 async function Activar(id) {

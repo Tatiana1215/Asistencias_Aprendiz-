@@ -70,6 +70,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     }
 
     const editarAprendiz = async (id, nombre, telefono, documento, email, ficha) => {
+        loading.value=true
         try {
             let inf = await axios.put(`http://localhost:4000/api/Aprendiz/Actualizar/${id}`, {
                 Nombre: nombre,
@@ -102,6 +103,8 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
                 timeout: 2500,
             })
             return error
+        } finally {
+            loading.value=false
         }
     }
     const cargarcould = async (id, formData) => {
