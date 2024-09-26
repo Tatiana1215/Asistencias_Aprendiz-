@@ -1,5 +1,5 @@
 <template>
-  <div>
+
     <div class="titleFirst">
       <h3>INFORMES</h3>
       <hr class="divider" />
@@ -42,8 +42,6 @@
         </q-table>
       </div>
     </div>
-  </div>
-
 </template>
 
 <script setup >
