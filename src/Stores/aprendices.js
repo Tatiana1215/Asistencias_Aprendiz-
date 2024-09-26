@@ -69,6 +69,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     }
 
     const editarAprendiz = async (id, nombre, telefono, documento, email, ficha) => {
+        loading.value=true
         try {
             let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Actualizar/${id}`, {
                 Nombre: nombre,
@@ -100,6 +101,8 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
                 timeout: 2500,
             })
             return error
+        } finally {
+            loading.value=false
         }
     }
 

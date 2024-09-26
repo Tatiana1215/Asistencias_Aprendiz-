@@ -28,15 +28,15 @@ const routes = [
             { path: "Ficha", component: Ficha },
             { path: "Usuario", component: Usuario}, 
             { path: "Informes", component: Informes}, 
-            { path: "Tabla", component: Tabla}, 
+         
            
                  
         ]
     },
     {path:"/Login", component:Login},
     {path:"/OlvidoContrasena", component: OlvidoContrasena},
-    {path: "/RegistroA", component: RegistroA}
-
+    {path: "/RegistroA", component: RegistroA},
+    { path: "/Tabla", component: Tabla}, 
 ]
 
 export const router = createRouter({

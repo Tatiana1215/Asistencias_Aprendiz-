@@ -155,7 +155,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(2, 1fr); 
   gap: 20px;
-  justify-items: center;
+
   margin-top: 40px; 
 }
 

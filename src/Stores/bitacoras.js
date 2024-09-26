@@ -12,13 +12,26 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
     let loading =ref (false)
    
 
-    const listarBitacora = async (fechaInicial, fechaFinal) => {
+    const listarBitacora = async (ficha,fechaInicial, fechaFinal) => {
         loading.value=true
         try {
+
+            console.log(fechaInicial)
+            console.log(fechaFinal);
+            console.log(ficha);
+            
+            
             let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/ListarBitacoras', {
                 params: {
+
+                    fichaNumero: ficha, // Este parámetro debe coincidir con lo que el backend espera
+                    FechaInicial: new Date(fechaInicial).toISOString(), // Formato ISO
+                    FechaFinal: new Date(fechaFinal).toISOString(), // Formato ISO
+
+                  /*   fichaNumero: ficha,
                     FechaInicial: new Date(fechaInicial).toISOString(),
-                    FechaFinal: new Date(fechaFinal).toISOString()
+                    FechaFinal: new Date(fechaFinal).toISOString(),
+                    */
                 },
                 headers: {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
@@ -37,7 +50,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             console.log('No hay bitácoras', error);
             Notify.create({
                 color: "negative",
-                message: "Error al listar bitácoras",
+                message:error.response.data.message,
                 icon: "error",
                 timeout: 2500,
             });
