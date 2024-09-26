@@ -38,7 +38,7 @@
           :size="size"
           :label="`${size}`"
           icon="print"
-          to="./Tabla"
+          @click="guardarDatosEImprimir"
         />
       </div>
     </div>
@@ -66,6 +66,7 @@
 import { ref, onBeforeMount } from "vue";
 import { UseUsuarioStore } from "../Stores/usuario";
 import { UseInformeStore } from "../Stores/informes";
+import { useRouter } from "vue-router"
 import axios from "axios";
 import { Notify } from "quasar";
 import dayjs from "dayjs";
@@ -78,7 +79,7 @@ const rows = ref([]); // Datos para la tabla
 
 const UseStore = UseInformeStore(); // Usamos el store que gestionará las solicitudes
 const UseUsuario = UseUsuarioStore();
-
+const router = useRouter()
 // Cargar datos al montar el componente
 onBeforeMount(() => {
   fetchData();
@@ -132,7 +133,9 @@ async function buscarAprendices() {
       icon: "warning",
       timeout: 2500,
     });
+ 
     return;
+  
   }
 
   // Validar que la fecha no sea futura
@@ -148,6 +151,7 @@ async function buscarAprendices() {
 
   console.log("Ficha seleccionada:", ficha.value);
   console.log("Fecha seleccionada:", fechaInicial.value);
+  console.log(rows.value);
 
   // Continuar con la lógica de búsqueda de aprendices si la validación pasa
   try {
@@ -184,12 +188,29 @@ async function buscarAprendices() {
   }
 }
 
+
+async function guardarDatosEImprimir() {
+  try {
+    await UseStore.obtenerBitacorasPorFichaYFecha(ficha.value, fechaInicial.value);
+    router.push("/Tabla"); // Redirige a la tabla plana después de obtener los datos
+  } catch (error) {
+    console.error("Error al obtener datos para imprimir:", error);
+    Notify.create({
+      color: "negative",
+      message: "Error al obtener datos para imprimir. Intenta de nuevo.",
+      icon: "error",
+      timeout: 2500,
+    });
+  }
+}
+
+
 const columns = ref([
 {
     name: "Numero",
     required: true,
     label: "N°",
-    align: "left",
+   align: 'center',
     field: "Numero",
     sortable: true,
   },
@@ -197,7 +218,7 @@ const columns = ref([
     name: "nombre",
     required: true,
     label: "Nombre",
-    align: "left",
+   align: 'center',
     field: "nombre",
     sortable: true,
   },
@@ -205,7 +226,7 @@ const columns = ref([
     name: "documento",
     required: true,
     label: "Documento",
-    align: "left",
+    align: 'center',
     field: "documento",
     sortable: true,
   },
@@ -213,7 +234,7 @@ const columns = ref([
     name: "emailAprendiz",
     required: true,
     label: "Email",
-    align: "left",
+    align: 'center',
     field: "emailAprendiz",
     sortable: true,
   },
@@ -221,7 +242,7 @@ const columns = ref([
     name: "telefonoAprendiz",
     required: true,
     label: "Número de Teléfono",
-    align: "left",
+    align: 'center',
     field: "telefonoAprendiz",
     sortable: true,
   },

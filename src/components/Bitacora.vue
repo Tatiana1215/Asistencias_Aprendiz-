@@ -8,6 +8,7 @@
 
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex align-center">
+        
         <q-select
           dense
           v-model="ficha"
@@ -157,6 +158,26 @@ async function traer() {
 }
 
 async function Buscar() {
+  try {
+    console.log("Ficha seleccionada:", ficha.value);
+    console.log("Fecha inicial:", fechaInicial.value);
+    console.log("Fecha final:", fechaFinal.value);
+
+    let res = await UseBitacora.listarBitacora(
+      ficha.value,
+      fechaInicial.value,
+      fechaFinal.value
+    );
+
+    console.log("Datos recibidos:", res.data);
+    rows.value = res.data;
+  } catch (error) {
+    console.error("Error al buscar las bitácoras:", error);
+  }
+}
+
+
+/* async function Buscar() {
 
   let res = await UseBitacora.listarBitacora(
     fechaInicial.value,
@@ -167,7 +188,7 @@ async function Buscar() {
   console.log("Datos recibidos:", res.data);
 
   rows.value = res.data;
-}
+} */
 
 async function actualizarEstado(row) {
   try {
@@ -191,7 +212,7 @@ const columns = ref([
     name: "Numero",
     required: true,
     label: "N°",
-    align: "left",
+    align: "center",
     field: "Numero",
     sortable: true,
   },
@@ -199,7 +220,7 @@ const columns = ref([
     name: "nombreAprendiz",
     required: true,
     label: "Aprendiz",
-    align: "left",
+    align: "center",
     field: "nombreAprendiz",
     sortable: true,
   },
@@ -207,7 +228,7 @@ const columns = ref([
     name: "documentoAprendiz",
     required: true,
     label: "Número de Documento",
-    align: "left",
+    align: "center",
     field: "documentoAprendiz",
     sortable: true,
   },
@@ -215,7 +236,7 @@ const columns = ref([
     name: "telefonoAprendiz",
     required: true,
     label: "Número de Teléfono",
-    align: "left",
+    align: "center",
     field: "telefonoAprendiz",
     sortable: true,
   },
@@ -223,7 +244,7 @@ const columns = ref([
     name: "emailAprendiz",
     required: true,
     label: "Email",
-    align: "left",
+    align: "center",
     field: "emailAprendiz",
     sortable: true,
   },

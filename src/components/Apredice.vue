@@ -218,12 +218,12 @@ async function Desactivar(id) {
 
 const columns = ref([
   { name: 'Numero', align: 'center', label: 'N°', field: 'Numero', sortable: true },
-  { name: 'Nombre', required: true, label: 'Aprendiz', align: 'left', field: "Nombre", sortable: true },
+  { name: 'Nombre', required: true, label: 'Aprendiz', align: 'center', field: "Nombre", sortable: true },
   { name: 'Documento1', align: 'center', label: 'Documento', field: 'Documento', sortable: true },
   { name: 'Telefono', align: 'center', label: 'Teléfono', field: 'Telefono', sortable: true },
   { name: 'Email', align: 'center', label: 'Email', field: 'Email', sortable: true },
-  { name: 'Estado1', label: 'Estado', field: 'Estado1', sortable: true },
-  { name: 'opciones', label: 'Opciones' },
+  { name: 'Estado1', label: 'Estado',align: 'center', field: 'Estado1', sortable: true },
+  { name: 'opciones', label: 'Opciones',align: 'center' },
 ]);
 </script>
 

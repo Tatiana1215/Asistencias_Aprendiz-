@@ -1,8 +1,9 @@
- import { defineStore } from "pinia";
+import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
 import { useQuasar, Notify } from "quasar";
- import { UseUsuarioStore } from "./usuario.js"; 
+import { UseUsuarioStore } from "./usuario.js"; 
+
 
 
 
@@ -10,7 +11,10 @@ import { useQuasar, Notify } from "quasar";
 export const UseInformeStore = defineStore("informes", () => {
 
 
-    const UseUsuario= UseUsuarioStore() 
+    const UseUsuario= UseUsuarioStore()
+ 
+
+    const aprendices = ref([]);
 
     const listarAprediz = async () => {
 
@@ -33,9 +37,6 @@ export const UseInformeStore = defineStore("informes", () => {
     const obtenerBitacorasPorFichaYFecha = async (ficha, fechaInicial) => {
      
         try {
-
-            console.log('Ficha enviada al backend:', ficha);
-            console.log('Fecha enviada al backend:', fechaInicial);
 
             let res = await axios.get(`https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/listaFechaFicha`, {
                 params: {
@@ -64,11 +65,18 @@ export const UseInformeStore = defineStore("informes", () => {
             }
             
         }
+    }
+
+
+    const obtenerAprendicesGuardados = () => {
+        return aprendices.value;
     };
-    
+
+   
+   
 
 return {
- listarAprediz, obtenerBitacorasPorFichaYFecha
+ listarAprediz, obtenerBitacorasPorFichaYFecha, obtenerAprendicesGuardados
 
 }
 

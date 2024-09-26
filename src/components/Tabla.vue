@@ -26,14 +26,14 @@
       <!-- Filas de datos dinámicas -->
       <tr v-for="(fila, index) in completarFilas" :key="index">
         <td>{{ index + 1 }}</td>
-        <td>{{ fila.nombres || '' }}</td>
+        <td>{{ fila.nombre || '' }}</td>
         <td>{{ fila.documento || '' }}</td>
         <td>{{ fila.planta || '' }}</td>
         <td>{{ fila.contratista || '' }}</td>
-        <td>{{ fila.otro || '' }}</td>
+        <td>{{ fila.otro || 'Aprendiz' }}</td>
         <td>{{ fila.dependencia || '' }}</td>
-        <td>{{ fila.correo || '' }}</td>
-        <td>{{ fila.telefono || '' }}</td>
+        <td>{{ fila.emailAprendiz || '' }}</td>
+        <td>{{ fila.telefonoAprendiz || '' }}</td>
         <td>{{ fila.autoriza || ''}} </td>
         <td>{{ fila.firma || '' }}</td>
       </tr>
@@ -41,49 +41,28 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      filas: [] // Se llenará con la información de otra tabla
-    };
-  },
-  computed: {
-    completarFilas() {
-      // Si hay menos de 27 filas, agrega filas vacías para completar
-      const filasCompletas = [...this.filas];
-      while (filasCompletas.length < 27) {
-        filasCompletas.push({
-          nombres: "",
-          documento: "",
-          planta: "",
-          contratista: "",
-          otro: "APRENDIZ",
-          dependencia: "",
-          correo: "",
-          telefono: "",
-          autoriza: "",
-          firma: ""
-        });
-      }
-      return filasCompletas;
-    }
-  },
-  mounted() {
-    this.obtenerDatos();
-  },
-  methods: {
-    obtenerDatos() {
-      // Aquí deberías llamar a tu API o fuente de datos para obtener la información
-      // axios.get('/api/otraTabla').then(response => {
-      //   this.filas = response.data;
-      // });
+<script setup>
+import { ref, onBeforeMount } from "vue";
+import { UseInformeStore } from "../Stores/informes"; // Importa el store correctamente
 
+// Inicializa el store
+const UseStore = UseInformeStore();
+const aprendices = ref([]);
 
-    
-    }
+// Función para obtener los datos
+const guardarDatosEImprimir = async () => {
+  try {
+    await UseStore.listarAprediz(); // Llama a la función para listar aprendices
+    aprendices.value = UseStore.obtenerAprendicesGuardados(); // Guarda los aprendices en el ref
+  } catch (error) {
+    console.error('Error al guardar los datos e imprimir:', error);
   }
 };
+
+// Hook para ejecutar cuando el componente se monta
+onBeforeMount(() => {
+  guardarDatosEImprimir(); // Cargar datos cuando el componente se monte
+});
 </script>
 
 <style scoped>
