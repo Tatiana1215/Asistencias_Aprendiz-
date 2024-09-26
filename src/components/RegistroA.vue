@@ -40,7 +40,7 @@ async function registrarLlegada() {
   if ( res && res.status == 200){
     Aprendiz.value = ""
   }
-  traer()
+  // traer()
 }
 
 </script>

@@ -8,7 +8,7 @@ import Usuario from "../components/Usuario.vue"
 import InicioH from "../components/InicioH.vue"
 import OlvidoContrasena from "../components/OlvidoContraseña.vue"
 import RegistroA from "../components/RegistroA.vue"
-import Main from "../components/Main.vue"
+// import Main from "../components/Main.vue"
 import Informes from "../components/Informes.vue"
 import Tabla from "../components/Tabla.vue"
 
@@ -17,8 +17,11 @@ import { createRouter, createWebHashHistory } from "vue-router"
 
 
 const routes = [
-    { path: "/", component: Main },
-
+    // { path: "/", component: Main }
+    { path: "/", redirect: "/Login" }, // Redirige la raíz a /Login,
+    { path: "/Login", component: Login },
+    { path: "/OlvidoContrasena", component: OlvidoContrasena },
+    { path: "/RegistroA", component: RegistroA },
     {
         path: "/Home", component: Home, children: [
             { path: "", redirect: "/Home/InicioH" },
@@ -28,17 +31,12 @@ const routes = [
             { path: "Ficha", component: Ficha },
             { path: "Usuario", component: Usuario}, 
             { path: "Informes", component: Informes}, 
-         
+            { path: "Tabla", component: Tabla}, 
            
                  
         ]
-    },
-    {path:"/Login", component:Login},
-    {path:"/OlvidoContrasena", component: OlvidoContrasena},
-    {path: "/RegistroA", component: RegistroA},
-    { path: "/Tabla", component: Tabla}, 
+    }
 ]
-
 export const router = createRouter({
     history: createWebHashHistory(),
     routes

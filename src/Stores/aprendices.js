@@ -7,79 +7,81 @@ import { UseUsuarioStore } from "./usuario.js";
 
 export const UseAprendizStore = defineStore("aprendiz", () => {
     let aprendiz = ref(false)
-    const UseUsuario= UseUsuarioStore()
-
-    
-    let loading =ref (false)
+    let loading = ref(false)
+    const UseUsuario = UseUsuarioStore()
 
     const listarAprediz = async () => {
-
         try {
             let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/ListarTodo', {
-                headers:{
+                headers: {
                     "x-token": UseUsuario.xtoken
                 }
-        })
+            })
             console.log(res);
             return res
         } catch (error) {
             console.log(error);
             return error
         }
-
     }
 
-    const registrarAprendiz = async (nombre, telefono, documento, email, ficha) => {
-        loading.value=true
+    const registrarAprendiz = async (nombre, telefono, documento, email, ficha, Firma) => {
+        loading.value = true;
         try {
-            let inf = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Insertar', {
-                Nombre: nombre,
-                Telefono: telefono,
-                Documento: documento,
-                Email: email,
-                Id_Ficha: ficha
-            },{
-                headers:{
-                   "x-token": UseUsuario.xtoken
-                }
-            })
-            // console.log('Datos enviados:', { nombre, telefono, documento, email, ficha });
+            let formData = new FormData();
+            formData.append('Nombre', nombre);
+            formData.append('Telefono', telefono);
+            formData.append('Documento', documento);
+            formData.append('Email', email);
+            formData.append('Id_Ficha', ficha);
+
+            if (Firma.value) {
+                formData.append('archivo', Firma); // Solo agregar si Firma no es null
+            }
+
+            let inf = await axios.post('http://localhost:4000/api/Aprendiz/Insertar', formData,
+                {
+                    headers: {
+                        'x-token': UseUsuario.xtoken,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
             Notify.create({
                 color: "positive",
                 message: "Registro Exitoso",
                 icon: "check_circle",
                 timeout: 2500,
-            })
-            console.log('Registro exitoso', inf)
-            return inf
+            });
+            return inf;
 
         } catch (error) {
-            console.log('No se realizo el registro', error)
+            console.log(error);
             Notify.create({
                 color: "negative",
-                message: error.response.data.errors[0].msg,
+                message: error.response.data.message || error.response.data.error||error.response.data.errors[0].msg,
                 icon: "error",
                 timeout: 2500,
             });
-
         } finally {
-            aprendiz.value = false
-            loading.value=false
+            aprendiz.value = false;
+            loading.value = false;
         }
     }
 
     const editarAprendiz = async (id, nombre, telefono, documento, email, ficha) => {
         loading.value=true
         try {
-            let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Actualizar/${id}`, {
+            let inf = await axios.put(`http://localhost:4000/api/Aprendiz/Actualizar/${id}`, {
                 Nombre: nombre,
                 Telefono: telefono,
                 Documento: documento,
                 Email: email,
-                Id_Ficha: ficha
-            },{
-                headers:{
-             "xtoken": UseUsuario.xtoken
+                Id_Ficha: ficha,
+
+            }, {
+                headers: {
+                    "xtoken": UseUsuario.xtoken
                 }
             })
 
@@ -105,9 +107,40 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
             loading.value=false
         }
     }
+    const cargarcould = async (id, formData) => {
+        try {
+            let r = await axios.put(`http://localhost:4000/api/Aprendiz/cargarCloud/${id}`, formData, {
+                headers: {
+                    "x-token": UseUsuario.xtoken,
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            console.log(r);
+            return r;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+
+    const updatecoul = async (id) => {
+        try {
+            let r = await axios.put(`http://localhost:4000/Aprendices/uploadClou/${id}`, {
+                headers: {
+                    "x-token": UseUsuario.xtoken,
+                },
+            }
+            );
+            console.log(r);
+            return r;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
 
 
     return {
-        registrarAprendiz, listarAprediz, editarAprendiz,loading
+        registrarAprendiz, listarAprediz, editarAprendiz, loading, cargarcould, updatecoul
     }
 })
