@@ -40,7 +40,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             // bitacoras.value = res.data; // Update bitacoras state
             Notify.create({
                 color: "positive",
-                message: "Datos entre estas fechas1",
+                message: "Busqueda Exitosa",
                 icon: "check_circle",
                 timeout: 2500,
             });

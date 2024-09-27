@@ -7,25 +7,55 @@
     <hr class="divider" />
 
     <div class="q-pa-md q-gutter-sm">
-      <q-btn label="Crear" icon="add_circle" color="green" @click="AbrirModal = true" p="false" />
+      <q-btn
+        label="Crear"
+        icon="add_circle"
+        color="green"
+        @click="AbrirCrear()"
+        p="false"
+      />
 
       <div class="table-container">
         <q-table :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)" p="true">
+              <q-btn
+                round
+                color="white"
+                :style="{ border: '2px solid green' }"
+                @click="Abrir(props.row)"
+                p="true"
+              >
                 <q-icon name="edit" style="color: green" />
               </q-btn>
-              <q-btn icon="close" round color="red" :loading="loading[props.row._id]" @click="Desactivar(props.row._id)"
-                v-if="props.row.Estado == 1" />
-              <q-btn icon="check" round color="green" :loading="loading[props.row._id]"
-                @click="Activar(props.row._id)" v-else />
+              <q-btn
+                icon="close"
+                round
+                color="red"
+                :loading="loading[props.row._id]"
+                @click="Desactivar(props.row._id)"
+                v-if="props.row.Estado == 1"
+              />
+              <q-btn
+                icon="check"
+                round
+                color="green"
+                :loading="loading[props.row._id]"
+                @click="Activar(props.row._id)"
+                v-else
+              />
             </q-td>
           </template>
 
           <template v-slot:body-cell-Estado1="props">
             <q-td :props="props">
-              <p v-if="props.row.Estado == 1" class="custom-font" style="color: green">Activo</p>
+              <p
+                v-if="props.row.Estado == 1"
+                class="custom-font"
+                style="color: green"
+              >
+                Activo
+              </p>
               <p v-else class="custom-font" style="color: red">Inactivo</p>
             </q-td>
           </template>
@@ -47,7 +77,6 @@
               <span class="custom-font">{{ props.row.Codigo }}</span>
             </q-td>
           </template>
-
         </q-table>
       </div>
 
@@ -58,19 +87,42 @@
           </div>
           <q-card-section class="q-pt-none">
             <!-- <label for="codigo">Nombre</label> -->
-            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
-              @keyup.enter="prompt = false" />
+            <q-input
+              dense
+              v-model="nombre"
+              placeholder=" Nombre"
+              autofocus
+              color="green"
+              @keyup.enter="prompt = false"
+            />
             <br />
 
             <!-- <label for="codigo">codigo</label> -->
-            <q-input dense v-model="codigo" placeholder="Codigo" autofocus color="green"
-              @keyup.enter="prompt = false" />
+            <q-input
+              dense
+              v-model="codigo"
+              placeholder="Codigo"
+              autofocus
+              color="green"
+              @keyup.enter="prompt = false"
+            />
             <br />
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
-            <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
-            <q-btn :loading="useFicha.loading" label="Enviar" color="green" @click="CrearFicha()">
+            <q-btn
+              flat
+              label="Cancelar"
+              @click="p = false"
+              color="red"
+              v-close-popup
+            />
+            <q-btn
+              :loading="useFicha.loading"
+              label="Enviar"
+              color="green"
+              @click="CrearFicha()"
+            >
               <template v-slot:loading>
                 <q-spinner color="white" size="1em" />
               </template>
@@ -93,7 +145,7 @@ let codigo = ref("");
 let nombre = ref("");
 let p = ref(false);
 let id = ref("");
-let loading = ref({})
+let loading = ref({});
 
 // Guardar valores originales para comparación
 let originalCodigo = ref("");
@@ -111,6 +163,8 @@ async function traer() {
   rows.value = res.data;
 }
 
+
+
 function limpiarCampos() {
   nombre.value = "";
   codigo.value = "";
@@ -118,32 +172,76 @@ function limpiarCampos() {
   originalCodigo.value = "";
 }
 
-
 async function Abrir(row) {
-
   AbrirModal.value = true;
   p.value = true;
   codigo.value = row.Codigo;
   nombre.value = row.Nombre;
   id.value = row._id;
+
+  originalCodigo.value = row.Codigo;
+  originalNombre.value = row.Nombre;
 }
 
-async function CrearFicha() {
-  console.log(p.value);
+function AbrirCrear() {
+  limpiarCampos();   // Limpiar campos antes de abrir el modal
+  AbrirModal.value = true;
+  p.value = false;   // Indica que es un nuevo registro, no una edición
+}
 
-  // Verificar si se realizaron cambios
-  if (p.value && nombre.value === originalNombre.value && codigo.value === originalCodigo.value) {
-    alert("No se hizo ningún cambio.");
-    AbrirModal.value = false;
+
+async function CrearFicha() {
+  const trimmedNombre = nombre.value.trim();
+  const trimmedCodigo = codigo.value.trim();
+
+  // Validar que no haya solo espacios
+  const noSpacesRegex = /^[^\s]+$/; // Cambiado para asegurar que no haya espacios en ningún lugar
+
+  if (!trimmedNombre || !trimmedCodigo) {
+    Notify.create({
+      color: "negative",
+      message: "Los campos no pueden estar vacíos",
+      icon: "error",
+      timeout: 2500,
+    });
     return;
+  }
+
+  // Verificar que no haya espacios intermedios
+  if (
+    !noSpacesRegex.test(trimmedNombre) ||
+    !noSpacesRegex.test(trimmedCodigo)
+  ) {
+    Notify.create({
+      color: "negative",
+      message: "Los campos no pueden contener espacios en blanco",
+      icon: "error",
+      timeout: 2500,
+    });
+    return;
+  }
+
+
+  if (
+    p.value &&
+    nombre.value === originalNombre.value &&
+    codigo.value === originalCodigo.value
+  ) {
+    Notify.create({
+      color: "warning",
+      message: "No se hicieron cambios",
+      icon: "info",
+      timeout: 2500,
+    });
+    return; // No cerramos el modal y mostramos el mensaje
   }
 
   let res;
   if (p.value) {
-    // Editando una ficha existente
+    // Editar ficha
     res = await useFicha.EditarFicha(id.value, nombre.value, codigo.value);
   } else {
-    // Creando una nueva ficha
+    // Crear nueva ficha
     res = await useFicha.crearFicha(codigo.value, nombre.value);
   }
 
@@ -158,55 +256,57 @@ async function CrearFicha() {
   }
 }
 
-
-
 async function Activar(id) {
   console.log(id);
-  loading.value[id] = true
+  loading.value[id] = true;
   try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Activar/${id}`);
+    inf = await axios.put(
+      `https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Activar/${id}`
+    );
     Notify.create({
-      color: 'positive',
-      message: 'La ficha ha sido activada exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
+      color: "positive",
+      message: "La ficha ha sido activada exitosamente",
+      icon: "check_circle",
+      timeout: 2500,
+    });
     traer();
   } catch (error) {
     console.log(error);
     Notify.create({
-      color: 'negative',
-      message: 'Error al activar la ficha',
-      icon: 'error',
-      timeout: 2500
-    })
+      color: "negative",
+      message: "Error al activar la ficha",
+      icon: "error",
+      timeout: 2500,
+    });
   } finally {
-    loading.value[id] = false
+    loading.value[id] = false;
   }
 }
 
 async function Desactivar(id) {
   console.log(id);
-  loading.value[id] = true
+  loading.value[id] = true;
   try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Desactivar/${id}`);
+    inf = await axios.put(
+      `https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Desactivar/${id}`
+    );
     Notify.create({
-  color:'positive',
-  message:'La ficha ha sido inactivada exitosamente',
-  icon:'check_circle',
-  timeout:2500
-})
+      color: "positive",
+      message: "La ficha ha sido inactivada exitosamente",
+      icon: "check_circle",
+      timeout: 2500,
+    });
     traer();
   } catch (error) {
     console.log(error);
     Notify.create({
-      color: 'negative',
-      message: 'Error al inactivar la ficha',
-      icon: 'error',
-      timeout: 2500
-    })
+      color: "negative",
+      message: "Error al inactivar la ficha",
+      icon: "error",
+      timeout: 2500,
+    });
   } finally {
-    loading.value[id] = false
+    loading.value[id] = false;
   }
 }
 
@@ -235,7 +335,7 @@ const columns = ref([
 <style>
 * {
   margin: 0%;
-  font-family: 'Roboto', Arial, sans-serif
+  font-family: "Roboto", Arial, sans-serif;
 }
 
 .container {
@@ -247,7 +347,7 @@ const columns = ref([
   margin: 15px 15px;
   display: flex;
   justify-content: center;
-  font-family: 'Roboto', Arial, sans-serif
+  font-family: "Roboto", Arial, sans-serif;
 }
 
 .divider {
@@ -280,7 +380,7 @@ const columns = ref([
   /* Cambia esto por el color de texto que prefieras */
   font-size: 15px;
   /* Ajusta el tamaño de la letra */
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   /* Cambia "Arial" por la fuente que prefieras */
   font-weight: bold;
   padding: 10px;
@@ -294,12 +394,7 @@ const columns = ref([
 .q-dialog__backdrop {
   backdrop-filter: blur(5px);
   /* Ajusta el nivel de desenfoque */
-  background-color: rgba(0,
-      0,
-      0,
-      0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   /* Opcional: Ajusta la opacidad del fondo */
 }
-
-
 </style>

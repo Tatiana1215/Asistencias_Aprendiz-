@@ -17,7 +17,7 @@
           color="green"
           emit-value
           map-options
-          option-label="Codigo"
+          option-label="formattedLabel"
           option-value="Codigo"
           use-input
           @filter="filterONE"
@@ -84,6 +84,7 @@
 import { ref, onBeforeMount } from "vue";
 import { UseBitacoraStore } from "../Stores/bitacoras";
 import { UseUsuarioStore } from "../Stores/usuario";
+import { Notify } from "quasar";
 import axios from "axios";
 
 let fechaInicial = ref("");
@@ -127,6 +128,11 @@ async function fetchData() {
     );
     const data = res.data;
     const activeFichas = data.filter((ficha) => ficha.Estado === 1);
+
+    activeFichas.forEach(ficha => {
+      ficha.formattedLabel = `${ficha.Codigo} - ${ficha.Nombre}`; // Aquí concatenas el código con el nombre
+    });
+
     options.value = activeFichas;
     filterOptions.value = activeFichas;
   } catch (error) {
@@ -158,6 +164,53 @@ async function traer() {
 }
 
 async function Buscar() {
+  // Verificar si la ficha está vacía
+  const today = new Date().toISOString().split("T")[0]
+
+  if (!ficha.value) {
+    Notify.create({
+      type: "negative",
+      message: "El campo Ficha está vacío.",
+    
+    });
+    return; // Detener la ejecución
+  }
+
+  // Verificar si la fecha inicial está vacía
+  if (!fechaInicial.value) {
+    Notify.create({
+      type: "negative",
+      message: "El campo Fecha está vacío.",
+    });
+    return; // Detener la ejecución
+  }
+
+  // Verificar si la fecha final está vacía
+  if (!fechaFinal.value) {
+    Notify.create({
+      type: "negative",
+      message: "El campo Fecha está vacío.",
+    });
+    return; // Detener la ejecución
+  }
+  // Verificar si la fecha inicial es mayor que la fecha final
+  if (fechaInicial.value > fechaFinal.value) {
+    Notify.create({
+      type: "negative",
+      message: "La Fecha Inicial no puede ser mayor que la Fecha Final.",
+    });
+    return; // Detener la ejecución
+  }
+
+  // Verificar si alguna de las fechas es futura
+  if (fechaInicial.value > today || fechaFinal.value > today) {
+    Notify.create({
+      type: "negative",
+      message: "Las fechas no pueden ser futuras.",
+    });
+    return; // Detener la ejecución
+  }
+
   try {
     console.log("Ficha seleccionada:", ficha.value);
     console.log("Fecha inicial:", fechaInicial.value);
@@ -173,22 +226,14 @@ async function Buscar() {
     rows.value = res.data;
   } catch (error) {
     console.error("Error al buscar las bitácoras:", error);
+    Notify.create({
+      type: "negative",
+      message: "Hubo un error al buscar las bitácoras.",
+    });
   }
 }
 
 
-/* async function Buscar() {
-
-  let res = await UseBitacora.listarBitacora(
-    fechaInicial.value,
-    fechaFinal.value,
-    ficha.value
-    
-  );
-  console.log("Datos recibidos:", res.data);
-
-  rows.value = res.data;
-} */
 
 async function actualizarEstado(row) {
   try {
