@@ -24,7 +24,7 @@
         <th>FIRMA O PARTICIPACIÓN VIRTUAL</th>
       </tr>
       <!-- Filas de datos dinámicas -->
-      <tr v-for="(fila, index) in Bitacoras" :key="index">
+      <tr v-for="(fila, index) in fillRows()" :key="index">
         <td>{{ index + 1 }}</td> <!-- Número de fila -->
         <td>{{ fila.nombre || '' }}</td> <!-- Nombres y Apellidos -->
         <td>{{ fila.documento || '' }}</td> <!-- Documento -->
@@ -56,6 +56,25 @@ onBeforeMount(() => {
   Bitacoras.value = UseStore.Bitacora; // Obtener los datos desde el store
   console.log(Bitacoras.value); // Verificar los datos
 });
+
+// Método para llenar filas hasta un total de 27
+const fillRows = () => {
+  const totalRows = 27;
+  const emptyRow = {
+    nombre: '',
+    documento: '',
+    planta: '',
+    contratista: '',
+    otro: '',
+    dependencia: '',
+    emailAprendiz: '',
+    telefonoAprendiz: '',
+    autoriza: '',
+    firma: ''
+  };
+
+  return [...Bitacoras.value, ...Array(totalRows - Bitacoras.value.length).fill(emptyRow)]; //Para pintar las 27 filas
+};
 </script>
 
 <style scoped>

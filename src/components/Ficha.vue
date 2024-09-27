@@ -126,24 +126,68 @@ async function Abrir(row) {
   codigo.value = row.Codigo;
   nombre.value = row.Nombre;
   id.value = row._id;
+
+  originalCodigo.value = row.Codigo;
+  originalNombre.value = row.Nombre;
 }
 
 async function CrearFicha() {
-  console.log(p.value);
 
-  // Verificar si se realizaron cambios
-  if (p.value && nombre.value === originalNombre.value && codigo.value === originalCodigo.value) {
-    alert("No se hizo ningún cambio.");
-    AbrirModal.value = false;
+  const trimmedNombre = nombre.value.trim();
+  const trimmedCodigo = codigo.value.trim();
+
+  // Validar que no haya solo espacios
+  const noSpacesRegex = /^[^\s]+$/; // Cambiado para asegurar que no haya espacios en ningún lugar
+
+  if (!trimmedNombre || !trimmedCodigo) {
+    Notify.create({
+      color: 'negative',
+      message: 'Los campos no pueden estar vacíos',
+      icon: 'error',
+      timeout: 2500
+    });
     return;
+  }
+
+  // Verificar que no haya espacios intermedios
+  if (!noSpacesRegex.test(trimmedNombre) || !noSpacesRegex.test(trimmedCodigo)) {
+    Notify.create({
+      color: 'negative',
+      message: 'Los campos no pueden contener espacios en blanco',
+      icon: 'error',
+      timeout: 2500
+    });
+    return;
+  }
+
+  // Validar nuevamente si están vacíos después de trim
+  if (!trimmedNombre || !trimmedCodigo) {
+    Notify.create({
+      color: 'negative',
+      message: 'Los campos no pueden estar vacíos',
+      icon: 'error',
+      timeout: 2500
+    });
+    return;
+  }
+
+
+  if (p.value && nombre.value === originalNombre.value && codigo.value === originalCodigo.value) {
+    Notify.create({
+      color: 'warning',
+      message: 'No se hicieron cambios',
+      icon: 'info',
+      timeout: 2500
+    });
+    return; // No cerramos el modal y mostramos el mensaje
   }
 
   let res;
   if (p.value) {
-    // Editando una ficha existente
+    // Editar ficha
     res = await useFicha.EditarFicha(id.value, nombre.value, codigo.value);
   } else {
-    // Creando una nueva ficha
+    // Crear nueva ficha
     res = await useFicha.crearFicha(codigo.value, nombre.value);
   }
 

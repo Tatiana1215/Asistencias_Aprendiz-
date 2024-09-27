@@ -15,7 +15,7 @@
           color="green"
           emit-value
           map-options
-          option-label="Codigo"
+          option-label="formattedLabel"
           option-value="Codigo"
           use-input
           @filter="filterONE"
@@ -43,9 +43,16 @@
       </div>
     </div>
 
+
     <q-card-actions align="center">
-      <q-btn label="Buscar" color="green" @click="buscarAprendices()" />
-    </q-card-actions>
+    <q-btn :loading="UseStore.loading" color="green" @click="buscarAprendices()">
+            Buscar
+            <template v-slot:loading>
+              <q-spinner color="white" size="1em" />
+            </template>
+          </q-btn>
+        </q-card-actions>
+
 
     <!-- Tabla de aprendices -->
     <div class="q-pa-md q-gutter-sm">
@@ -100,6 +107,11 @@ async function fetchData() {
     );
     const data = res.data;
     const activeFichas = data.filter((ficha) => ficha.Estado === 1);
+
+    activeFichas.forEach(ficha => {
+      ficha.formattedLabel = `${ficha.Codigo} - ${ficha.Nombre}`; // Aquí concatenas el código con el nombre
+    });
+
     options.value = activeFichas;
     filterOptions.value = activeFichas;
   } catch (error) {
@@ -126,16 +138,25 @@ async function filterONE(val, update) {
 
 async function buscarAprendices() {
   // Validación inicial de ficha y fecha
-  if (!ficha.value || !fechaInicial.value) {
+  
+  if (!ficha.value) {
     Notify.create({
-      color: "warning",
-      message: "Por favor, selecciona una ficha y una fecha válida.",
+      color: "negative",
+      message: "Por favor, selecciona una ficha.",
       icon: "warning",
       timeout: 2500,
     });
- 
     return;
-  
+  }
+
+  if (!fechaInicial.value) {
+    Notify.create({
+      color: "negative",
+      message: "Por favor, selecciona una fecha.",
+      icon: "warning",
+      timeout: 2500,
+    });
+    return;
   }
 
   // Validar que la fecha no sea futura
@@ -164,6 +185,14 @@ async function buscarAprendices() {
     if (res) {
       rows.value = res.data; // Asigna directamente los datos a 'rows'
       console.log(res);
+
+      Notify.create({
+        color: "positive",
+        message: "Búsqueda exitosa.",
+        icon: "check_circle",
+        timeout: 2500,
+      });
+
     } else {
       // Si no hay datos, muestra un mensaje de error
       console.error(
