@@ -78,7 +78,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
         loading.value=true
         try {
             let res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/Insertar', {
-                Id_Aprendiz: Aprendiz,
+                Documento: Aprendiz
             },
             )
             Notify.create({

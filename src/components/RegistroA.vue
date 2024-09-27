@@ -35,7 +35,7 @@ let Aprendiz = ref('')
 
 async function registrarLlegada() {
   let res = await UseBitacora.registrarAprendiz(
-    Aprendiz.value,
+    Aprendiz.value
   );
   if ( res && res.status == 200){
     Aprendiz.value = ""
