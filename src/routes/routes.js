@@ -31,11 +31,9 @@ const routes = [
             { path: "Aprendiz", component: Aprendiz },
             { path: "Ficha", component: Ficha },
             { path: "Usuario", component: Usuario}, 
-            { path: "Informes", component: Informes}, 
-        
-              
+            { path: "Informes", component: Informes},    
         ]
-    }
+    },  { path: "/Tabla", component: Tabla}, 
 ]
 export const router = createRouter({
     history: createWebHashHistory(),

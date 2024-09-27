@@ -25,21 +25,10 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
         }
     }
 
-    const registrarAprendiz = async (nombre, telefono, documento, email, ficha, Firma) => {
+    const registrarAprendiz = async (formData) => {
         loading.value = true;
         try {
-            let formData = new FormData();
-            formData.append('Nombre', nombre);
-            formData.append('Telefono', telefono);
-            formData.append('Documento', documento);
-            formData.append('Email', email);
-            formData.append('Id_Ficha', ficha);
-
-            if (Firma.value) {
-                formData.append('archivo', Firma); // Solo agregar si Firma no es null
-            }
-
-            let inf = await axios.post('http://localhost:4000/api/Aprendiz/Insertar', formData,
+            let inf = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Insertar', formData,
                 {
                     headers: {
                         'x-token': UseUsuario.xtoken,
@@ -69,15 +58,16 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
         }
     }
 
-    const editarAprendiz = async (id, nombre, telefono, documento, email, ficha) => {
+    const editarAprendiz = async (id, nombre, telefono, documento, email, ficha, Firma) => {
         loading.value=true
         try {
-            let inf = await axios.put(`http://localhost:4000/api/Aprendiz/Actualizar/${id}`, {
+            let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Actualizar/${id}`, {
                 Nombre: nombre,
                 Telefono: telefono,
                 Documento: documento,
                 Email: email,
                 Id_Ficha: ficha,
+                Firma:Firma
 
             }, {
                 headers: {
@@ -109,7 +99,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     }
     const cargarcould = async (id, formData) => {
         try {
-            let r = await axios.put(`http://localhost:4000/api/Aprendiz/cargarCloud/${id}`, formData, {
+            let r = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/cargarCloud/${id}`, formData, {
                 headers: {
                     "x-token": UseUsuario.xtoken,
                     "Content-Type": "multipart/form-data",
@@ -125,7 +115,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
 
     const updatecoul = async (id) => {
         try {
-            let r = await axios.put(`http://localhost:4000/Aprendices/uploadClou/${id}`, {
+            let r = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendices/uploadClou/${id}`, {
                 headers: {
                     "x-token": UseUsuario.xtoken,
                 },

@@ -73,7 +73,7 @@
         <q-btn 
           label="Ver" 
           color="green" 
-          to = './Apredice'
+          to = './Aprendiz'
         />
       </q-card-actions>
     </q-card>

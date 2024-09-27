@@ -63,7 +63,7 @@ function toggleLeftDrawer() {
 }
 
 function salir() {
-  router.pust("/Login");
+  router.push("/Login");
 }
 </script>
 

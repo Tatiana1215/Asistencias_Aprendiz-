@@ -49,22 +49,48 @@
 
           <q-card-section class="q-pt-none">
             <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green"
-              @keyup.enter="prompt = false" />
+              @keyup.enter="prompt = false"  :rules="[ 
+           (val) => (val && val.length > 0) || 'Por favor, ingrese un nombre'
+         ]"  />
+
             <br>
             <q-input dense v-model="telefono" placeholder="Telefono" autofocus color="green"
-              @keyup.enter="prompt = false" />
+              @keyup.enter="prompt = false" :rules="[
+    (val) => (val && val.length > 0) || 'Por favor, ingrese un teléfono'
+  ]"   />
             <br>
             <q-input dense v-model="documento" placeholder="Documento" autofous color="green"
-              @keyup.enter="prompt = false" />
+              @keyup.enter="prompt = false" :rules="[ 
+           (val) => (val && val.length > 0) || 'Por favor, ingrese un Numero de Documento']" />
             <br>
-            <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false" />
+            <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false" :rules="[ 
+           (val) => (val && val.length > 0) || 'Por favor, ingrese un Email']" />
             <br>
             <!-- <q-input dense v-model="ficha" placeholder="Id_Ficha" autofocus @keyup.enter="prompt = false" />
           <br> -->
 
             <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value
               map-options option-label="Codigo" option-value="_id" use-input @filter="filterFunction"
-              class="custom-select" use-chips />
+              class="custom-select" use-chips :rules="[ 
+           (val) => (val && val.length > 0) || 'Por favor, ingrese un Numero de Ficha']" />
+
+
+            <div class="file-upload">
+              <q-file v-model="Firma" label="Firma Virtual (Opcional)" filled accept="image/*"
+                @update:model-value="handleFileChange" :rules="[ 
+           (val) => (val && val.length > 0) || 'Por favor, ingrese la Firma']">
+                <template v-slot:prepend>
+                  <q-icon name="attach_file"  />
+                </template>
+              </q-file>
+
+              <!-- Mostrar la foto existente si no se ha cargado una nueva -->
+              <q-img v-if="!previewUrl && datosExistentesFirma" :src="datosExistentesFirma"
+                style="max-width: 200px; max-height: 200px;" class="q-mt-md" />
+
+              <!-- Mostrar la previsualización de la nueva foto si se ha seleccionado -->
+              <q-img v-if="previewUrl" :src="previewUrl" style="max-width: 200px; max-height: 200px;" class="q-mt-md" />
+            </div>
 
           </q-card-section>
 
@@ -125,18 +151,57 @@ function limpiarCampos() {
   documento.value = '';
   email.value = '';
   ficha.value = '';
+  Firma.value = '';
+  previewUrl.value = false
 }
 
 async function agregarAprendiz() {
 
   let res;
   if (p.value == false) {
+
+    if (!Firma.value) {
+      console.log("No hay archivo para subir");
+      return;
+    }
+    // Agregamos los datos  fromdata para guarda la información que se va guardando en la base de datos
+    const formData = new FormData();
+    formData.append('Nombre', nombre.value);
+    formData.append('Telefono', telefono.value);
+    formData.append('Documento', documento.value);
+    formData.append('Email', email.value);
+    formData.append('Id_Ficha', ficha.value);
+
+    if (Firma.value) { // estamos validando la firma  para que la guarde en la nube de cloudinary
+      formData.append('archivo', Firma.value);
+    }
+    res = await useAprendiz.registrarAprendiz(formData) //aca ponemos formdata donde anterior mente estamos guardando los datos de cada campo
+
+    if (formData) {
+      console.log("Archivo subido correctamente", res);
+      Notify.create({
+        color: 'positive',
+        message: 'Firma virtual subida correctamente',
+        icon: 'cloud_done'
+      });
+    }
+
+  } else {
+    // Primero, subimos la firma si hay alguna seleccionada
+    if (Firma.value) {
+      await cargarCloud();  // Aquí llamamos la función para subir la firma
+    }
+    res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value, Firma.value)
+  }
+  if (res && res.status === 200) {
+
     res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
   } else {
     res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value)
   }
 
   if (res && res.status == 200) {
+
     AbrirModal.value = false;
     p.value = false
     limpiarCampos()
@@ -148,6 +213,53 @@ async function agregarAprendiz() {
 }
 
 
+
+
+
+const handleFileChange = (file) => {
+  if (file) {
+    Firma.value = file;
+    previewUrl.value = URL.createObjectURL(file);
+    datosExistentesFirma.value = ''; // Ocultar la firma existente al seleccionar una nueva
+  } else {
+    Firma.value = null;
+    previewUrl.value = '';
+  }
+};
+
+const subir = (e) => {
+  if (e.target.files.length > 0) {
+    Firma.value = e.target.files[0];
+    console.log("Archivo seleccionado:", Firma.value);
+  }
+};
+
+async function cargarCloud() {
+  if (!Firma.value) {
+    console.log("No hay archivo para subir");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("archivo", Firma.value); // Cambia "firmaVirtual" a "archivo"
+
+  try {
+    let ris = await useAprendiz.cargarcould(id.value, formData);
+    console.log("Archivo subido correctamente", ris);
+    Notify.create({
+      color: 'positive',
+      message: 'Firma virtual subida correctamente',
+      icon: 'cloud_done'
+    });
+  } catch (error) {
+    console.error("Error subiendo archivo:", error);
+    Notify.create({
+      color: 'negative',
+      message: 'Error al subir la firma virtual',
+      icon: 'error'
+    });
+  }
+}
 
 async function fetchData() {
   const response = await fetch('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
