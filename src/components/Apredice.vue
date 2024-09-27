@@ -18,10 +18,8 @@
                 <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
                   <q-icon name="edit" style="color: green" />
                 </q-btn>
-                <q-btn icon="close" round color="red" :loading="loading[props.row._id]"
-                  @click="Desactivar(props.row._id)" v-if="props.row.Estado == 1" />
-                <q-btn icon="check" round color="green" :loading="loading[props.row._id]"
-                  @click="Activar(props.row._id)" v-else />
+                <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+                <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
               </q-td>
             </template>
             <template v-slot:body-cell-Estado1="props">
@@ -35,25 +33,18 @@
                 {{ props.pageIndex + 1 }}
               </q-td>
             </template>
-
-            <template v-slot:body-cell-Firma="props">
-              <q-td :props="props">
-                {{ console.log(props.row.Firma) }}
-                <q-img v-if="props.row.Firma" :src="props.row.Firma" alt="Firma"
-                  style="max-width: 100px; max-height: 100px;" />
-                <p v-else>No disponible</p>
-              </q-td>
-            </template>
-
           </q-table>
         </div>
       </div>
 
+
+
       <q-dialog v-model="AbrirModal" persistent>
         <q-card style="min-width: 350px; margin: 0;">
-          <div class="text">
-            {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
-          </div>
+          <!-- <q-card-section> -->
+            <div class="text">
+              {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
+            </div>
           <!-- </q-card-section> -->
 
           <q-card-section class="q-pt-none">
@@ -75,11 +66,14 @@
             <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false" :rules="[ 
            (val) => (val && val.length > 0) || 'Por favor, ingrese un Email']" />
             <br>
+            <!-- <q-input dense v-model="ficha" placeholder="Id_Ficha" autofocus @keyup.enter="prompt = false" />
+          <br> -->
 
             <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value
               map-options option-label="Codigo" option-value="_id" use-input @filter="filterFunction"
               class="custom-select" use-chips :rules="[ 
            (val) => (val && val.length > 0) || 'Por favor, ingrese un Numero de Ficha']" />
+
 
             <div class="file-upload">
               <q-file v-model="Firma" label="Firma Virtual (Opcional)" filled accept="image/*"
@@ -97,12 +91,13 @@
               <!-- Mostrar la previsualización de la nueva foto si se ha seleccionado -->
               <q-img v-if="previewUrl" :src="previewUrl" style="max-width: 200px; max-height: 200px;" class="q-mt-md" />
             </div>
+
           </q-card-section>
 
 
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
-
+  
             <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz()">
               Guardar
               <template v-slot:loading>
@@ -121,7 +116,6 @@ import { ref, onBeforeMount } from 'vue';
 import axios from 'axios';
 import { UseAprendizStore } from '../Stores/aprendices';
 import { UseUsuarioStore } from '../Stores/usuario';
-import { Notify } from 'quasar';
 
 let nombre = ref('')
 let telefono = ref('')
@@ -132,11 +126,6 @@ let inf = ref('')
 let AbrirModal = ref(false)
 let p = ref(false)
 let id = ref('')
-let Firma = ref(null);
-let previewUrl = ref('');
-let loading = ref({})
-let datosExistentesFirma = ref('')
-
 
 
 const useAprendiz = UseAprendizStore()
@@ -166,10 +155,11 @@ function limpiarCampos() {
   previewUrl.value = false
 }
 
-
 async function agregarAprendiz() {
+
   let res;
   if (p.value == false) {
+
     if (!Firma.value) {
       console.log("No hay archivo para subir");
       return;
@@ -204,14 +194,24 @@ async function agregarAprendiz() {
     res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value, Firma.value)
   }
   if (res && res.status === 200) {
+
+    res = await useAprendiz.registrarAprendiz(nombre.value, telefono.value, documento.value, email.value, ficha.value)
+  } else {
+    res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value)
+  }
+
+  if (res && res.status == 200) {
+
     AbrirModal.value = false;
     p.value = false
     limpiarCampos()
   } else {
     AbrirModal.value = true;
   }
+
   await traer()
 }
+
 
 
 
@@ -260,6 +260,7 @@ async function cargarCloud() {
     });
   }
 }
+
 async function fetchData() {
   const response = await fetch('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
     headers: {
@@ -303,12 +304,6 @@ function Abrir(row) {
   email.value = row.Email;
   ficha.value = row.Id_Ficha;
   id.value = row._id;
-  Firma.value = null; // Resetear firma seleccionada
-  previewUrl.value = ''; // Resetear vista previa
-  // Si el aprendiz tiene una firma existente, la mostramos
-  if (row.Firma) {
-    previewUrl.value = row.Firma;
-  }
 }
 
 
@@ -316,51 +311,20 @@ function Abrir(row) {
 
 async function Activar(id) {
   console.log(id);
-  loading.value[id] = true
   try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`)
-    Notify.create({
-      color: 'positive',
-      message: 'El aprendiz ha sido activado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
-
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`)
     traer();
   } catch (error) {
     console.log(error);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al activar el aprendiz',
-      icon: 'error',
-      timeout: 2500
-    })
-  } finally {
-    loading.value[id] = false
   }
 }
 async function Desactivar(id) {
   console.log(id);
-  loading.value[id] = true
   try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`)
-    Notify.create({
-      color: 'positive',
-      message: 'El aprendiz ha sido inactivado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`)
     traer();
   } catch (error) {
     console.log(error);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al inactivar el aprendiz',
-      icon: 'error',
-      timeout: 2500
-    })
-  } finally {
-    loading.value[id] = false
   }
 }
 
@@ -370,19 +334,18 @@ const columns = ref([
   { name: 'Documento1', align: 'center', label: 'Documento', field: 'Documento', sortable: true },
   { name: 'Telefono', align: 'center', label: 'Teléfono', field: 'Telefono', sortable: true },
   { name: 'Email', align: 'center', label: 'Email', field: 'Email', sortable: true },
-  { name: 'Firma', label: 'Firma', field: 'Firma', sortable: true },
-  { name: 'Estado1', label: 'Estado', field: 'Estado1', sortable: true },
-  { name: 'opciones', label: 'Opciones' },
+  { name: 'Estado1', label: 'Estado',align: 'center', field: 'Estado1', sortable: true },
+  { name: 'opciones', label: 'Opciones',align: 'center' },
 ]);
 </script>
 
 
 
 <style>
+
 .iconoAprendiz img {
   width: 100%;
 }
-
 .tituloAprendiz,
 .text {
   background-color: green;
@@ -393,10 +356,5 @@ const columns = ref([
   font-size: 25px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-align: center;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
 }
 </style>

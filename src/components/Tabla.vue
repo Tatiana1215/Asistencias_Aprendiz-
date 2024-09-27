@@ -55,7 +55,7 @@ const Bitacoras = ref([]);
 onBeforeMount(() => {
   Bitacoras.value = UseStore.Bitacora; // Obtener los datos desde el store
   console.log(Bitacoras.value); // Verificar los datos
-}); 
+});
 </script>
 
 <style scoped>

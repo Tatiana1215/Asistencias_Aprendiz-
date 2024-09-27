@@ -49,7 +49,7 @@
               </q-btn>
               <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
               <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
-              <q-btn icon="delete" round color="red" @click="Eliminar(props.row._id)" />
+
             </q-td>
           </template>
 
@@ -99,7 +99,8 @@
 import { ref, onBeforeMount } from 'vue';
 import axios from 'axios';
 import { UseUsuarioStore } from '../Stores/usuario';
-import { Notify } from 'quasar';
+
+
 
 // Guardar valores originales para comparación
 let originalNombre = ref('');
@@ -115,7 +116,7 @@ let AbrirModal2 = ref(false)
 let nombre1 = ref("");
 let email1 = ref("");
 let password1 = ref("");
-let loading = ref({})
+
 const UseUsuario = UseUsuarioStore()
 
 
@@ -207,78 +208,35 @@ const columns = ref([
 ]);
 
 async function Activar(id) {
-  loading.value[id] = true
-  try {
-    await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`, {
-      headers: {
-        'x-token': UseUsuario.xtoken,
-      },
-    });
-    Notify.create({
-      color: 'positive',
-      message: 'El usuario ha sido activado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
-    await traer();
-  } catch (error) {
-    console.log(error.message);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al activar usuario',
-      icon: 'error',
-      timeout: 2500
-    })
-}finally{
-  loading.value[id] = false
-}
-}
-
-async function Desactivar(id) {
-  loading.value[id] = true
   try {
     await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Desactivar/${id}`, {
       headers: {
         'x-token': UseUsuario.xtoken,
       },
     });
-    Notify.create({
-      color: 'positive',
-      message: 'El usuario ha sido inactivado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
     await traer();
-
-}catch (error) {
-    console.log(error);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al inactivar usuario',
-      icon: 'error',
-      timeout: 2500
-    })
-  }finally{
-    loading.value[id] = false
-  }
+  } catch (error) {
+    console.log(error.message);
+  
+}
 }
 
-
-
-async function Eliminar(id) {
+async function Desactivar(id) {
   try {
-
-    await axios.delete(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Eliminar/${id}`, {
+    await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`, {
       headers: {
         'x-token': UseUsuario.xtoken,
       },
     });
     await traer();
-  } catch (error) {
-    console.log(error);
 
+}catch (error) {
+    console.log(error);
+  }
 }
-}
+
+
+
 </script>
 
 <style>

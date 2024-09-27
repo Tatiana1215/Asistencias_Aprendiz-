@@ -78,7 +78,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
         loading.value=true
         try {
             let res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/Insertar', {
-                Documento: Aprendiz,
+                Id_Aprendiz: Aprendiz,
             },
             )
             Notify.create({
@@ -93,7 +93,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             console.log(error);
             Notify.create({
                 color: "negative",
-                message: error.response.data.errors[0].msg || error.response.data.mensaje,
+                message: error.response.data.errors[0].msg,
                 icon: "error",
                 timeout: 2500,
             });
@@ -104,12 +104,10 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
         }
     }
 
-   
 
     return {
-        listarBitacora,listar, registrarAprendiz,loading,
+        listarBitacora,listar, registrarAprendiz,loading
     }
-
 })
 
 
