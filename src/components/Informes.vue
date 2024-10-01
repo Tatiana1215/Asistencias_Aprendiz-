@@ -7,51 +7,26 @@
 
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex">
-        <q-select
-          dense
-          v-model="ficha"
-          :options="filterOptions"
-          label="Id_Ficha"
-          color="green"
-          emit-value
-          map-options
-          option-label="formattedLabel"
-          option-value="Codigo"
-          use-input
-          @filter="filterONE"
-          class="custom-select"
-          use-chips
-        />
+        <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
+          option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
+          use-chips />
 
-        <input
-          type="date"
-          v-model="fechaInicial"
-          name="fechaInicial"
-          id="fechaInicial"
-        />
+        <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
 
-        <q-btn
-          v-for="size in sizes"
-          :key="`btn_size_rd_${size}`"
-          rounded
-          color="green"
-          :size="size"
-          :label="`${size}`"
-          icon="print"
-          to="/Tabla"
-        />
+        <q-btn v-for="size in sizes" :key="`btn_size_rd_${size}`" rounded color="green" :size="size" :label="`${size}`"
+          icon="print" to="/Tabla" />
       </div>
     </div>
 
 
     <q-card-actions align="center">
-    <q-btn :loading="UseStore.loading" color="green" @click="buscarAprendices()">
-            Buscar
-            <template v-slot:loading>
-              <q-spinner color="white" size="1em" />
-            </template>
-          </q-btn>
-        </q-card-actions>
+      <q-btn :loading="UseStore.loading" color="green" @click="buscarAprendices()">
+        Buscar
+        <template v-slot:loading>
+          <q-spinner color="white" size="1em" />
+        </template>
+      </q-btn>
+    </q-card-actions>
 
 
     <!-- Tabla de aprendices -->
@@ -138,7 +113,7 @@ async function filterONE(val, update) {
 
 async function buscarAprendices() {
   // Validación inicial de ficha y fecha
-  
+
   if (!ficha.value) {
     Notify.create({
       color: "negative",
@@ -221,11 +196,11 @@ async function buscarAprendices() {
 
 
 const columns = ref([
-{
+  {
     name: "Numero",
     required: true,
     label: "N°",
-   align: 'center',
+    align: 'center',
     field: "Numero",
     sortable: true,
   },
@@ -233,7 +208,7 @@ const columns = ref([
     name: "nombre",
     required: true,
     label: "Nombre",
-   align: 'center',
+    align: 'center',
     field: "nombre",
     sortable: true,
   },

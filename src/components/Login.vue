@@ -15,43 +15,21 @@
           </div>
 
           <q-card-section class="q-pt-none">
-            <q-input
-              dense
-              v-model="email"
-              placeholder="Correo electrónico"
-              autofocus
-              color="green"
-              class="custom-input"
-              @keyup.enter="secionIniciada"
-            />
+            <q-input dense v-model="email" placeholder="Correo electrónico" autofocus color="green" class="custom-input"
+              @keyup.enter="secionIniciada" />
             <br />
-            <q-input
-              dense
-              v-model="password"
-              placeholder="Contraseña"
-              autofocus
-              color="green"
-              :type="passwordFieldType"
-              class="custom-input"
-              @keyup.enter="secionIniciada"
-            >
+            <q-input dense v-model="password" placeholder="Contraseña" autofocus color="green" :type="passwordFieldType"
+              class="custom-input" @keyup.enter="secionIniciada">
               <template v-slot:append>
-                <q-icon
-                  :name="passwordVisible ? 'visibility_off' : 'visibility'"
-                  @click="togglePasswordVisibility"
-                  class="cursor-pointer"
-                />
+                <q-icon :name="passwordVisible ? 'visibility_off' : 'visibility'" @click="togglePasswordVisibility"
+                  class="cursor-pointer" />
               </template>
             </q-input>
           </q-card-section>
 
           <!-- Botón de Iniciar Sesión centrado -->
           <q-card-actions align="center" class="text-primary">
-            <q-btn
-              :loading="useUsuario.loading"
-              class="custom-btn"
-              @click="secionIniciada"
-            >
+            <q-btn :loading="useUsuario.loading" class="custom-btn" @click="secionIniciada">
               Iniciar sesión
             </q-btn>
           </q-card-actions>
@@ -115,11 +93,13 @@ async function secionIniciada() {
   height: 60%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  overflow: hidden; /* Asegura que el contenido no sobresalga */
+  overflow: hidden;
+  /* Asegura que el contenido no sobresalga */
 }
 
 .imagen-secure {
-  flex: 1; /* Ocupa 50% del espacio */
+  flex: 1;
+  /* Ocupa 50% del espacio */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,12 +108,15 @@ async function secionIniciada() {
 
 .imagen-secure img {
   width: 100%;
-  height: auto; /* Ajusta la altura automáticamente */
-  object-fit: cover; /* Asegura que la imagen cubra el área sin deformarse */
+  height: auto;
+  /* Ajusta la altura automáticamente */
+  object-fit: cover;
+  /* Asegura que la imagen cubra el área sin deformarse */
 }
 
 .InicioSecion {
-  flex: 1; /* Ocupa 50% del espacio */
+  flex: 1;
+  /* Ocupa 50% del espacio */
   display: flex;
   flex-direction: column;
   justify-content: center;
