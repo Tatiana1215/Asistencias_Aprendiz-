@@ -2,13 +2,14 @@
   <div class="table-container">
     <table>
       <tr>
-        <th colspan="11" class="title-row">REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No-</th>
+        <th colspan="11" class="title-row">
+          REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No- 002  DEL DÍA {{ fechaDia }} DEL MES DE {{ fechaMes }} DEL AÑO {{ fechaAnio }}
+        </th>
       </tr>
       <tr>
-        <th colspan="11" class="subtitle-row">DEL DÍA _____ DEL MES DE _____ DEL AÑO 2024</th>
-      </tr>
-      <tr>
-        <th colspan="11" class="objective-row">OBJETIVO (S)</th>
+        <th colspan="11" class="objective-row">
+          OBJETIVO (S) Registro de asistencia de la ficha {{ ficha }}
+        </th>
       </tr>
       <tr>
         <th>No.</th>
@@ -30,7 +31,7 @@
         <td>{{ fila.documento || '' }}</td> <!-- Documento -->
         <td>{{ fila.planta ||  '' }}</td> <!-- Planta -->
         <td>{{ fila.contratista || '' }}</td> <!-- Contratista -->
-        <td>{{ fila.otro || 'Aprendiz' }}</td> <!-- Otro -->
+        <td>{{ fila.otro || '' }}</td> <!-- Otro -->
         <td>{{ fila.dependencia || '' }}</td> <!-- Dependencia -->
         <td>{{ fila.emailAprendiz || '' }}</td> <!-- Correo Electrónico -->
         <td>{{ fila.telefonoAprendiz || '' }}</td> <!-- Teléfono -->
@@ -50,6 +51,15 @@ const UseStore = UseInformeStore();
 
 // Ref para guardar los datos de Bitacoras
 const Bitacoras = ref([]); 
+
+// Variables para la ficha y la fecha
+const ficha = ref("12345"); // Cambia este valor según la ficha seleccionada
+const fecha = ref(new Date()); // Fecha actual por defecto, puedes cambiarla según necesidad
+
+// Formatear la fecha en día, mes y año
+const fechaDia = ref(fecha.value.getDate());
+const fechaMes = ref(fecha.value.toLocaleString("default", { month: "long" })); // Mes en formato largo
+const fechaAnio = ref(fecha.value.getFullYear());
 
 // Cargar los datos de Bitacoras antes de montar el componente
 onBeforeMount(() => {
