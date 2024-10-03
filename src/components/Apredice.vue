@@ -370,7 +370,7 @@ const columns = ref([
   { name: 'Documento1', align: 'center', label: 'Documento', field: 'Documento', sortable: true },
   { name: 'Telefono', align: 'center', label: 'Teléfono', field: 'Telefono', sortable: true },
   { name: 'Email', align: 'center', label: 'Email', field: 'Email', sortable: true },
-  { name: 'Firma', label: 'Firma', field: 'Firma', sortable: true },
+  { name: 'Firma', label: 'Firma', field: 'Firma',align: 'center', sortable: true },
   { name: 'Estado1', label: 'Estado', field: 'Estado1', sortable: true },
   { name: 'opciones', label: 'Opciones' },
 ]);

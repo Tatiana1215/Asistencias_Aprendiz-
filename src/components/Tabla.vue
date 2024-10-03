@@ -3,7 +3,7 @@
     <table>
       <tr>
         <th colspan="11" class="title-row">
-          REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No- 002  DEL DÍA {{ fechaDia }} DEL MES DE {{ fechaMes }} DEL AÑO {{ fechaAnio }}
+          REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No- 002 DEL DÍA {{ fechaDia }} DEL MES DE {{ fechaMes }} DEL AÑO {{ fechaAnio }}
         </th>
       </tr>
       <tr>
@@ -29,14 +29,20 @@
         <td>{{ index + 1 }}</td> <!-- Número de fila -->
         <td>{{ fila.nombre || '' }}</td> <!-- Nombres y Apellidos -->
         <td>{{ fila.documento || '' }}</td> <!-- Documento -->
-        <td>{{ fila.planta ||  '' }}</td> <!-- Planta -->
+        <td>{{ fila.planta || '' }}</td> <!-- Planta -->
         <td>{{ fila.contratista || '' }}</td> <!-- Contratista -->
         <td>{{ fila.otro || '' }}</td> <!-- Otro -->
         <td>{{ fila.dependencia || '' }}</td> <!-- Dependencia -->
         <td>{{ fila.emailAprendiz || '' }}</td> <!-- Correo Electrónico -->
         <td>{{ fila.telefonoAprendiz || '' }}</td> <!-- Teléfono -->
-        <td>{{ fila.autoriza || ''}}</td> <!-- Autoriza Grabación -->
-        <td>{{ fila.firma || '' }}</td> <!-- Firma -->
+        <td>{{ fila.autoriza || '' }}</td> <!-- Autoriza Grabación -->
+        <!-- Columna de Firma con imagen -->
+        <td>
+          <div v-if="fila.firma">
+            <img :src="fila.firma" alt="Firma" style="max-width: 100px; max-height: 100px;" />
+          </div>
+          <span v-else></span>
+        </td>
       </tr>
     </table>
   </div>
@@ -80,10 +86,10 @@ const fillRows = () => {
     emailAprendiz: '',
     telefonoAprendiz: '',
     autoriza: '',
-    firma: ''
+    firma: '' // Aquí debe estar la URL de la firma si está disponible
   };
 
-  return [...Bitacoras.value, ...Array(totalRows - Bitacoras.value.length).fill(emptyRow)]; //Para pintar las 27 filas
+  return [...Bitacoras.value, ...Array(totalRows - Bitacoras.value.length).fill(emptyRow)];
 };
 </script>
 
