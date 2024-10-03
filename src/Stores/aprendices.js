@@ -48,7 +48,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
             console.log(error);
             Notify.create({
                 color: "negative",
-                message: error.response.data.message || error.response.data.error||error.response.data.errors[0].msg,
+                message: error.response.data.message || error.response.data.errors[0].msg,
                 icon: "error",
                 timeout: 2500,
             });
@@ -59,7 +59,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     }
 
     const editarAprendiz = async (id, nombre, telefono, documento, email, ficha, Firma) => {
-        loading.value=true
+        loading.value = true
         try {
             let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Actualizar/${id}`, {
                 Nombre: nombre,
@@ -67,14 +67,13 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
                 Documento: documento,
                 Email: email,
                 Id_Ficha: ficha,
-                Firma:Firma
+                Firma: Firma
 
             }, {
                 headers: {
                     "xtoken": UseUsuario.xtoken
                 }
             })
-
             Notify.create({
                 color: "positive",
                 message: "Datos Actualizados",
@@ -94,9 +93,21 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
             })
             return error
         } finally {
-            loading.value=false
+            loading.value = false
         }
     }
+
+
+    const mostrarMensajeSinCambios = () => {
+        Notify.create({
+            color: "warning",
+            message: "No se hicieron cambios",
+            icon: "info",
+            timeout: 2500,
+        });
+    };
+
+
     const cargarcould = async (id, formData) => {
         try {
             let r = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/cargarCloud/${id}`, formData, {
@@ -131,6 +142,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
 
 
     return {
-        registrarAprendiz, listarAprediz, editarAprendiz, loading, cargarcould, updatecoul
+        registrarAprendiz, listarAprediz, editarAprendiz, cargarcould, updatecoul, loading,mostrarMensajeSinCambios
     }
-})
+}
+)

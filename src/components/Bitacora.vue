@@ -8,36 +8,14 @@
 
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex align-center">
-        
-        <q-select
-          dense
-          v-model="ficha"
-          :options="filterOptions"
-          label="Id_Ficha"
-          color="green"
-          emit-value
-          map-options
-          option-label="formattedLabel"
-          option-value="Codigo"
-          use-input
-          @filter="filterONE"
-          class="custom-select"
-          use-chips
-        />
+
+        <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
+          option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
+          use-chips />
 
         <div class="Fecha">
-          <input
-            type="date"
-            v-model="fechaInicial"
-            name="fechaInicial"
-            id="fechaInicial"
-          />
-          <input
-            type="date"
-            v-model="fechaFinal"
-            name="fechaFinal"
-            id="fechaFinal"
-          />
+          <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
+          <input type="date" v-model="fechaFinal" name="fechaFinal" id="fechaFinal" />
 
           <q-btn :loading="UseBitacora.loading" color="green" @click="Buscar()">
             Buscar
@@ -52,22 +30,13 @@
       <div class="table">
         <q-table :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-Estado="props">
-            <q-select
-              v-model="props.row.Estado"
-              :options="estadoOptions"
-              :class="{
-                'estado-asistio': props.row.Estado === 'Asistio',
-                'estado-no-asistio': props.row.Estado === 'No Asistio',
-                'estado-excusa': props.row.Estado === 'Excusa',
-                'estado-pendiente': props.row.Estado === 'Pendiente',
-              }"
-              label="Seleccione Estado"
-              dense
-              outlined
-              @update:model-value="actualizarEstado(props.row)"
-              emit-value
-              map-options
-            ></q-select>
+            <q-select v-model="props.row.Estado" :options="estadoOptions" :class="{
+              'estado-asistio': props.row.Estado === 'Asistio',
+              'estado-no-asistio': props.row.Estado === 'No Asistio',
+              'estado-excusa': props.row.Estado === 'Excusa',
+              'estado-pendiente': props.row.Estado === 'Pendiente',
+            }" label="Seleccione Estado" dense outlined @update:model-value="actualizarEstado(props.row)" emit-value
+              map-options></q-select>
           </template>
           <template v-slot:body-cell-Numero="props">
             <q-td :props="props">
@@ -171,7 +140,7 @@ async function Buscar() {
     Notify.create({
       type: "negative",
       message: "El campo Ficha está vacío.",
-    
+
     });
     return; // Detener la ejecución
   }
@@ -358,7 +327,8 @@ const columns = ref([
 
 .inline-flex {
   display: flex;
-  gap: 15px; /* Espacio entre los elementos */
+  gap: 15px;
+  /* Espacio entre los elementos */
   align-items: center;
 }
 
@@ -367,7 +337,7 @@ const columns = ref([
   margin-right: 10px;
 }
 
-.Fecha{
+.Fecha {
   display: flex;
   gap: 10px;
 }

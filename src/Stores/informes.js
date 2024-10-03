@@ -71,4 +71,7 @@ export const UseInformeStore = defineStore("informes", () => {
         Bitacora,
         loading 
     };
-});
+},
+{
+  persist: true,
+},);

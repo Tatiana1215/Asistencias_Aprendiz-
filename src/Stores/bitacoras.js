@@ -8,49 +8,38 @@ import { UseUsuarioStore } from "./usuario";
 export const UseBitacoraStore = defineStore("bitacora", () => {
 
     const UseUsuario = UseUsuarioStore()
+    let loading = ref(false)
 
-    let loading =ref (false)
-   
 
-    const listarBitacora = async (ficha,fechaInicial, fechaFinal) => {
-        loading.value=true
+    const listarBitacora = async (ficha, fechaInicial, fechaFinal) => {
+        loading.value = true
         try {
-
             console.log(fechaInicial)
             console.log(fechaFinal);
             console.log(ficha);
-            
-            
             let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/ListarBitacoras', {
                 params: {
 
                     fichaNumero: ficha, // Este parámetro debe coincidir con lo que el backend espera
                     FechaInicial: new Date(fechaInicial).toISOString(), // Formato ISO
                     FechaFinal: new Date(fechaFinal).toISOString(), // Formato ISO
-
-                  /*   fichaNumero: ficha,
-                    FechaInicial: new Date(fechaInicial).toISOString(),
-                    FechaFinal: new Date(fechaFinal).toISOString(),
-                    */
                 },
                 headers: {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
             });
-            // bitacoras.value = res.data; // Update bitacoras state
             Notify.create({
                 color: "positive",
                 message: "Busqueda Exitosa",
                 icon: "check_circle",
                 timeout: 2500,
             });
-            // bitacoras.value = res.data; // Update bitacoras state
             return res;
         } catch (error) {
             console.log('No hay bitácoras', error);
             Notify.create({
                 color: "negative",
-                message:error.response.data.message,
+                message: error.response.data.message,
                 icon: "error",
                 timeout: 2500,
             });
@@ -60,22 +49,22 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
         }
     }
 
-    const listar= async () => {
-       
+    const listar = async () => {
+
         try {
             let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/listar', {
                 headers: {
                     "x-token": UseUsuario.xtoken// Cambiar el header al estándar Authorization
                 }
             });
-     
+
             return res;
         } catch (error) {
             console.log('No hay bitácoras', error);
         }
     }
     const registrarAprendiz = async (Aprendiz) => {
-        loading.value=true
+        loading.value = true
         try {
             let res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Bitacora/Insertar', {
                 Documento: Aprendiz
@@ -83,7 +72,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             )
             Notify.create({
                 color: "positive",
-                message:"Registro Exitoso",
+                message: "Registro Exitoso",
                 icon: "error",
                 timeout: 2500,
             });
@@ -100,14 +89,17 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
 
             return error
         } finally {
-            loading.value=false
+            loading.value = false
         }
     }
 
 
     return {
-        listarBitacora,listar, registrarAprendiz,loading
+        listarBitacora, listar, registrarAprendiz, loading
     }
-})
+},{
+        persist: true,
+    },
+)
 
 
