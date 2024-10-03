@@ -63,7 +63,7 @@
         </q-table>
       </div>
 
-      
+
       <q-dialog v-model="AbrirModal" persistent>
         <q-card style="min-width: 400px; margin: 0;">
           <div class="text">
@@ -153,6 +153,37 @@ async function EditarUsuario() {
     return;
   }
 
+  const trimNombre = nombre.value.trim();
+  const trimEmail = email.value.trim();
+
+  // Regex para evitar cualquier espacio dentro de los campos
+  const noSpacesRegex = /^[^\s]+$/;
+
+  // Verificar si los campos están vacíos
+  if (!trimNombre || !trimEmail ) {
+    Notify.create({
+      color: "negative",
+      message: "Los campos no pueden estar vacíos",
+      icon: "error",
+      timeout: 2500,
+    });
+    return;
+  }
+
+  // Verificar si los campos contienen espacios
+  if (
+    !noSpacesRegex.test(trimEmail) ||
+    !noSpacesRegex.test(trimPassword)
+  ) {
+    Notify.create({
+      color: "negative",
+      message: "Los campos no pueden contener espacios en blanco",
+      icon: "error",
+      timeout: 2500,
+    });
+    return;
+  }
+
   const res = await UseUsuario.actualizarUsuario(
     id.value,
     nombre.value,
@@ -166,14 +197,6 @@ async function EditarUsuario() {
     AbrirModal.value = true;
   }
 }
-
-// async function Abrir(row) {
-//   console.log("Abrir:", row);
-//   AbrirModal.value = true
-//   nombre.value = row.Nombre
-//   email.value = row.Email
-//   id.value = row._id;
-// }
 
 function limpiarCampos2() {
   (nombre1.value = ""), (email1.value = "");
@@ -202,7 +225,6 @@ async function registrar() {
 
   // Verificar si los campos contienen espacios
   if (
-    !noSpacesRegex.test(trimNombre) ||
     !noSpacesRegex.test(trimEmail) ||
     !noSpacesRegex.test(trimPassword)
   ) {

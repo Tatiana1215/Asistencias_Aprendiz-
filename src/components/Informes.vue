@@ -106,7 +106,9 @@ async function filterONE(val, update) {
   update(() => {
     const needle = val.toLowerCase();
     filterOptions.value = options.value.filter((option) =>
-      option.Codigo.toLowerCase().includes(needle)
+    option.Codigo.toLowerCase().includes(needle) ||
+    option.Nombre.toLowerCase().includes(needle)
+
     );
   });
 }
@@ -133,6 +135,16 @@ async function buscarAprendices() {
     });
     return;
   }
+
+  // if(!ficha.Estado == && !fechaInicial){
+  //   Notify.create({
+  //     color: "negative",
+  //     message: "Noy hay aprendices que asistieron en esa fecha.",
+  //     icon: "warning",
+  //     timeout: 2500,
+  //   });
+  //   return;
+  // }
 
   // Validar que la fecha no sea futura
   if (dayjs(fechaInicial.value).isAfter(dayjs())) {

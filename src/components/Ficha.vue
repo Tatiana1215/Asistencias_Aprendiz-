@@ -154,9 +154,7 @@ async function CrearFicha() {
   }
 
   // Verificar que no haya espacios intermedios
-  if (
-    !noSpacesRegex.test(trimmedNombre) ||
-    !noSpacesRegex.test(trimmedCodigo)
+  if (!noSpacesRegex.test(trimmedCodigo)
   ) {
     Notify.create({
       color: "negative",

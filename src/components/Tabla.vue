@@ -3,7 +3,8 @@
     <table>
       <tr>
         <th colspan="11" class="title-row">
-          REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No- 002  DEL DÍA {{ fechaDia }} DEL MES DE {{ fechaMes }} DEL AÑO {{ fechaAnio }}
+          REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No- 002 DEL DÍA {{ fechaDia }} DEL MES DE {{ fechaMes }} DEL AÑO
+          {{ fechaAnio }}
         </th>
       </tr>
       <tr>
@@ -29,14 +30,14 @@
         <td>{{ index + 1 }}</td> <!-- Número de fila -->
         <td>{{ fila.nombre || '' }}</td> <!-- Nombres y Apellidos -->
         <td>{{ fila.documento || '' }}</td> <!-- Documento -->
-        <td>{{ fila.planta ||  '' }}</td> <!-- Planta -->
+        <td>{{ fila.planta || '' }}</td> <!-- Planta -->
         <td>{{ fila.contratista || '' }}</td> <!-- Contratista -->
         <td>{{ fila.otro || '' }}</td> <!-- Otro -->
         <td>{{ fila.dependencia || '' }}</td> <!-- Dependencia -->
         <td>{{ fila.emailAprendiz || '' }}</td> <!-- Correo Electrónico -->
         <td>{{ fila.telefonoAprendiz || '' }}</td> <!-- Teléfono -->
-        <td>{{ fila.autoriza || ''}}</td> <!-- Autoriza Grabación -->
-        <td>{{ fila.firma || '' }}</td> <!-- Firma -->
+        <td>{{ fila.autoriza || '' }}</td> <!-- Autoriza Grabación -->
+        <td>{{ fila.Firma || '' }}</td> 
       </tr>
     </table>
   </div>
@@ -50,7 +51,7 @@ import { UseInformeStore } from "../Stores/informes"; // Importa el store correc
 const UseStore = UseInformeStore();
 
 // Ref para guardar los datos de Bitacoras
-const Bitacoras = ref([]); 
+const Bitacoras = ref([]);
 
 // Variables para la ficha y la fecha
 const ficha = ref("12345"); // Cambia este valor según la ficha seleccionada
@@ -88,6 +89,18 @@ const fillRows = () => {
 </script>
 
 <style scoped>
+
+.signature-image {
+  
+ 
+  max-width: 100px;  /* Ajusta el ancho máximo de la imagen */
+    max-height: 50px;  /* Ajusta la altura máxima de la imagen */
+    
+   
+  object-fit: contain; /* Asegura que la imagen mantenga sus proporciones */
+  }
+  
+  
 .table-container {
   width: 100%;
   margin: 0 auto;
@@ -101,7 +114,8 @@ table {
   margin-top: 20px;
 }
 
-th, td {
+th,
+td {
   border: 1px solid black;
   padding: 10px;
   text-align: center;

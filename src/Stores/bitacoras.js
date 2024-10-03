@@ -39,7 +39,7 @@ export const UseBitacoraStore = defineStore("bitacora", () => {
             console.log('No hay bitácoras', error);
             Notify.create({
                 color: "negative",
-                message: error.response.data.message,
+                message: error.response.data.mensaje,
                 icon: "error",
                 timeout: 2500,
             });
