@@ -7,6 +7,7 @@
 
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex">
+
         <q-select
           dense
           v-model="ficha"
@@ -40,6 +41,16 @@
           icon="print"
           to="/Tabla"
         />
+
+        <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
+          option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
+          use-chips />
+
+        <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
+
+        <q-btn v-for="size in sizes" :key="`btn_size_rd_${size}`" rounded color="green" :size="size" :label="`${size}`"
+          icon="print" to="/Tabla" />
+
       </div>
     </div>
 
@@ -51,6 +62,7 @@
         </template>
       </q-btn>
     </q-card-actions>
+
 
     <!-- Tabla de aprendices -->
     <div class="q-pa-md q-gutter-sm">
@@ -234,7 +246,11 @@ const columns = ref([
     name: "Numero",
     required: true,
     label: "N°",
+
     align: "center",
+
+    align: 'center',
+
     field: "Numero",
     sortable: true,
   },
@@ -242,7 +258,10 @@ const columns = ref([
     name: "nombre",
     required: true,
     label: "Nombre",
+
     align: "center",
+
+    align: 'center',
     field: "nombre",
     sortable: true,
   },

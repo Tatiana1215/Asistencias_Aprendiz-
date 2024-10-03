@@ -50,43 +50,45 @@
       </div>
 
       <q-dialog v-model="AbrirModal" persistent>
-        <q-card style="min-width: 350px; margin: 0;">
+        <q-card style="min-width: 500px; margin: 0;">
           <div class="text">
             {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
           </div>
           <!-- </q-card-section> -->
 
           <q-card-section class="q-pt-none">
-            <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green"
-              @keyup.enter="prompt = false"  :rules="[ 
-           (val) => (val && val.length > 0) || 'Por favor, ingrese un nombre'
-         ]"  />
+            <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green" @keyup.enter="prompt = false"
+              :rules="[
+                (val) => (val && val.length > 0) || 'El nombre es obligatorio'
+              ]" />
 
             <br>
             <q-input dense v-model="telefono" placeholder="Telefono" autofocus color="green"
               @keyup.enter="prompt = false" :rules="[
-    (val) => (val && val.length > 0) || 'Por favor, ingrese un teléfono'
-  ]"   />
+                (val) => (val && val.length > 0) || 'El teléfono es obligatorio'
+              ]" />
             <br>
             <q-input dense v-model="documento" placeholder="Documento" autofous color="green"
-              @keyup.enter="prompt = false" :rules="[ 
-           (val) => (val && val.length > 0) || 'Por favor, ingrese un Numero de Documento']" />
+              @keyup.enter="prompt = false" :rules="[
+                (val) => (val && val.length > 0) || 'El Numero de Documento es obligatorio']" />
             <br>
-            <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false" :rules="[ 
-           (val) => (val && val.length > 0) || 'Por favor, ingrese un Email']" />
+            <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false"
+              :rules="[
+                (val) => (val && val.length > 0) || 'El Email es obligatorio']" />
             <br>
 
-            <q-select dense v-model="ficha" :options="filterOptions" label="Id_Ficha" color="green" emit-value
-              map-options option-label="Codigo" option-value="_id" use-input @filter="filterFunction"
-              class="custom-select" use-chips :rules="[ 
-           (val) => (val && val.length > 0) || 'Por favor, ingrese un Numero de Ficha']" />
+            <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
+              option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
+              use-chips :rules="[
+                (val) => (val && val.length > 0) || 'El numero de Ficha es obligatorio']" />
 
             <div class="file-upload">
               <q-file v-model="Firma" label="Firma Virtual (Opcional)" filled accept="image/*"
-                @update:model-value="handleFileChange" :rules="[ 
-           (val) => (val && val.length > 0) || 'Por favor, ingrese la Firma']">
+                @update:model-value="handleFileChange" :rules="[
+                  (val) => !!val || 'La firma es obligatoria'  // Ensure a file is selected
+                ]">
                 <template v-slot:prepend>
-                  <q-icon name="attach_file"  />
+                  <q-icon name="attach_file" />
                 </template>
               </q-file>
 
@@ -101,7 +103,7 @@
 
 
           <q-card-actions align="right" class="text-primary">
-            <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
+            <q-btn flat label="Cancelar" @click="cerrarModal(), p = false" color="red" v-close-popup />
 
             <q-btn :loading="useAprendiz.loading" color="green" @click="agregarAprendiz()">
               Guardar
@@ -117,7 +119,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, resolveDirective } from 'vue';
 import axios from 'axios';
 import { UseAprendizStore } from '../Stores/aprendices';
 import { UseUsuarioStore } from '../Stores/usuario';
@@ -137,7 +139,13 @@ let previewUrl = ref('');
 let loading = ref({})
 let datosExistentesFirma = ref('')
 
-
+// para hacer la comparacion de los datos 
+let infNombre = ref('');
+let infTelefono = ref('');
+let infDocumento = ref('');
+let infEmail = ref('')
+let infFicha = ref('')
+let infFirma = ref('')
 
 const useAprendiz = UseAprendizStore()
 const UseUsuario = UseUsuarioStore()
@@ -155,7 +163,6 @@ async function traer() {
   rows.value = res.data
 }
 
-
 function limpiarCampos() {
   nombre.value = '';
   telefono.value = '';
@@ -164,16 +171,150 @@ function limpiarCampos() {
   ficha.value = '';
   Firma.value = '';
   previewUrl.value = false
+
+  // limpiar los valores de la comparación 
+  infNombre.value = '';
+  infTelefono = '';
+  infDocumento = '';
+  infEmail = '';
+  infFicha = '';
+  infFirma = '';
 }
+
+function cerrarModal() {
+  limpiarCampos()
+}
+
+// function datosModificados() {
+//   // return nombre.value === infNombre.value ||
+//   //   telefono.value === infTelefono.value ||
+//   //   documento.value === infDocumento.value ||
+//   //   email.value === infEmail.value ||
+//   //   ficha.value === infFicha.value ||
+//   //   Firma.value === infFirma.value;
+//   return nombre.value !== infNombre.value ||
+//     telefono.value !== infTelefono.value ||
+//     documento.value !== infDocumento.value ||
+//     email.value !== infEmail.value ||
+//     ficha.value !== infFicha.value ||
+//     // Firma.value !== infFirma.value;
+//     (Firma.value && Firma.value !== infFirma.value);
+
+// }
 
 
 async function agregarAprendiz() {
+
+  if (!nombre.value || !telefono.value || !documento.value || !email.value || !ficha.value) {
+    Notify.create({
+      color: "negative",
+      message: "Los campos no pueden estar vacíos",
+      icon: "error",
+      timeout: 2500,
+    })
+  }
+
+
+  // Trim input values to remove leading and trailing spaces
+  const trimmedNombre = nombre.value.trim();
+  const trimmedTelefono = telefono.value.trim();
+  const trimmedDocumento = documento.value.trim();
+  const trimmedEmail = email.value.trim();
+  const trimmedFicha = ficha.value.trim();
+
+  // Expresión regular para garantizar que no haya espacios múltiples dentro de los campos
+  const noExcessiveSpacesRegex = /^[^\s]+(\s[^\s]+)*$/;
+  // /^[^\s]+$/
+
+  //  Validar que ningún campo esté vacío después del recorte
+  if (!trimmedNombre || !trimmedTelefono || !trimmedDocumento || !trimmedEmail || !trimmedFicha
+  ) {
+    Notify.create({
+      color: "negative",
+      message: "Los campos no pueden estar vacíos",
+      icon: "error",
+      timeout: 2500,
+    });
+    return;
+  }
+  if (p.value === false) {
+    if (!Firma.value) {
+      Notify.create({
+        color: "negative",
+        message: "Los campos no pueden estar vacíos",
+        icon: "error",
+        timeout: 2500,
+      });
+      return;
+    }
+  }
+  // Validate that there are no internal excessive spaces
+  if (!noExcessiveSpacesRegex.test(trimmedNombre) || !noExcessiveSpacesRegex.test(trimmedTelefono) ||
+    !noExcessiveSpacesRegex.test(trimmedDocumento) || !noExcessiveSpacesRegex.test(trimmedEmail) ||
+    !noExcessiveSpacesRegex.test(trimmedFicha)) {
+    Notify.create({
+      color: "negative",
+      message: "Los campos no pueden contener espacios en blanco excesivos",
+      icon: "error",
+      timeout: 2500,
+    });
+    return;
+  }
+  // if ( p.value && !datosModificados()) {
+  //     // useAprendiz.mostrarMensajeSinCambios();
+  //     Notify.create({
+  //       color: "warning",
+  //       message: "No se hicieron cambios",
+  //       icon: "info",
+  //       timeout: 2500,
+  //     });
+  //     // AbrirModal.value = false
+  //     return
+  //   }
+  // if (p.value === true && !datosModificados()) {
+  //   Notify.create({
+  //     color: "warning",
+  //     message: "No se hicieron cambios",
+  //     icon: "info",
+  //     timeout: 2500,
+  //   });
+  //   return;
+  // }
+
+
+    
+
   let res;
-  if (p.value == false) {
+
+  if (p.value ) {
+    if (
+    nombre.value === infNombre.value && telefono.value === infTelefono.value 
+    && documento.value === infDocumento.value
+    && email.value === infEmail.value 
+    // && ficha.value 
+    // && Firma.value 
+  ) {
+    AbrirModal.value = true;
+    Notify.create({
+      color: "warning",
+      message: "No se hicieron cambios",
+      icon: "info",
+      timeout: 2500,
+    });
+
+    return;
+  }
+    if (Firma.value) { // Primero, subimos la firma si hay alguna seleccionada
+      await cargarCloud();  // Aquí llamamos la función para subir la firma
+    }
+
+    res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value, Firma.value)
+  } else {
     if (!Firma.value) {
       console.log("No hay archivo para subir");
       return;
     }
+
     // Agregamos los datos  fromdata para guarda la información que se va guardando en la base de datos
     const formData = new FormData();
     formData.append('Nombre', nombre.value);
@@ -185,24 +326,22 @@ async function agregarAprendiz() {
     if (Firma.value) { // estamos validando la firma  para que la guarde en la nube de cloudinary
       formData.append('archivo', Firma.value);
     }
+
+
     res = await useAprendiz.registrarAprendiz(formData) //aca ponemos formdata donde anterior mente estamos guardando los datos de cada campo
 
-    if (formData) {
-      console.log("Archivo subido correctamente", res);
-      Notify.create({
-        color: 'positive',
-        message: 'Firma virtual subida correctamente',
-        icon: 'cloud_done'
-      });
-    }
+  //   if (formData) {
+  //     console.log("Archivo subido correctamente", res);
+  //     Notify.create({
+  //       color: 'positive',
+  //       message: 'Firma virtual subida correctamente',
+  //       icon: 'cloud_done'
+  //     });
+  //   }
 
-  } else {
-    // Primero, subimos la firma si hay alguna seleccionada
-    if (Firma.value) {
-      await cargarCloud();  // Aquí llamamos la función para subir la firma
-    }
-    res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value, Firma.value)
   }
+
+
   if (res && res.status === 200) {
     AbrirModal.value = false;
     p.value = false
@@ -265,8 +404,7 @@ async function fetchData() {
     headers: {
       "x-token": UseUsuario.xtoken
     }
-  }
-  )
+  })
   options.value = await response.json()
 }
 
@@ -309,6 +447,15 @@ function Abrir(row) {
   if (row.Firma) {
     previewUrl.value = row.Firma;
   }
+
+
+  infNombre.value = row.Nombre;
+  infTelefono.value = row.Telefono;
+  infDocumento.value = row.Documento;
+  infEmail.value = row.Email;
+  infFicha.val = row.Id_Ficha
+  infFirma.value = null
+
 }
 
 

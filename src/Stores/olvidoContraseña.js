@@ -120,7 +120,10 @@ let loading =ref (false)
 return {
     CorreoMensaje, verificarCodigo, nuevaContraseña, loading
 }
-})
+},
+{
+  persist: true,
+},)
 
 
 

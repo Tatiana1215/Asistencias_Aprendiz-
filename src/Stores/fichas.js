@@ -92,4 +92,7 @@ export const UseFichaStore = defineStore("ficha", () => {
     return {
     listarFicha, crearFicha, EditarFicha,loading
     }
-})
+},
+{
+  persist: true,
+},)

@@ -7,53 +7,25 @@
     <hr class="divider" />
 
     <div class="q-pa-md q-gutter-sm">
-      <q-btn
-        label="Crear"
-        icon="add_circle"
-        color="green"
-        @click="AbrirCrear()"
-        p="false"
-      />
+      <q-btn label="Crear" icon="add_circle" color="green" @click="AbrirCrear()" p="false" />
 
       <div class="table-container">
         <q-table :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-btn
-                round
-                color="white"
-                :style="{ border: '2px solid green' }"
-                @click="Abrir(props.row)"
-                p="true"
-              >
+              <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)" p="true">
                 <q-icon name="edit" style="color: green" />
               </q-btn>
-              <q-btn
-                icon="close"
-                round
-                color="red"
-                :loading="loading[props.row._id]"
-                @click="Desactivar(props.row._id)"
-                v-if="props.row.Estado == 1"
-              />
-              <q-btn
-                icon="check"
-                round
-                color="green"
-                :loading="loading[props.row._id]"
-                @click="Activar(props.row._id)"
-                v-else
-              />
+              <q-btn icon="close" round color="red" :loading="loading[props.row._id]" @click="Desactivar(props.row._id)"
+                v-if="props.row.Estado == 1" />
+              <q-btn icon="check" round color="green" :loading="loading[props.row._id]" @click="Activar(props.row._id)"
+                v-else />
             </q-td>
           </template>
 
           <template v-slot:body-cell-Estado1="props">
             <q-td :props="props">
-              <p
-                v-if="props.row.Estado == 1"
-                class="custom-font"
-                style="color: green"
-              >
+              <p v-if="props.row.Estado == 1" class="custom-font" style="color: green">
                 Activo
               </p>
               <p v-else class="custom-font" style="color: red">Inactivo</p>
@@ -81,48 +53,22 @@
       </div>
 
       <q-dialog v-model="AbrirModal" persistent>
-        <q-card style="min-width: 350px; margin-top: 0">
+        <q-card style="min-width: 400px; margin-top: 0">
           <div class="text">
             {{ p == true ? "Editar Ficha" : "Agregar Ficha" }}
           </div>
           <q-card-section class="q-pt-none">
             <!-- <label for="codigo">Nombre</label> -->
-            <q-input
-              dense
-              v-model="nombre"
-              placeholder=" Nombre"
-              autofocus
-              color="green"
-              @keyup.enter="prompt = false"
-            />
+            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
+              @keyup.enter="prompt = false" />
             <br />
-
-            <!-- <label for="codigo">codigo</label> -->
-            <q-input
-              dense
-              v-model="codigo"
-              placeholder="Codigo"
-              autofocus
-              color="green"
-              @keyup.enter="prompt = false"
-            />
-            <br />
+            <q-input dense v-model="codigo" placeholder="Codigo" autofocus color="green"
+              @keyup.enter="prompt = false" />
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
-            <q-btn
-              flat
-              label="Cancelar"
-              @click="p = false"
-              color="red"
-              v-close-popup
-            />
-            <q-btn
-              :loading="useFicha.loading"
-              label="Enviar"
-              color="green"
-              @click="CrearFicha()"
-            >
+            <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
+            <q-btn :loading="useFicha.loading" label="Enviar" color="green" @click="CrearFicha()">
               <template v-slot:loading>
                 <q-spinner color="white" size="1em" />
               </template>
@@ -246,7 +192,7 @@ async function CrearFicha() {
   }
 
   // Verificar el estado de la respuesta
-  if (res && res.status == 200) {
+  if (res && res.status === 200) {
     await traer(); // Refrescar los datos
     AbrirModal.value = false; // Cerrar modal en caso de éxito
     p.value = false;
@@ -344,7 +290,7 @@ const columns = ref([
 }
 
 .titleFirst {
-  margin: 15px 15px;
+  /* margin: 15px ; */
   display: flex;
   justify-content: center;
   font-family: "Roboto", Arial, sans-serif;

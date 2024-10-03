@@ -3,64 +3,34 @@
     <div class="titleFirst">
       <h3>Usuarios</h3>
     </div>
-
     <hr class="divider" />
-
     <div class="q-pa-md">
-      <q-btn
-        class="btnA"
-        label="Crear"
-        icon="add_circle"
-        color="green"
-        @click="AbrirModal2 = true"
-      />
+      <q-btn class="btnA" label="Crear" icon="add_circle" color="green" @click="AbrirModal2 = true" />
       <q-dialog v-model="AbrirModal2">
-        <q-card class="dialogRegistrar">
+        <q-card class="dialogRegistrar" style="min-width: 400px; margin: 0;">
           <div class="text">
             {{ "Agregar Usuario" }}
           </div>
           <q-card-section>
-            <q-input
-              dense
-              v-model="nombre1"
-              placeholder="Nombre"
-              autofocus
-              color="green"
-              @keyup.enter="inicioSecion = false"
-            />
+            <q-input dense v-model="nombre1" placeholder="Nombre" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
             <br />
-            <q-input
-              dense
-              v-model="email1"
-              placeholder="Email"
-              autofocus
-              color="green"
-              @keyup.enter="inicioSecion = false"
-            />
+            <q-input dense v-model="email1" placeholder="Email" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
             <br />
-            <q-input
-              dense
-              v-model="password1"
-              placeholder="Password"
-              autofocus
-              color="green"
-              @keyup.enter="inicioSecion = false"
-            />
+            <q-input dense v-model="password1" placeholder="Password" autofocus color="green"
+              @keyup.enter="inicioSecion = false" />
             <br />
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn
-              :loading="UseUsuario.loading"
-              color="green"
-              @click="registrar()"
-            >
+            <q-btn flat label="Cancelar" color="red" v-close-popup />
+            <q-btn :loading="UseUsuario.loading" color="green" @click="registrar()">
               Registar
               <template v-slot:loading>
                 <q-spinner color="white" size="1em" />
               </template>
             </q-btn>
-            <q-btn flat label="Close" color="red" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -69,28 +39,12 @@
         <q-table :rows="rows" :columns="columns" row-key="name">
           <template v-slot:body-cell-Opciones="props">
             <q-td :props="props">
-              <q-btn
-                round
-                color="white"
-                :style="(border = '2px solid green')"
-                @click="Abrir(props.row), (AbrirModal = true)"
-              >
+              <q-btn round color="white" :style="(border = '2px solid green')"
+                @click="Abrir(props.row), (AbrirModal = true)">
                 <q-icon name="edit" style="color: green" />
               </q-btn>
-              <q-btn
-                icon="close"
-                round
-                color="red"
-                @click="Activar(props.row._id)"
-                v-if="props.row.Estado == 1"
-              />
-              <q-btn
-                icon="check"
-                round
-                color="green"
-                @click="Desactivar(props.row._id)"
-                v-else
-              />
+              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+              <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else />
             </q-td>
           </template>
 
@@ -108,49 +62,27 @@
           </template>
         </q-table>
       </div>
+
+      
       <q-dialog v-model="AbrirModal" persistent>
-        <q-card style="min-width: 350px; margin-top: 0">
+        <q-card style="min-width: 400px; margin: 0;">
           <div class="text">
             {{ "Editar Usuario" }}
           </div>
 
           <q-card-section class="q-pt-none">
-            <q-input
-              dense
-              v-model="email"
-              placeholder="Editar"
-              autofocus
-              color="green"
-              @keyup.enter="prompt = false"
-            />
+            <q-input dense v-model="email" placeholder="Editar" autofocus color="green" @keyup.enter="prompt = false" />
             <br />
 
-            <q-input
-              dense
-              v-model="nombre"
-              placeholder=" Nombre"
-              autofocus
-              color="green"
-              @keyup.enter="prompt = false"
-            />
+            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
+              @keyup.enter="prompt = false" />
             <br />
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
-            <q-btn
-              flat
-              label="Cancelar"
-              @click="p = false"
-              color="red"
-              v-close-popup
-            />
+            <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
 
-            <q-btn
-              label="Enviar"
-              :loading="UseUsuario.loading"
-              color="green"
-              @click="EditarUsuario()"
-            >
+            <q-btn label="Enviar" :loading="UseUsuario.loading" color="green" @click="EditarUsuario()">
             </q-btn>
           </q-card-actions>
         </q-card>
@@ -217,7 +149,7 @@ async function EditarUsuario() {
       icon: "info",
       timeout: 2500,
     });
-    
+
     return;
   }
 
@@ -372,4 +304,3 @@ async function Desactivar(id) {
   box-sizing: border-box;
 }
 </style>
-
