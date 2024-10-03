@@ -50,8 +50,12 @@
 
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import { UseInformeStore } from "../Stores/informes"; // Importa el store correctamente
+import { UseInformeStore } from "../Stores/informes"; 
+import axios from "axios";// Importa el store correctamente
 
+const options = ref([]); 
+const ficha = ref(""); // Ficha seleccionada
+const fechaInicial = ref(""); // Fecha seleccionada
 // Inicializa el store
 const UseStore = UseInformeStore();
 
