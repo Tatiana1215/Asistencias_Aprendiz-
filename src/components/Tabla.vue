@@ -59,13 +59,7 @@ const UseStore = UseInformeStore();
 const Bitacoras = ref([]); 
 
 // Variables para la ficha y la fecha
-const ficha = ref("12345"); // Cambia este valor según la ficha seleccionada
-const fecha = ref(new Date()); // Fecha actual por defecto, puedes cambiarla según necesidad
 
-// Formatear la fecha en día, mes y año
-const fechaDia = ref(fecha.value.getDate());
-const fechaMes = ref(fecha.value.toLocaleString("default", { month: "long" })); // Mes en formato largo
-const fechaAnio = ref(fecha.value.getFullYear());
 
 // Cargar los datos de Bitacoras antes de montar el componente
 onBeforeMount(() => {
