@@ -10,10 +10,11 @@
         <h2>Registro de Llegada</h2>
         <form @submit.prevent="registrarLlegada">
           <!-- <input v-model="Aprendiz" id="documento" placeholder="Numero de Documento" required /> -->
-          <q-input dense v-model="Aprendiz" type="text" id="documento" placeholder="Numero de Documento" required
-            autofocus color="green" :rules="[
+
+          <q-input color="green-8" v-model="Aprendiz" type="text" id="documento" label="Numero de Documento" :rules="[
               (val) => (val && val.length > 0) || 'Ingrese el numero de documento'
             ]" /> <br>
+            
           <q-btn :loading="UseBitacora.loading" color="green" @click="registrarLlegada()">
             Registrar
             <template v-slot:loading>

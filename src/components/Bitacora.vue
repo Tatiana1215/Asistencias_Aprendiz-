@@ -267,7 +267,7 @@ const columns = ref([
   {
     name: "documentoAprendiz",
     required: true,
-    label: "Número de Documento",
+    label: "Documento",
     align: "center",
     field: "documentoAprendiz",
     sortable: true,
@@ -275,7 +275,7 @@ const columns = ref([
   {
     name: "telefonoAprendiz",
     required: true,
-    label: "Número de Teléfono",
+    label: "Teléfono",
     align: "center",
     field: "telefonoAprendiz",
     sortable: true,
@@ -291,8 +291,14 @@ const columns = ref([
   {
     name: "nombreFicha",
     align: "center",
-    label: "Programa de formación",
+    label: "Ficha",
     field: "nombreFicha",
+    sortable: true,
+  },{
+    name: "numeroFicha",
+    align: "center",
+    label: "Numero",
+    field: "numeroFicha",
     sortable: true,
   },
   {

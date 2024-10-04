@@ -144,5 +144,8 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
     return {
         registrarAprendiz, listarAprediz, editarAprendiz, cargarcould, updatecoul, loading,mostrarMensajeSinCambios
     }
-}
+},
+{
+  persist: true,
+},
 )

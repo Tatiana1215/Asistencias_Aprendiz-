@@ -31,8 +31,8 @@
         <td>{{ fila.documento || '' }}</td>
         <td>{{ fila.planta || '' }}</td>
         <td>{{ fila.contratista || '' }}</td>
-        <td>{{ fila.otro || '' }}</td>
-        <td>{{ fila.dependencia || '' }}</td>
+        <td>{{ fila.otro ? 'Aprendiz' : '' }}</td>
+        <td>{{ fila.nombre? 'SENA-CAT' :'' }}</td>
         <td>{{ fila.emailAprendiz || '' }}</td>
         <td>{{ fila.telefonoAprendiz || '' }}</td>
         <td>{{ fila.autoriza || '' }}</td>
@@ -48,18 +48,18 @@
 </template>
 
 <script setup>
-
-import { ref, onBeforeMount, onUnmounted, computed } from "vue";
+import { ref, onBeforeMount, onUnmounted, computed} from "vue";
+import { onBeforeRouteLeave } from "vue-router";
 import { UseInformeStore } from "../Stores/informes";
-import axios from "axios";// Importa el store correctamente
 
-const options = ref([]); 
-const ficha = ref(""); // Ficha seleccionada
-const fechaInicial = ref(""); // Fecha seleccionada
-// Inicializa el store
 
 const UseStore = UseInformeStore();
 const Bitacoras = ref([]);
+
+// Llama a limpiarDatos cuando salgas de la ruta
+onBeforeRouteLeave(() => {
+  UseStore.limpiarDatos();
+});
 
 const ficha = computed(() => UseStore.fichaSeleccionada);
 const fechaSeleccionada = computed(() => {
@@ -106,9 +106,8 @@ const fillRows = () => {
     autoriza: '',
     firma: ''
   };
-
   return [...Bitacoras.value, ...Array(totalRows - Bitacoras.value.length).fill(emptyRow)];
-};
+  }
 </script>
 
 <style scoped>

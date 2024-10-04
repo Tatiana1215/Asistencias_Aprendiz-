@@ -8,6 +8,7 @@
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex">
 
+     
 
         <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
           option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
@@ -53,10 +54,16 @@
               <p v-else>No disponible</p>
             </q-td>
           </template>
-
-
   </q-table>
       </div>
+    </div>
+
+    <div class="q-gutter-y-md column" style="max-width: 300px">
+      <q-input color="green-8" v-model="text" label="Label">
+        <!-- <template v-slot:prepend> -->
+          <!-- <q-icon name="event" /> -->
+        <!-- </template> -->
+      </q-input>
     </div>
   </div>
 </template>
@@ -152,17 +159,6 @@ async function buscarAprendices() {
     });
     return;
   }
-
-  // if(!ficha.Estado == && !fechaInicial){
-  //   Notify.create({
-  //     color: "negative",
-  //     message: "Noy hay aprendices que asistieron en esa fecha.",
-  //     icon: "warning",
-  //     timeout: 2500,
-  //   });
-  //   return;
-  // }
-
   // Validar que la fecha no sea futura
   if (dayjs(fechaInicial.value).isAfter(dayjs())) {
     Notify.create({
@@ -174,69 +170,25 @@ async function buscarAprendices() {
     return;
   }
 
-  UseStore.setFichaSeleccionada(ficha.value);
-  UseStore.setFechaSeleccionada(fechaInicial.value);
-
   console.log("Ficha seleccionada:", ficha.value);
   console.log("Fecha seleccionada:", fechaInicial.value);
   console.log(rows.value);
 
   // Continuar con la lógica de búsqueda de aprendices si la validación pasa
-  try {
+  // try {
     // Llamada a la función que devuelve directamente los datos (no res.data)
     const res = await UseStore.obtenerBitacorasPorFichaYFecha(
       ficha.value,
       fechaInicial.value
     );
-
-
-    if (res && res.data && res.data.length > 0) {
-      // Asignar los datos a la tabla
-      rows.value = res.data;
-
-    if (res.status === 200) {
-      rows.value = res.data; // Asigna directamente los datos a 'rows'
-
-      console.log(res);
-
-      // Notify.create({
-      //   color: "positive",
-      //   message: "Búsqueda exitosa",
-      //   icon: "check_circle",
-      //   timeout: 2500,
-      // });
-    } else {
-      // Si no hay registros, mostrar la notificación
-      rows.value = []; // Limpiar la tabla
-      Notify.create({
-        color: "negative",
-        message: "Ningún aprendiz asistió en la fecha seleccionada.",
-        icon: "error",
-        timeout: 2500,
-      });
-    }
-  } catch (error) {
-    // Manejo de errores en la solicitud
-    Notify.create({
-      color: "negative",
-      message: error.response.data.errors[0].message,
-      icon: "error",
-      timeout: 2500,
-    });
-    console.error("Error al buscar aprendices:", error);
-  }
+    rows.value = res.data;
 }
-
 const columns = ref([
   {
     name: "Numero",
     required: true,
     label: "N°",
-
-    align: "center",
-
     align: 'center',
-
     field: "Numero",
     sortable: true,
   },
@@ -244,9 +196,6 @@ const columns = ref([
     name: "nombre",
     required: true,
     label: "Nombre",
-
-    align: "center",
-
     align: 'center',
     field: "nombre",
     sortable: true,
@@ -273,6 +222,20 @@ const columns = ref([
     label: "Número de Teléfono",
     align: "center",
     field: "telefonoAprendiz",
+    sortable: true,
+  },  {
+    name: "nombreFicha",
+    required: true,
+    label: "Ficha",
+    align: "center",
+    field: "nombreFicha",
+    sortable: true,
+  },  {
+    name: "numeroFicha",
+    required: true,
+    label: "Numero",
+    align: "center",
+    field: "numeroFicha",
     sortable: true,
   },
   {

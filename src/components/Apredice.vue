@@ -18,8 +18,8 @@
                 <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
                   <q-icon name="edit" style="color: green" />
                 </q-btn>
-                <q-btn icon="check" round color="green" :loading="loading[props.row._id]" @click="Activar(props.row._id)"
-                  v-if="props.row.Estado == 0" />
+                <q-btn icon="check" round color="green" :loading="loading[props.row._id]"
+                  @click="Activar(props.row._id)" v-if="props.row.Estado == 0" />
                 <q-btn icon="close" round color="red" :loading="loading[props.row._id]"
                   @click="Desactivar(props.row._id)" v-else />
                 <!-- <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
@@ -59,31 +59,30 @@
           <!-- </q-card-section> -->
 
           <q-card-section class="q-pt-none">
-            <q-input dense v-model="nombre" placeholder="Nombre" autofocus color="green" @keyup.enter="prompt = false"
-              :rules="[
-                (val) => (val && val.length > 0) || 'El nombre es obligatorio'
-              ]" />
+
+            <q-input color="green-8" v-model="nombre" label="Nombre" :rules="[
+              (val) => (val && val.length > 0) || 'El nombre es obligatorio'
+            ]" />
+
+            <q-input color="green-8" v-model="telefono" label="Telefono" :rules="[
+              (val) => (val && val.length > 0) || 'El teléfono es obligatorio'
+            ]" />
 
             <br>
-            <q-input dense v-model="telefono" placeholder="Telefono" autofocus color="green"
-              @keyup.enter="prompt = false" :rules="[
-                (val) => (val && val.length > 0) || 'El teléfono es obligatorio'
-              ]" />
-            <br>
-            <q-input dense v-model="documento" placeholder="Documento" autofous color="green"
-              @keyup.enter="prompt = false" :rules="[
-                (val) => (val && val.length > 0) || 'El Numero de Documento es obligatorio']" />
-            <br>
-            <q-input dense v-model="email" placeholder="Email" autofocus color="green" @keyup.enter="prompt = false"
-              :rules="[
-                (val) => (val && val.length > 0) || 'El Email es obligatorio']" />
-            <br>
+            <q-input color="green-8" v-model="documento" label="Documento" :rules="[
+              (val) => (val && val.length > 0) || 'El Numero de Documento es obligatorio']" />
 
+            <br>
+            <q-input color="green-8" v-model="email" label="Email" :rules="[
+              (val) => (val && val.length > 0) || 'El Email es obligatorio']" />
+
+            <br>
             <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
               option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
               use-chips :rules="[
                 (val) => (val && val.length > 0) || 'El numero de Ficha es obligatorio'
               ]">
+
               <template v-slot:option="scope">
                 <q-item v-bind="scope.itemProps">
                   <q-item-section>
@@ -92,6 +91,7 @@
                 </q-item>
               </template>
             </q-select>
+
             <div class="file-upload">
               <q-file v-model="Firma" label="Firma Virtual (Opcional)" filled accept="image/*"
                 @update:model-value="handleFileChange" :rules="[
@@ -407,137 +407,66 @@ async function filterFunction(val, update) {
 }
 
 
-
-// async function Activar(id) {
-//   console.log(id);
-//   loading.value[id] = true
-//   try {
-//     inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`,{
-//       headers: {
-//         "x-token": UseUsuario.xtoken
-//       }})
-//     // inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`, {
-//     //   headers: {
-//     //     "x-token": UseUsuario.xtoken
-//     //   }
-//     // })
-//     Notify.create({
-//       color: 'positive',
-//       message: 'El aprendiz ha sido activado exitosamente',
-//       icon: 'check_circle',
-//       timeout: 2500
-//     })
-//     traer();
-//     return
-//   } catch (error) {
-//     console.log(error);
-//     Notify.create({
-//       color: 'negative',
-//       message: 'Error al activar el aprendiz',
-//       icon: 'error',
-//       timeout: 2500
-//     })
-//     return
-//   } finally {
-//     loading.value[id] = false
-//   }
-// }
 async function Activar(id) {
-    console.log(id);
-    loading.value[id] = true;
-    try {
-        inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`, {}, {
-            headers: {
-                "x-token": UseUsuario.xtoken // Token correcto en los headers
-            }
-        });
-        Notify.create({
-            color: 'positive',
-            message: 'El aprendiz ha sido activado exitosamente',
-            icon: 'check_circle',
-            timeout: 2500
-        });
-        traer();
-        return;
-    } catch (error) {
-        console.log(error);
-        Notify.create({
-            color: 'negative',
-            message: 'Error al activar el aprendiz',
-            icon: 'error',
-            timeout: 2500
-        });
-        return;
-    } finally {
-        loading.value[id] = false;
-    }
+  console.log(id);
+  loading.value[id] = true;
+  try {
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`, {}, {
+      headers: {
+        "x-token": UseUsuario.xtoken // Token correcto en los headers
+      }
+    });
+    Notify.create({
+      color: 'positive',
+      message: 'El aprendiz ha sido activado exitosamente',
+      icon: 'check_circle',
+      timeout: 2500
+    });
+    traer();
+    return;
+  } catch (error) {
+    console.log(error);
+    Notify.create({
+      color: 'negative',
+      message: 'Error al activar el aprendiz',
+      icon: 'error',
+      timeout: 2500
+    });
+    return;
+  } finally {
+    loading.value[id] = false;
+  }
 }
 
-// async function Desactivar(id) {
-//   console.log(id);
-//   loading.value[id] = true
-//   try {
-//      inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`,{
-//       headers: {
-//         "x-token": UseUsuario.xtoken
-//       }})
-//     // inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`, {
-//     //   headers: {
-//     //     "x-token": UseUsuario.xtoken
-//     //   }
-//     // })
-//     Notify.create({
-//       color: 'positive',
-//       message: 'El aprendiz ha sido inactivado exitosamente',
-//       icon: 'check_circle',
-//       timeout: 2500
-//     })
-//     traer();
-//     return
-
-//   } catch (error) {
-//     console.log(error);
-//     Notify.create({
-//       color: 'negative',
-//       message: 'Error al inactivar el aprendiz',
-//       icon: 'error',
-//       timeout: 2500
-//     })
-//     return
-//   } finally {
-//     loading.value[id] = false
-//   }
-// }
-
 async function Desactivar(id) {
-    console.log(id);
-    loading.value[id] = true;
-    try {
-        inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`, {}, {
-            headers: {
-                "x-token": UseUsuario.xtoken // Colocar el token correctamente
-            }
-        });
-        Notify.create({
-            color: 'positive',
-            message: 'El aprendiz ha sido inactivado exitosamente',
-            icon: 'check_circle',
-            timeout: 2500
-        });
-        traer();
-        return;
-    } catch (error) {
-        console.log(error);
-        Notify.create({
-            color: 'negative',
-            message: 'Error al inactivar el aprendiz',
-            icon: 'error',
-            timeout: 2500
-        });
-        return;
-    } finally {
-        loading.value[id] = false;
-    }
+  console.log(id);
+  loading.value[id] = true;
+  try {
+    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`, {}, {
+      headers: {
+        "x-token": UseUsuario.xtoken // Colocar el token correctamente
+      }
+    });
+    Notify.create({
+      color: 'positive',
+      message: 'El aprendiz ha sido inactivado exitosamente',
+      icon: 'check_circle',
+      timeout: 2500
+    });
+    traer();
+    return;
+  } catch (error) {
+    console.log(error);
+    Notify.create({
+      color: 'negative',
+      message: 'Error al inactivar el aprendiz',
+      icon: 'error',
+      timeout: 2500
+    });
+    return;
+  } finally {
+    loading.value[id] = false;
+  }
 }
 
 const columns = ref([

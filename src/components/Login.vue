@@ -15,10 +15,9 @@
           </div>
 
           <q-card-section class="q-pt-none">
-            <q-input dense v-model="email" placeholder="Correo electrónico" autofocus color="green" class="custom-input"
-              @keyup.enter="secionIniciada" />
+            <q-input color="green-8" v-model="email" label="Correo Electronico" @keyup.enter="secionIniciada" />
             <br />
-            <q-input dense v-model="password" placeholder="Contraseña" autofocus color="green" :type="passwordFieldType"
+            <q-input color="green-8"  v-model="password" label="Contraseña" :type="passwordFieldType"
               class="custom-input" @keyup.enter="secionIniciada">
               <template v-slot:append>
                 <q-icon :name="passwordVisible ? 'visibility_off' : 'visibility'" @click="togglePasswordVisibility"
@@ -29,7 +28,7 @@
 
           <!-- Botón de Iniciar Sesión centrado -->
           <q-card-actions align="center" class="text-primary">
-            <q-btn   class="custom-btn" @click="secionIniciada">
+            <q-btn class="custom-btn" :Loading="useUsuario.loading" @click="secionIniciada">
               Iniciar sesión
             </q-btn>
           </q-card-actions>
@@ -52,6 +51,7 @@
 import { ref } from "vue";
 import { UseUsuarioStore } from "../Stores/usuario";
 import { useRouter } from "vue-router";
+import Usuario from "./Usuario.vue";
 
 const email = ref("");
 const password = ref("");
@@ -138,10 +138,10 @@ async function secionIniciada() {
   margin-bottom: 20px;
 }
 
-.custom-input input {
+/* .custom-input input {
   border-radius: 10px;
   border: 1px solid #6fcc72;
-}
+} */
 
 .custom-btn {
   background-color: #6fcc72;

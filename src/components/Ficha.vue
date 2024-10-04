@@ -59,11 +59,9 @@
           </div>
           <q-card-section class="q-pt-none">
             <!-- <label for="codigo">Nombre</label> -->
-            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
-              @keyup.enter="prompt = false" />
+            <q-input color="green-8" v-model="nombre" label="Nombre"/>
             <br />
-            <q-input dense v-model="codigo" placeholder="Codigo" autofocus color="green"
-              @keyup.enter="prompt = false" />
+            <q-input color="green-8" v-model="codigo" label="Código" />
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
@@ -144,7 +142,7 @@ async function CrearFicha() {
   const trimmedCodigo = codigo.value.trim();
 
   // Validar que no haya solo espacios
-  const noSpacesRegex = /^[^\s]+$/; // Cambiado para asegurar que no haya espacios en ningún lugar
+  const noSpacesRegex = /^\S+$/;
 
   if (!trimmedNombre || !trimmedCodigo) {
     Notify.create({
@@ -184,12 +182,12 @@ async function CrearFicha() {
   }
 
   let res;
-  if (p.value) {
+  if (p.value === true) {
     // Editar ficha
-    res = await useFicha.EditarFicha(id.value, nombre.value, codigo.value);
+    res = await useFicha.EditarFicha(id.value, trimmedNombre, trimmedCodigo);
   } else {
     // Crear nueva ficha
-    res = await useFicha.crearFicha(codigo.value, nombre.value);
+    res = await useFicha.crearFicha(trimmedNombre, trimmedCodigo);
   }
 
   // Verificar el estado de la respuesta
@@ -270,7 +268,7 @@ const columns = ref([
   {
     name: "Nombre1",
     required: true,
-    label: "Nombre del Programa",
+    label: "Ficha",
     align: "center",
     field: "Nombre",
     sortable: true,
@@ -278,7 +276,7 @@ const columns = ref([
   {
     name: "Codigo1",
     align: "center",
-    label: "Numero de ficha",
+    label: "Numero",
     field: "Codigo",
     sortable: true,
   },

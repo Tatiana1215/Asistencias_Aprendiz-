@@ -66,13 +66,13 @@ export const UseInformeStore = defineStore("informes", () => {
             console.log('Error al obtener bitácoras', error);
             if (!UseUsuario.xtoken) {
                 Notify.create({
-                    color: "warning",
+                    color: "negative",
                     message: error.response.data.errors[0].message,
                     icon: "warning",
                     timeout: 2500,
                 });
             }
-            return error;
+            return ;
         } finally {
             loading.value = false; 
         }
@@ -84,7 +84,14 @@ export const UseInformeStore = defineStore("informes", () => {
 
     const setFechaSeleccionada = (fecha) => {
         fechaSeleccionada.value = fecha;
-    };
+
+};
+        const limpiarDatos = () => {
+            Bitacora.value = "";
+            fichaSeleccionada.value = "";
+            fechaSeleccionada.value = "";
+        };
+    
 
 
     return {
@@ -95,7 +102,8 @@ export const UseInformeStore = defineStore("informes", () => {
         fichaSeleccionada,
         fechaSeleccionada,
         setFichaSeleccionada,
-        setFechaSeleccionada
+        setFechaSeleccionada,
+        limpiarDatos
     };
 },
 {
