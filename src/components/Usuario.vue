@@ -649,6 +649,9 @@ const columns = ref([
   { name: "Opciones", label: "Opciones", align: "center" },
 ]);
 
+
+
+
 async function Activar(id) {
   try {
     await axios.put(`
