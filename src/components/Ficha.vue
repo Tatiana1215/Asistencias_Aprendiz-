@@ -85,6 +85,8 @@ import { ref, onBeforeMount } from "vue";
 import axios from "axios";
 import { UseFichaStore } from "../Stores/fichas";
 import { Notify } from "quasar";
+import { UseUsuarioStore } from "../Stores/usuario";
+
 let inf = ref("");
 let AbrirModal = ref(false);
 let codigo = ref("");
@@ -98,6 +100,7 @@ let originalCodigo = ref("");
 let originalNombre = ref("");
 
 const useFicha = UseFichaStore();
+const UseUsuario = UseUsuarioStore()
 const rows = ref([]);
 // ficha
 onBeforeMount(() => {
@@ -205,7 +208,11 @@ async function Activar(id) {
   loading.value[id] = true;
   try {
     inf = await axios.put(
-      `https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Activar/${id}`
+      `https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Activar/${id}`, {}, {
+            headers: {
+                "x-token": UseUsuario.xtoken // Colocar el token correctamente
+            }
+        }
     );
     Notify.create({
       color: "positive",
@@ -232,7 +239,11 @@ async function Desactivar(id) {
   loading.value[id] = true;
   try {
     inf = await axios.put(
-      `https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Desactivar/${id}`
+      `https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Desactivar/${id}`, {}, {
+            headers: {
+                "x-token": UseUsuario.xtoken // Colocar el token correctamente
+            }
+        }
     );
     Notify.create({
       color: "positive",

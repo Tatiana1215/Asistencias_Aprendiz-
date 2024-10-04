@@ -18,15 +18,17 @@
                 <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
                   <q-icon name="edit" style="color: green" />
                 </q-btn>
+                <q-btn icon="check" round color="green" :loading="loading[props.row._id]" @click="Activar(props.row._id)"
+                  v-if="props.row.Estado == 0" />
                 <q-btn icon="close" round color="red" :loading="loading[props.row._id]"
-                  @click="Desactivar(props.row._id)" v-if="props.row.Estado == 1" />
-                <q-btn icon="check" round color="green" :loading="loading[props.row._id]"
-                  @click="Activar(props.row._id)" v-else />
+                  @click="Desactivar(props.row._id)" v-else />
+                <!-- <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+                <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else /> -->
               </q-td>
             </template>
             <template v-slot:body-cell-Estado1="props">
               <q-td :props="props">
-                <p style="color:green" v-if="props.row.Estado == 1">Activo</p>
+                <p style="color:green" v-if="props.row.Estado === 1">Activo</p>
                 <p style="color:red" v-else>Inactivo</p>
               </q-td>
             </template>
@@ -76,17 +78,6 @@
               :rules="[
                 (val) => (val && val.length > 0) || 'El Email es obligatorio']" />
             <br>
-
-            <!-- <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
-              option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
-              use-chips :rules="[
-                (val) => (val && val.length > 0) || 'El numero de Ficha es obligatorio']" /> -->
-
-            <!-- <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
-              option-label="label" option-value="_id" use-input @filter="filterFunction" class="custom-select" use-chips
-              :rules="[
-                (val) => (val && val.length > 0) || 'El numero de Ficha es obligatorio'
-              ]" /> -->
 
             <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
               option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
@@ -141,9 +132,10 @@
 import { ref, onBeforeMount } from 'vue';
 import axios from 'axios';
 import { UseAprendizStore } from '../Stores/aprendices';
-import { UseUsuarioStore } from '../Stores/usuario';
+// import { UseUsuarioStore } from '../Stores/usuario';
 import { Notify } from 'quasar';
-import Ficha from './Ficha.vue';
+import { UseUsuarioStore } from '../Stores/usuario';
+// import Ficha from './Ficha.vue';
 
 let nombre = ref('')
 let telefono = ref('')
@@ -200,6 +192,7 @@ function Abrir(row) {
   AbrirModal.value = true;
   p.value = true;
 
+
   //guarda los datos del formulario
   nombre.value = row.Nombre;
   telefono.value = row.Telefono;
@@ -213,7 +206,7 @@ function Abrir(row) {
 
   // Guardar los datos originales para comparación
   originalNombre = row.Nombre,
-  originalTelefono = row.Telefono
+    originalTelefono = row.Telefono
   originalDocumento = row.Documento
   originalEmail = row.Email
   originalId_Ficha = row.Id_Ficha
@@ -415,54 +408,136 @@ async function filterFunction(val, update) {
 
 
 
+// async function Activar(id) {
+//   console.log(id);
+//   loading.value[id] = true
+//   try {
+//     inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`,{
+//       headers: {
+//         "x-token": UseUsuario.xtoken
+//       }})
+//     // inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`, {
+//     //   headers: {
+//     //     "x-token": UseUsuario.xtoken
+//     //   }
+//     // })
+//     Notify.create({
+//       color: 'positive',
+//       message: 'El aprendiz ha sido activado exitosamente',
+//       icon: 'check_circle',
+//       timeout: 2500
+//     })
+//     traer();
+//     return
+//   } catch (error) {
+//     console.log(error);
+//     Notify.create({
+//       color: 'negative',
+//       message: 'Error al activar el aprendiz',
+//       icon: 'error',
+//       timeout: 2500
+//     })
+//     return
+//   } finally {
+//     loading.value[id] = false
+//   }
+// }
 async function Activar(id) {
-  console.log(id);
-  loading.value[id] = true
-  try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`)
-    Notify.create({
-      color: 'positive',
-      message: 'El aprendiz ha sido activado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
-
-    traer();
-  } catch (error) {
-    console.log(error);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al activar el aprendiz',
-      icon: 'error',
-      timeout: 2500
-    })
-  } finally {
-    loading.value[id] = false
-  }
+    console.log(id);
+    loading.value[id] = true;
+    try {
+        inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`, {}, {
+            headers: {
+                "x-token": UseUsuario.xtoken // Token correcto en los headers
+            }
+        });
+        Notify.create({
+            color: 'positive',
+            message: 'El aprendiz ha sido activado exitosamente',
+            icon: 'check_circle',
+            timeout: 2500
+        });
+        traer();
+        return;
+    } catch (error) {
+        console.log(error);
+        Notify.create({
+            color: 'negative',
+            message: 'Error al activar el aprendiz',
+            icon: 'error',
+            timeout: 2500
+        });
+        return;
+    } finally {
+        loading.value[id] = false;
+    }
 }
+
+// async function Desactivar(id) {
+//   console.log(id);
+//   loading.value[id] = true
+//   try {
+//      inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`,{
+//       headers: {
+//         "x-token": UseUsuario.xtoken
+//       }})
+//     // inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`, {
+//     //   headers: {
+//     //     "x-token": UseUsuario.xtoken
+//     //   }
+//     // })
+//     Notify.create({
+//       color: 'positive',
+//       message: 'El aprendiz ha sido inactivado exitosamente',
+//       icon: 'check_circle',
+//       timeout: 2500
+//     })
+//     traer();
+//     return
+
+//   } catch (error) {
+//     console.log(error);
+//     Notify.create({
+//       color: 'negative',
+//       message: 'Error al inactivar el aprendiz',
+//       icon: 'error',
+//       timeout: 2500
+//     })
+//     return
+//   } finally {
+//     loading.value[id] = false
+//   }
+// }
+
 async function Desactivar(id) {
-  console.log(id);
-  loading.value[id] = true
-  try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`)
-    Notify.create({
-      color: 'positive',
-      message: 'El aprendiz ha sido inactivado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
-    traer();
-  } catch (error) {
-    console.log(error);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al inactivar el aprendiz',
-      icon: 'error',
-      timeout: 2500
-    })
-  } finally {
-    loading.value[id] = false
-  }
+    console.log(id);
+    loading.value[id] = true;
+    try {
+        inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`, {}, {
+            headers: {
+                "x-token": UseUsuario.xtoken // Colocar el token correctamente
+            }
+        });
+        Notify.create({
+            color: 'positive',
+            message: 'El aprendiz ha sido inactivado exitosamente',
+            icon: 'check_circle',
+            timeout: 2500
+        });
+        traer();
+        return;
+    } catch (error) {
+        console.log(error);
+        Notify.create({
+            color: 'negative',
+            message: 'Error al inactivar el aprendiz',
+            icon: 'error',
+            timeout: 2500
+        });
+        return;
+    } finally {
+        loading.value[id] = false;
+    }
 }
 
 const columns = ref([

@@ -47,7 +47,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     const registrar = async (nombre1, email1, password1) => {
         loading.value = true;
         try {
-            const usuarioRegistro = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/insertar', {
+            const res = await axios.post('https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/insertar', {
                 Nombre: nombre1,
                 Email: email1,
                 Password: password1
@@ -65,7 +65,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
             })
 
             console.log(usuarioRegistro)
-            return usuarioRegistro
+            return res
 
         } catch (error) {
             Notify.create({
@@ -145,7 +145,7 @@ export const UseUsuarioStore = defineStore("Usuario", () => {
     }
 
     return {
-        xtoken,loading, Login, registrar, listarUsuarios, actualizarUsuario,usuario
+      Login, loading, xtoken,  registrar, listarUsuarios, actualizarUsuario,usuario
     }
 },
 {

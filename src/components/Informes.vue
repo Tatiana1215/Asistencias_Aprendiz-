@@ -7,6 +7,9 @@
 
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex">
+
+     
+
         <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
           option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
           use-chips />
@@ -15,9 +18,9 @@
 
         <q-btn v-for="size in sizes" :key="`btn_size_rd_${size}`" rounded color="green" :size="size" :label="`${size}`"
           icon="print" to="/Tabla" />
+
       </div>
     </div>
-
 
     <q-card-actions align="center">
       <q-btn :loading="UseStore.loading" color="green" @click="buscarAprendices()">
@@ -32,13 +35,28 @@
     <!-- Tabla de aprendices -->
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
-        <q-table :rows="rows" :columns="columns" row-key="documentoAprendiz">
-          <template v-slot:body-cell-Numero="props">
+        <q-table :rows="rows" :columns="columns" row-key="documento">
+    <template v-slot:body-cell-Numero="props">
+      <q-td :props="props">
+        {{ props.rowIndex + 1 }}
+      </q-td>
+    </template> 
+
+    <template v-slot:body-cell-firma="props">
             <q-td :props="props">
-              {{ props.pageIndex + 1 }}
+              {{ console.log(props.row.firma) }}
+              <q-img
+                v-if="props.row.firma"
+                :src="props.row.firma"
+                alt="firma"
+                style="max-width: 100px; max-height: 100px;"
+              />
+              <p v-else>No disponible</p>
             </q-td>
           </template>
-        </q-table>
+
+
+  </q-table>
       </div>
     </div>
   </div>
@@ -48,7 +66,7 @@
 import { ref, onBeforeMount } from "vue";
 import { UseUsuarioStore } from "../Stores/usuario";
 import { UseInformeStore } from "../Stores/informes";
-import { useRouter } from "vue-router"
+import { useRouter } from "vue-router";
 import axios from "axios";
 import { Notify } from "quasar";
 import dayjs from "dayjs";
@@ -61,7 +79,7 @@ const rows = ref([]); // Datos para la tabla
 
 const UseStore = UseInformeStore(); // Usamos el store que gestionará las solicitudes
 const UseUsuario = UseUsuarioStore();
-const router = useRouter()
+const router = useRouter();
 // Cargar datos al montar el componente
 onBeforeMount(() => {
   fetchData();
@@ -83,7 +101,7 @@ async function fetchData() {
     const data = res.data;
     const activeFichas = data.filter((ficha) => ficha.Estado === 1);
 
-    activeFichas.forEach(ficha => {
+    activeFichas.forEach((ficha) => {
       ficha.formattedLabel = `${ficha.Codigo} - ${ficha.Nombre}`; // Aquí concatenas el código con el nombre
     });
 
@@ -169,17 +187,16 @@ async function buscarAprendices() {
       fechaInicial.value
     );
 
-    if (res) {
+    if (res.status === 200) {
       rows.value = res.data; // Asigna directamente los datos a 'rows'
       console.log(res);
 
-      Notify.create({
-        color: "positive",
-        message: "Búsqueda exitosa.",
-        icon: "check_circle",
-        timeout: 2500,
-      });
-
+      // Notify.create({
+      //   color: "positive",
+      //   message: "Búsqueda exitosa",
+      //   icon: "check_circle",
+      //   timeout: 2500,
+      // });
     } else {
       // Si no hay datos, muestra un mensaje de error
       console.error(
@@ -196,7 +213,7 @@ async function buscarAprendices() {
     // Manejo de errores en la solicitud
     Notify.create({
       color: "negative",
-      message: "Error al buscar aprendices. Intenta de nuevo.",
+      message: error.response.data.errors[0].message,
       icon: "error",
       timeout: 2500,
     });
@@ -204,15 +221,16 @@ async function buscarAprendices() {
   }
 }
 
-
-
-
 const columns = ref([
   {
     name: "Numero",
     required: true,
     label: "N°",
+
+    align: "center",
+
     align: 'center',
+
     field: "Numero",
     sortable: true,
   },
@@ -220,6 +238,9 @@ const columns = ref([
     name: "nombre",
     required: true,
     label: "Nombre",
+
+    align: "center",
+
     align: 'center',
     field: "nombre",
     sortable: true,
@@ -228,7 +249,7 @@ const columns = ref([
     name: "documento",
     required: true,
     label: "Documento",
-    align: 'center',
+    align: "center",
     field: "documento",
     sortable: true,
   },
@@ -236,7 +257,7 @@ const columns = ref([
     name: "emailAprendiz",
     required: true,
     label: "Email",
-    align: 'center',
+    align: "center",
     field: "emailAprendiz",
     sortable: true,
   },
@@ -244,11 +265,20 @@ const columns = ref([
     name: "telefonoAprendiz",
     required: true,
     label: "Número de Teléfono",
-    align: 'center',
+    align: "center",
     field: "telefonoAprendiz",
     sortable: true,
   },
+  {
+    name:"firma",
+    required: true,
+    label:"Firma",
+    align:"center",
+    field:"firma",
+    sortable: true,
+  },
 ]);
+
 </script>
 
 <style scoped>
