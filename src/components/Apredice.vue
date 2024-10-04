@@ -18,15 +18,17 @@
                 <q-btn round color="white" :style="{ border: '2px solid green' }" @click="Abrir(props.row)">
                   <q-icon name="edit" style="color: green" />
                 </q-btn>
+                <q-btn icon="check" round color="green" :loading="loading[props.row._id]" @click="Activar(props.row._id)"
+                  v-if="props.row.Estado == 0" />
                 <q-btn icon="close" round color="red" :loading="loading[props.row._id]"
-                  @click="Desactivar(props.row._id)" v-if="props.row.Estado == 1" />
-                <q-btn icon="check" round color="green" :loading="loading[props.row._id]"
-                  @click="Activar(props.row._id)" v-else />
+                  @click="Desactivar(props.row._id)" v-else />
+                <!-- <q-btn icon="close" round color="red" @click="Activar(props.row._id)" v-if="props.row.Estado == 1" />
+                <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" v-else /> -->
               </q-td>
             </template>
             <template v-slot:body-cell-Estado1="props">
               <q-td :props="props">
-                <p style="color:green" v-if="props.row.Estado == 1">Activo</p>
+                <p style="color:green" v-if="props.row.Estado === 1">Activo</p>
                 <p style="color:red" v-else>Inactivo</p>
               </q-td>
             </template>
@@ -52,7 +54,7 @@
       <q-dialog v-model="AbrirModal" persistent>
         <q-card style="min-width: 500px; margin: 0;">
           <div class="text">
-            {{ p == true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
+            {{ p === true ? "Editar Aprendiz" : "Agregar Aprendiz" }}
           </div>
           <!-- </q-card-section> -->
 
@@ -80,8 +82,16 @@
             <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
               option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
               use-chips :rules="[
-                (val) => (val && val.length > 0) || 'El numero de Ficha es obligatorio']" />
-
+                (val) => (val && val.length > 0) || 'El numero de Ficha es obligatorio'
+              ]">
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ scope.opt.Codigo }} - {{ scope.opt.Nombre }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
             <div class="file-upload">
               <q-file v-model="Firma" label="Firma Virtual (Opcional)" filled accept="image/*"
                 @update:model-value="handleFileChange" :rules="[
@@ -119,11 +129,13 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, resolveDirective } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import axios from 'axios';
 import { UseAprendizStore } from '../Stores/aprendices';
-import { UseUsuarioStore } from '../Stores/usuario';
+// import { UseUsuarioStore } from '../Stores/usuario';
 import { Notify } from 'quasar';
+import { UseUsuarioStore } from '../Stores/usuario';
+// import Ficha from './Ficha.vue';
 
 let nombre = ref('')
 let telefono = ref('')
@@ -140,20 +152,21 @@ let loading = ref({})
 let datosExistentesFirma = ref('')
 
 // para hacer la comparacion de los datos 
-let infNombre = ref('');
-let infTelefono = ref('');
-let infDocumento = ref('');
-let infEmail = ref('')
-let infFicha = ref('')
-let infFirma = ref('')
+let originalNombre = ref('');
+let originalTelefono = ref('');
+let originalDocumento = ref('');
+let originalEmail = ref('')
+let originalId_Ficha = ref('')
+let originalFirma = ref('')
 
+
+// tara el infomacion de los stores
 const useAprendiz = UseAprendizStore()
 const UseUsuario = UseUsuarioStore()
+const rows = ref([]);
 
-const rows = ref([
-]);
-const options = ref(null);
 
+// Actualiza los datos en tiempo real
 onBeforeMount(() => {
   traer();
 });
@@ -162,6 +175,7 @@ async function traer() {
   let res = await useAprendiz.listarAprediz()
   rows.value = res.data
 }
+
 
 function limpiarCampos() {
   nombre.value = '';
@@ -172,36 +186,42 @@ function limpiarCampos() {
   Firma.value = '';
   previewUrl.value = false
 
-  // limpiar los valores de la comparación 
-  infNombre.value = '';
-  infTelefono = '';
-  infDocumento = '';
-  infEmail = '';
-  infFicha = '';
-  infFirma = '';
 }
+
+function Abrir(row) {
+  AbrirModal.value = true;
+  p.value = true;
+
+
+  //guarda los datos del formulario
+  nombre.value = row.Nombre;
+  telefono.value = row.Telefono;
+  documento.value = row.Documento;
+  email.value = row.Email;
+  ficha.value = row.Id_Ficha;
+  id.value = row._id;
+  Firma.value = null; // Resetear firma seleccionada
+  previewUrl.value = ''; // Resetear vista previa
+  // Si el aprendiz tiene una firma existente, la mostramos
+
+  // Guardar los datos originales para comparación
+  originalNombre = row.Nombre,
+    originalTelefono = row.Telefono
+  originalDocumento = row.Documento
+  originalEmail = row.Email
+  originalId_Ficha = row.Id_Ficha
+  originalFirma = row.Firma
+  // Si el aprendiz tiene una firma existente, la mostramos
+  if (row.Firma) {
+    previewUrl.value = row.Firma;
+  }
+
+}
+
 
 function cerrarModal() {
   limpiarCampos()
 }
-
-// function datosModificados() {
-//   // return nombre.value === infNombre.value ||
-//   //   telefono.value === infTelefono.value ||
-//   //   documento.value === infDocumento.value ||
-//   //   email.value === infEmail.value ||
-//   //   ficha.value === infFicha.value ||
-//   //   Firma.value === infFirma.value;
-//   return nombre.value !== infNombre.value ||
-//     telefono.value !== infTelefono.value ||
-//     documento.value !== infDocumento.value ||
-//     email.value !== infEmail.value ||
-//     ficha.value !== infFicha.value ||
-//     // Firma.value !== infFirma.value;
-//     (Firma.value && Firma.value !== infFirma.value);
-
-// }
-
 
 async function agregarAprendiz() {
 
@@ -214,20 +234,16 @@ async function agregarAprendiz() {
     })
   }
 
-
-  // Trim input values to remove leading and trailing spaces
-  const trimmedNombre = nombre.value.trim();
   const trimmedTelefono = telefono.value.trim();
   const trimmedDocumento = documento.value.trim();
   const trimmedEmail = email.value.trim();
-  const trimmedFicha = ficha.value.trim();
 
-  // Expresión regular para garantizar que no haya espacios múltiples dentro de los campos
-  const noExcessiveSpacesRegex = /^[^\s]+(\s[^\s]+)*$/;
-  // /^[^\s]+$/
 
-  //  Validar que ningún campo esté vacío después del recorte
-  if (!trimmedNombre || !trimmedTelefono || !trimmedDocumento || !trimmedEmail || !trimmedFicha
+  // // Expresión regular para garantizar que no haya espacios múltiples dentro de los campos
+  const noExcessiveSpacesRegex = /^[^\s]+$/
+
+  // //  Validar que ningún campo esté vacío después del recorte
+  if (!trimmedTelefono || !trimmedDocumento || !trimmedEmail
   ) {
     Notify.create({
       color: "negative",
@@ -248,10 +264,9 @@ async function agregarAprendiz() {
       return;
     }
   }
-  // Validate that there are no internal excessive spaces
-  if (!noExcessiveSpacesRegex.test(trimmedNombre) || !noExcessiveSpacesRegex.test(trimmedTelefono) ||
-    !noExcessiveSpacesRegex.test(trimmedDocumento) || !noExcessiveSpacesRegex.test(trimmedEmail) ||
-    !noExcessiveSpacesRegex.test(trimmedFicha)) {
+  // // Validate that there are no internal excessive spaces
+  if (!noExcessiveSpacesRegex.test(trimmedTelefono) ||
+    !noExcessiveSpacesRegex.test(trimmedDocumento) || !noExcessiveSpacesRegex.test(trimmedEmail)) {
     Notify.create({
       color: "negative",
       message: "Los campos no pueden contener espacios en blanco excesivos",
@@ -260,61 +275,32 @@ async function agregarAprendiz() {
     });
     return;
   }
-  // if ( p.value && !datosModificados()) {
-  //     // useAprendiz.mostrarMensajeSinCambios();
-  //     Notify.create({
-  //       color: "warning",
-  //       message: "No se hicieron cambios",
-  //       icon: "info",
-  //       timeout: 2500,
-  //     });
-  //     // AbrirModal.value = false
-  //     return
-  //   }
-  // if (p.value === true && !datosModificados()) {
-  //   Notify.create({
-  //     color: "warning",
-  //     message: "No se hicieron cambios",
-  //     icon: "info",
-  //     timeout: 2500,
-  //   });
-  //   return;
-  // }
 
-
-    
-
-  let res;
-
-  if (p.value ) {
-    if (
-    nombre.value === infNombre.value && telefono.value === infTelefono.value 
-    && documento.value === infDocumento.value
-    && email.value === infEmail.value 
-    // && ficha.value 
-    // && Firma.value 
+  if (p.value === true && nombre.value == originalNombre && documento.value == originalDocumento
+    && email.value == originalEmail && telefono.value == originalTelefono && ficha.value == originalId_Ficha
+    // && Firma.value == originalFirma
   ) {
-    AbrirModal.value = true;
     Notify.create({
       color: "warning",
       message: "No se hicieron cambios",
       icon: "info",
-      timeout: 2500,
+      timeout: 2500
     });
-
     return;
   }
+  let res;
+
+  if (p.value === true) {
     if (Firma.value) { // Primero, subimos la firma si hay alguna seleccionada
       await cargarCloud();  // Aquí llamamos la función para subir la firma
     }
-
     res = await useAprendiz.editarAprendiz(id.value, nombre.value, telefono.value, documento.value, email.value, ficha.value, Firma.value)
   } else {
+
     if (!Firma.value) {
       console.log("No hay archivo para subir");
       return;
     }
-
     // Agregamos los datos  fromdata para guarda la información que se va guardando en la base de datos
     const formData = new FormData();
     formData.append('Nombre', nombre.value);
@@ -326,19 +312,7 @@ async function agregarAprendiz() {
     if (Firma.value) { // estamos validando la firma  para que la guarde en la nube de cloudinary
       formData.append('archivo', Firma.value);
     }
-
-
     res = await useAprendiz.registrarAprendiz(formData) //aca ponemos formdata donde anterior mente estamos guardando los datos de cada campo
-
-  //   if (formData) {
-  //     console.log("Archivo subido correctamente", res);
-  //     Notify.create({
-  //       color: 'positive',
-  //       message: 'Firma virtual subida correctamente',
-  //       icon: 'cloud_done'
-  //     });
-  //   }
-
   }
 
 
@@ -351,10 +325,6 @@ async function agregarAprendiz() {
   }
   await traer()
 }
-
-
-
-
 const handleFileChange = (file) => {
   if (file) {
     Firma.value = file;
@@ -399,116 +369,175 @@ async function cargarCloud() {
     });
   }
 }
-async function fetchData() {
-  const response = await fetch('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
-    headers: {
-      "x-token": UseUsuario.xtoken
-    }
-  })
-  options.value = await response.json()
-}
 
-fetchData()
 
+const options = ref([])
 const filterOptions = ref([])
 
+async function fetchData() {
+  try {
+    const response = await fetch('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
+      headers: {
+        "x-token": UseUsuario.xtoken
+      }
+    })
+    const allOptions = await response.json()
+    options.value = allOptions.filter(option => option.Estado === 1)
+    filterOptions.value = options.value
+  } catch (error) {
+    console.error('Error fetching fichas:', error)
+  }
+}
+fetchData()
 async function filterFunction(val, update) {
   if (val === '') {
-    console.log(val);
-
     update(() => {
-      filterOptions.value = options.value;
-
-    });
+      filterOptions.value = options.value
+    })
+    return
   }
 
   update(() => {
     const needle = val.toLowerCase()
-    filterOptions.value = options.value.filter(option => {
-      return option._id.toLowerCase().includes(needle)
-    })
+    filterOptions.value = options.value.filter(option =>
+      option.Codigo.toLowerCase().includes(needle) ||
+      option.Nombre.toLowerCase().includes(needle)
+    )
   })
 }
 
 
 
-function Abrir(row) {
-  AbrirModal.value = true;
-  p.value = true;
-  nombre.value = row.Nombre;
-  telefono.value = row.Telefono;
-  documento.value = row.Documento;
-  email.value = row.Email;
-  ficha.value = row.Id_Ficha;
-  id.value = row._id;
-  Firma.value = null; // Resetear firma seleccionada
-  previewUrl.value = ''; // Resetear vista previa
-  // Si el aprendiz tiene una firma existente, la mostramos
-  if (row.Firma) {
-    previewUrl.value = row.Firma;
-  }
-
-
-  infNombre.value = row.Nombre;
-  infTelefono.value = row.Telefono;
-  infDocumento.value = row.Documento;
-  infEmail.value = row.Email;
-  infFicha.val = row.Id_Ficha
-  infFirma.value = null
-
-}
-
-
-
-
+// async function Activar(id) {
+//   console.log(id);
+//   loading.value[id] = true
+//   try {
+//     inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`,{
+//       headers: {
+//         "x-token": UseUsuario.xtoken
+//       }})
+//     // inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`, {
+//     //   headers: {
+//     //     "x-token": UseUsuario.xtoken
+//     //   }
+//     // })
+//     Notify.create({
+//       color: 'positive',
+//       message: 'El aprendiz ha sido activado exitosamente',
+//       icon: 'check_circle',
+//       timeout: 2500
+//     })
+//     traer();
+//     return
+//   } catch (error) {
+//     console.log(error);
+//     Notify.create({
+//       color: 'negative',
+//       message: 'Error al activar el aprendiz',
+//       icon: 'error',
+//       timeout: 2500
+//     })
+//     return
+//   } finally {
+//     loading.value[id] = false
+//   }
+// }
 async function Activar(id) {
-  console.log(id);
-  loading.value[id] = true
-  try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`)
-    Notify.create({
-      color: 'positive',
-      message: 'El aprendiz ha sido activado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
-
-    traer();
-  } catch (error) {
-    console.log(error);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al activar el aprendiz',
-      icon: 'error',
-      timeout: 2500
-    })
-  } finally {
-    loading.value[id] = false
-  }
+    console.log(id);
+    loading.value[id] = true;
+    try {
+        inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`, {}, {
+            headers: {
+                "x-token": UseUsuario.xtoken // Token correcto en los headers
+            }
+        });
+        Notify.create({
+            color: 'positive',
+            message: 'El aprendiz ha sido activado exitosamente',
+            icon: 'check_circle',
+            timeout: 2500
+        });
+        traer();
+        return;
+    } catch (error) {
+        console.log(error);
+        Notify.create({
+            color: 'negative',
+            message: 'Error al activar el aprendiz',
+            icon: 'error',
+            timeout: 2500
+        });
+        return;
+    } finally {
+        loading.value[id] = false;
+    }
 }
+
+// async function Desactivar(id) {
+//   console.log(id);
+//   loading.value[id] = true
+//   try {
+//      inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`,{
+//       headers: {
+//         "x-token": UseUsuario.xtoken
+//       }})
+//     // inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Activar/${id}`, {
+//     //   headers: {
+//     //     "x-token": UseUsuario.xtoken
+//     //   }
+//     // })
+//     Notify.create({
+//       color: 'positive',
+//       message: 'El aprendiz ha sido inactivado exitosamente',
+//       icon: 'check_circle',
+//       timeout: 2500
+//     })
+//     traer();
+//     return
+
+//   } catch (error) {
+//     console.log(error);
+//     Notify.create({
+//       color: 'negative',
+//       message: 'Error al inactivar el aprendiz',
+//       icon: 'error',
+//       timeout: 2500
+//     })
+//     return
+//   } finally {
+//     loading.value[id] = false
+//   }
+// }
+
 async function Desactivar(id) {
-  console.log(id);
-  loading.value[id] = true
-  try {
-    inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`)
-    Notify.create({
-      color: 'positive',
-      message: 'El aprendiz ha sido inactivado exitosamente',
-      icon: 'check_circle',
-      timeout: 2500
-    })
-    traer();
-  } catch (error) {
-    console.log(error);
-    Notify.create({
-      color: 'negative',
-      message: 'Error al inactivar el aprendiz',
-      icon: 'error',
-      timeout: 2500
-    })
-  } finally {
-    loading.value[id] = false
-  }
+    console.log(id);
+    loading.value[id] = true;
+    try {
+        inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Desactivar/${id}`, {}, {
+            headers: {
+                "x-token": UseUsuario.xtoken // Colocar el token correctamente
+            }
+        });
+        Notify.create({
+            color: 'positive',
+            message: 'El aprendiz ha sido inactivado exitosamente',
+            icon: 'check_circle',
+            timeout: 2500
+        });
+        traer();
+        return;
+    } catch (error) {
+        console.log(error);
+        Notify.create({
+            color: 'negative',
+            message: 'Error al inactivar el aprendiz',
+            icon: 'error',
+            timeout: 2500
+        });
+        return;
+    } finally {
+        loading.value[id] = false;
+    }
 }
 
 const columns = ref([
@@ -517,7 +546,7 @@ const columns = ref([
   { name: 'Documento1', align: 'center', label: 'Documento', field: 'Documento', sortable: true },
   { name: 'Telefono', align: 'center', label: 'Teléfono', field: 'Telefono', sortable: true },
   { name: 'Email', align: 'center', label: 'Email', field: 'Email', sortable: true },
-  { name: 'Firma', label: 'Firma', field: 'Firma',align: 'center', sortable: true },
+  { name: 'Firma', label: 'Firma', field: 'Firma', sortable: true },
   { name: 'Estado1', label: 'Estado', field: 'Estado1', sortable: true },
   { name: 'opciones', label: 'Opciones' },
 ]);

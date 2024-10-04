@@ -49,16 +49,25 @@ export const UseInformeStore = defineStore("informes", () => {
 
 
             Bitacora.value = res.data;
+
+            // Bitacora.value = res.data;
+
             console.log('bitacora:', res.data);
-            console.log(Bitacora);
+            // console.log(Bitacora);
             console.log("Respuesta completa del servidor:", res);
+            Notify.create({
+                color: "positive",
+                message: "Búsqueda exitosa",
+                icon: "check_circle",
+                timeout: 2500,
+              });
             return res; // Devuelve las bitácoras para mostrarlas en la tabla
         } catch (error) {
             console.log('Error al obtener bitácoras', error);
             if (!UseUsuario.xtoken) {
                 Notify.create({
                     color: "warning",
-                    message: "Token no encontrado. Por favor inicia sesión.",
+                    message: error.response.data.errors[0].message,
                     icon: "warning",
                     timeout: 2500,
                 });

@@ -48,8 +48,15 @@
 </template>
 
 <script setup>
+
 import { ref, onBeforeMount, onUnmounted, computed } from "vue";
 import { UseInformeStore } from "../Stores/informes";
+import axios from "axios";// Importa el store correctamente
+
+const options = ref([]); 
+const ficha = ref(""); // Ficha seleccionada
+const fechaInicial = ref(""); // Fecha seleccionada
+// Inicializa el store
 
 const UseStore = UseInformeStore();
 const Bitacoras = ref([]);
