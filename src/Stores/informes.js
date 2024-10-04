@@ -11,7 +11,9 @@ import { UseUsuarioStore } from "./usuario.js";
 export const UseInformeStore = defineStore("informes", () => {
     const UseUsuario = UseUsuarioStore();
     let Bitacora = ref("");
-    let loading = ref(false); // Estado de carga
+    let loading = ref(false); 
+    let fichaSeleccionada = ref(""); // Nueva referencia para la ficha seleccionada
+    let fechaSeleccionada = ref("");
 
     const listarAprediz = async () => {
         loading.value = true; 
@@ -44,7 +46,12 @@ export const UseInformeStore = defineStore("informes", () => {
                 }
             });
 
+
+
+            Bitacora.value = res.data;
+
             // Bitacora.value = res.data;
+
             console.log('bitacora:', res.data);
             // console.log(Bitacora);
             console.log("Respuesta completa del servidor:", res);
@@ -71,11 +78,24 @@ export const UseInformeStore = defineStore("informes", () => {
         }
     };
 
+    const setFichaSeleccionada = (ficha) => {
+        fichaSeleccionada.value = ficha;
+    };
+
+    const setFechaSeleccionada = (fecha) => {
+        fechaSeleccionada.value = fecha;
+    };
+
+
     return {
         listarAprediz,
         obtenerBitacorasPorFichaYFecha,
         Bitacora,
-        loading 
+        loading,
+        fichaSeleccionada,
+        fechaSeleccionada,
+        setFichaSeleccionada,
+        setFechaSeleccionada
     };
 },
 {

@@ -26,17 +26,16 @@
       </tr>
       <!-- Filas de datos dinámicas -->
       <tr v-for="(fila, index) in fillRows()" :key="index">
-        <td>{{ index + 1 }}</td> <!-- Número de fila -->
-        <td>{{ fila.nombre || '' }}</td> <!-- Nombres y Apellidos -->
-        <td>{{ fila.documento || '' }}</td> <!-- Documento -->
-        <td>{{ fila.planta || '' }}</td> <!-- Planta -->
-        <td>{{ fila.contratista || '' }}</td> <!-- Contratista -->
-        <td>{{ fila.otro || '' }}</td> <!-- Otro -->
-        <td>{{ fila.dependencia || '' }}</td> <!-- Dependencia -->
-        <td>{{ fila.emailAprendiz || '' }}</td> <!-- Correo Electrónico -->
-        <td>{{ fila.telefonoAprendiz || '' }}</td> <!-- Teléfono -->
-        <td>{{ fila.autoriza || '' }}</td> <!-- Autoriza Grabación -->
-        <!-- Columna de Firma con imagen -->
+        <td>{{ index + 1 }}</td>
+        <td>{{ fila.nombre || '' }}</td>
+        <td>{{ fila.documento || '' }}</td>
+        <td>{{ fila.planta || '' }}</td>
+        <td>{{ fila.contratista || '' }}</td>
+        <td>{{ fila.otro || '' }}</td>
+        <td>{{ fila.dependencia || '' }}</td>
+        <td>{{ fila.emailAprendiz || '' }}</td>
+        <td>{{ fila.telefonoAprendiz || '' }}</td>
+        <td>{{ fila.autoriza || '' }}</td>
         <td>
           <div v-if="fila.firma">
             <img :src="fila.firma" alt="Firma" style="max-width: 100px; max-height: 100px;" />
@@ -49,29 +48,50 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from "vue";
-import { UseInformeStore } from "../Stores/informes"; 
+
+import { ref, onBeforeMount, onUnmounted, computed } from "vue";
+import { UseInformeStore } from "../Stores/informes";
 import axios from "axios";// Importa el store correctamente
 
 const options = ref([]); 
 const ficha = ref(""); // Ficha seleccionada
 const fechaInicial = ref(""); // Fecha seleccionada
 // Inicializa el store
+
 const UseStore = UseInformeStore();
+const Bitacoras = ref([]);
 
-// Ref para guardar los datos de Bitacoras
-const Bitacoras = ref([]); 
-
-// Variables para la ficha y la fecha
-
-
-// Cargar los datos de Bitacoras antes de montar el componente
-onBeforeMount(() => {
-  Bitacoras.value = UseStore.Bitacora; // Obtener los datos desde el store
-  console.log(Bitacoras.value); // Verificar los datos
+const ficha = computed(() => UseStore.fichaSeleccionada);
+const fechaSeleccionada = computed(() => {
+  return new Date(UseStore.fechaSeleccionada + 'T00:00:00'); // Asegúrate de que esté en el formato ISO
 });
 
-// Método para llenar filas hasta un total de 27
+// Computar los componentes de la fecha
+const fechaDia = computed(() => {
+  const fecha = new Date(fechaSeleccionada.value);
+  return fecha.getDate();
+});
+
+const fechaMes = computed(() => {
+  const meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+  const fecha = new Date(fechaSeleccionada.value);
+  return meses[fecha.getMonth()];
+});
+
+const fechaAnio = computed(() => {
+  const fecha = new Date(fechaSeleccionada.value);
+  return fecha.getFullYear();
+});
+
+onBeforeMount(() => {
+  Bitacoras.value = UseStore.Bitacora;
+});
+
+// Limpiar datos cuando el componente se desmonte
+onUnmounted(() => {
+  Bitacoras.value = [];
+});
+
 const fillRows = () => {
   const totalRows = 27;
   const emptyRow = {
@@ -79,12 +99,12 @@ const fillRows = () => {
     documento: '',
     planta: '',
     contratista: '',
-    otro: '',
+    otro: '', 
     dependencia: '',
     emailAprendiz: '',
     telefonoAprendiz: '',
     autoriza: '',
-    firma: '' // Aquí debe estar la URL de la firma si está disponible
+    firma: ''
   };
 
   return [...Bitacoras.value, ...Array(totalRows - Bitacoras.value.length).fill(emptyRow)];
@@ -100,7 +120,7 @@ const fillRows = () => {
 }
 
 table {
-  width: 80%;
+  width: 90%; /* Ajusta el ancho para mejor presentación */
   border-collapse: collapse;
   margin-top: 20px;
 }
@@ -117,18 +137,12 @@ th {
 }
 
 .title-row {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  text-align: center;
-}
-
-.subtitle-row {
-  font-size: 14px;
-  text-align: center;
 }
 
 .objective-row {
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
 }
 </style>
