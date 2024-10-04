@@ -29,7 +29,7 @@
 
           <!-- Botón de Iniciar Sesión centrado -->
           <q-card-actions align="center" class="text-primary">
-            <q-btn :loading="useUsuario.loading" class="custom-btn" @click="secionIniciada">
+            <q-btn   class="custom-btn" @click="secionIniciada">
               Iniciar sesión
             </q-btn>
           </q-card-actions>

@@ -8,40 +8,6 @@
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex">
 
-        <q-select
-          dense
-          v-model="ficha"
-          :options="filterOptions"
-          label="Id_Ficha"
-          color="green"
-          emit-value
-          map-options
-          option-label="formattedLabel"
-          option-value="Codigo"
-          use-input
-          @filter="filterONE"
-          class="custom-select"
-          use-chips
-        />
-
-        <input
-          type="date"
-          v-model="fechaInicial"
-          name="fechaInicial"
-          id="fechaInicial"
-        />
-
-        <q-btn
-          v-for="size in sizes"
-          :key="`btn_size_rd_${size}`"
-          rounded
-          color="green"
-          :size="size"
-          :label="size"
-          icon="print"
-          to="/Tabla"
-        />
-
         <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
           option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
           use-chips />
@@ -195,6 +161,9 @@ async function buscarAprendices() {
     return;
   }
 
+  UseStore.setFichaSeleccionada(ficha.value);
+  UseStore.setFechaSeleccionada(fechaInicial.value);
+
   console.log("Ficha seleccionada:", ficha.value);
   console.log("Fecha seleccionada:", fechaInicial.value);
   console.log(rows.value);
@@ -207,8 +176,9 @@ async function buscarAprendices() {
       fechaInicial.value
     );
 
-    if (res) {
-      rows.value = res.data; // Asigna directamente los datos a 'rows'
+    if (res && res.data && res.data.length > 0) {
+      // Asignar los datos a la tabla
+      rows.value = res.data;
       console.log(res);
 
       Notify.create({
@@ -218,13 +188,11 @@ async function buscarAprendices() {
         timeout: 2500,
       });
     } else {
-      // Si no hay datos, muestra un mensaje de error
-      console.error(
-        "No se encontraron datos para la ficha y fecha seleccionadas."
-      );
+      // Si no hay registros, mostrar la notificación
+      rows.value = []; // Limpiar la tabla
       Notify.create({
         color: "negative",
-        message: "No se encontraron datos para la ficha y fecha seleccionadas.",
+        message: "Ningún aprendiz asistió en la fecha seleccionada.",
         icon: "error",
         timeout: 2500,
       });
