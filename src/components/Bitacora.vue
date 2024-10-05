@@ -29,7 +29,7 @@
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
         <q-table :rows="rows" :columns="columns" row-key="name">
-          <template v-slot:body-cell-Estado="props">
+          <!-- <template v-slot:body-cell-Estado="props">
             <q-select v-model="props.row.Estado" :options="estadoOptions" :class="{
               'estado-asistio': props.row.Estado === 'Asistio',
               'estado-no-asistio': props.row.Estado === 'No Asistio',
@@ -37,7 +37,27 @@
               'estado-pendiente': props.row.Estado === 'Pendiente',
             }" label="Seleccione Estado" dense outlined @update:model-value="actualizarEstado(props.row)" emit-value
               map-options></q-select>
-          </template>
+          </template> -->
+
+          <template v-slot:body-cell-Estado="props">
+  <q-select
+    v-model="props.row.Estado"
+    :options="estadoOptions"
+    :class="{
+      'estado-asistio': props.row.Estado === 'Asistio',
+      'estado-no-asistio': props.row.Estado === 'No Asistio',
+      'estado-excusa': props.row.Estado === 'Excusa',
+      'estado-pendiente': props.row.Estado === 'Pendiente',
+    }"
+    label="Seleccione Estado"
+    dense
+    outlined
+
+    @update:model-value="() => actualizarEstado(props.row)"
+    emit-value
+    map-options
+  ></q-select>
+</template>
           <template v-slot:body-cell-Numero="props">
             <q-td :props="props">
               {{ props.pageIndex + 1 }}
@@ -121,7 +141,8 @@ async function filterONE(val, update) {
   update(() => {
     const needle = val.toLowerCase();
     filterOptions.value = options.value.filter((option) =>
-      option.Codigo.toLowerCase().includes(needle)
+    option.Codigo.toLowerCase().includes(needle) ||
+    option.Nombre.toLowerCase().includes(needle)
     );
   });
 }
@@ -190,7 +211,6 @@ async function Buscar() {
       fechaInicial.value,
       fechaFinal.value
     );
-
     console.log("Datos recibidos:", res.data);
     rows.value = res.data;
   } catch (error) {
@@ -202,8 +222,6 @@ async function Buscar() {
   }
 }
 
-
-
 async function actualizarEstado(row) {
   try {
     console.log("Estado enviado:", row.Estado); // Verifica el valor que estás enviando
@@ -213,9 +231,17 @@ async function actualizarEstado(row) {
         Estado: row.Estado,
       }
     );
-    rows.value = res.data;
+    // rows.value = res.data;
+    // Actualiza el estado localmente
+    const index = rows.value.findIndex(r => r._id === row._id);
+    if (index !== -1) {
+      rows.value[index].Estado = row.Estado; // Actualiza solo el estado de la fila modificada
+    }
     console.log("Estado actualizado:", res.data);
-    traer();
+    // traer();
+    // await Buscar()
+    // await traer()
+    
   } catch (error) {
     console.log("Error al actualizar el estado:", error);
   }
@@ -276,13 +302,6 @@ const columns = ref([
     field: "createdAt",
     sortable: true,
   },
-  // {
-  //   name: "Estado",
-  //   align: "center",
-  //   label: "Estado",
-  //   field: "Estado",
-  //   sortable: true,
-  // },
   {
     name: "Estado",
     align: "center",

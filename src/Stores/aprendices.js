@@ -58,20 +58,20 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
         }
     }
 
-    const editarAprendiz = async (id, nombre, telefono, documento, email, ficha, Firma) => {
+    const editarAprendiz = async (id, nombre, telefono1, documento, email1, ficha, Firma) => {
         loading.value = true
         try {
             let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Aprendiz/Actualizar/${id}`, {
                 Nombre: nombre,
-                Telefono: telefono,
+                Telefono: telefono1,
                 Documento: documento,
-                Email: email,
+                Email: email1,
                 Id_Ficha: ficha,
                 Firma: Firma
 
             }, {
                 headers: {
-                    "xtoken": UseUsuario.xtoken
+                    "x-token": UseUsuario.xtoken
                 }
             })
             Notify.create({
@@ -87,7 +87,7 @@ export const UseAprendizStore = defineStore("aprendiz", () => {
             // return error
             Notify.create({
                 color: "negative",
-                message: error.response.data.errors[0].msg,
+                message: error.response.data.errors[0].msg || error.response.data.message,
                 icon: "error",
                 timeout: 2500,
             })

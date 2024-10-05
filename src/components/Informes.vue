@@ -8,6 +8,7 @@
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex">
 
+
         <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
           option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
           use-chips />
@@ -122,7 +123,9 @@ async function filterONE(val, update) {
   update(() => {
     const needle = val.toLowerCase();
     filterOptions.value = options.value.filter((option) =>
-      option.Codigo.toLowerCase().includes(needle)
+    option.Codigo.toLowerCase().includes(needle) ||
+    option.Nombre.toLowerCase().includes(needle)
+
     );
   });
 }
@@ -150,6 +153,16 @@ async function buscarAprendices() {
     return;
   }
 
+  // if(!ficha.Estado == && !fechaInicial){
+  //   Notify.create({
+  //     color: "negative",
+  //     message: "Noy hay aprendices que asistieron en esa fecha.",
+  //     icon: "warning",
+  //     timeout: 2500,
+  //   });
+  //   return;
+  // }
+
   // Validar que la fecha no sea futura
   if (dayjs(fechaInicial.value).isAfter(dayjs())) {
     Notify.create({
@@ -176,17 +189,22 @@ async function buscarAprendices() {
       fechaInicial.value
     );
 
+
     if (res && res.data && res.data.length > 0) {
       // Asignar los datos a la tabla
       rows.value = res.data;
+
+    if (res.status === 200) {
+      rows.value = res.data; // Asigna directamente los datos a 'rows'
+
       console.log(res);
 
-      Notify.create({
-        color: "positive",
-        message: "Búsqueda exitosa",
-        icon: "check_circle",
-        timeout: 2500,
-      });
+      // Notify.create({
+      //   color: "positive",
+      //   message: "Búsqueda exitosa",
+      //   icon: "check_circle",
+      //   timeout: 2500,
+      // });
     } else {
       // Si no hay registros, mostrar la notificación
       rows.value = []; // Limpiar la tabla
@@ -201,7 +219,7 @@ async function buscarAprendices() {
     // Manejo de errores en la solicitud
     Notify.create({
       color: "negative",
-      message: "Error al buscar aprendices. Intenta de nuevo.",
+      message: error.response.data.errors[0].message,
       icon: "error",
       timeout: 2500,
     });
