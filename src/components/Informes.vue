@@ -207,7 +207,7 @@ async function buscarAprendices() {
     });
     console.error("Error al buscar aprendices:", error);
   }
-}
+}   
 
 const columns = ref([
   {
