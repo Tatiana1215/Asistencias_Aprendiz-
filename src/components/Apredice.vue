@@ -316,6 +316,9 @@ async function agregarAprendiz() {
   }
 
 
+
+
+
   if (res && res.status === 200) {
     AbrirModal.value = false;
     p.value = false
