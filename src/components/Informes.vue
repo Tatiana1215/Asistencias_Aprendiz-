@@ -18,7 +18,6 @@
 
         <q-btn v-for="size in sizes" :key="`btn_size_rd_${size}`" rounded color="green" :size="size" :label="`${size}`"
           icon="print" to="/Tabla" />
-
       </div>
     </div>
 
