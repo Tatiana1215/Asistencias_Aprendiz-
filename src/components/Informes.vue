@@ -21,6 +21,9 @@
       </div>
     </div>
 
+
+
+
     
     <q-card-actions align="center">
       <q-btn :loading="UseStore.loading" color="green" @click="buscarAprendices()">
