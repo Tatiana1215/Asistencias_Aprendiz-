@@ -14,6 +14,7 @@
           <q-btn to="/Login" icon="exit_to_app" label="Salir" @click="salir" />
         </q-toolbar>
       </q-header>
+      
 
       <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
         <div class="cuadroDespliegue">
