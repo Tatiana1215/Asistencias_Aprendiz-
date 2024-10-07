@@ -155,7 +155,7 @@ async function buscarAprendices() {
   if (dayjs(fechaInicial.value).isAfter(dayjs())) {
     Notify.create({
       color: "warning",
-      message: "La fecha no puede ser en el futuro.",
+      message: "La fecha no puede ser mayor a la actual.",
       icon: "warning",
       timeout: 2500,
     });
@@ -173,12 +173,39 @@ async function buscarAprendices() {
   // Continuar con la lógica de búsqueda de aprendices si la validación pasa
   // try {
     // Llamada a la función que devuelve directamente los datos (no res.data)
+    try {
     const res = await UseStore.obtenerBitacorasPorFichaYFecha(
       ficha.value,
       fechaInicial.value
     );
-    rows.value = res.data;
+
+    // Verificar si no hay datos en absoluto
+    if (!res.data || res.data.length === 0) {
+      Notify.create({
+        color: "info",
+        message: "No hay registros para la fecha y ficha seleccionadas.",
+        icon: "info",
+        timeout: 2500,
+      });
+      rows.value = [];
+      return;
+    }
+    // Actualizar los datos de la tabla con todos los registros
+    rows.value = res.data
+
+  } catch (error) {
+    console.error("Error al buscar aprendices:", error);
+    Notify.create({
+      color: "negative",
+      message: "No hay asistencias registradas.",
+      icon: "error",
+      timeout: 2500,
+    });
+  }
 }
+
+
+
 const columns = ref([
   {
     name: "Numero",
