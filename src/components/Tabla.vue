@@ -31,7 +31,8 @@
         <td>{{ fila.documento || '' }}</td>
         <td>{{ fila.planta || '' }}</td>
         <td>{{ fila.contratista || '' }}</td>
-        <td>{{ fila.otro ? 'Aprendiz' : '' }}</td>
+        <!-- <td>{{ fila.otro ? 'Aprendiz' : '' }}</td> -->
+        <td>{{ fila.nombre? 'Aprendiz' : '' }}</td>
         <td>{{ fila.nombre? 'SENA-CAT' :'' }}</td>
         <td>{{ fila.emailAprendiz || '' }}</td>
         <td>{{ fila.telefonoAprendiz || '' }}</td>
@@ -65,7 +66,7 @@ const ficha = computed(() => UseStore.fichaSeleccionada);
 const fechaSeleccionada = computed(() => {
   return new Date(UseStore.fechaSeleccionada + 'T00:00:00'); // Asegúrate de que esté en el formato ISO
 });
-
+console.log(UseStore.fichaSeleccionada)
 // Computar los componentes de la fecha
 const fechaDia = computed(() => {
   const fecha = new Date(fechaSeleccionada.value);

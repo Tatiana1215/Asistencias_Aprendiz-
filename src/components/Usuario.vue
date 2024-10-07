@@ -12,21 +12,20 @@
             {{ "Agregar Usuario" }}
           </div>
           <q-card-section>
-            <q-input color="green-8" v-model="nombre1" label="Nombre"
-              @keyup.enter="inicioSecion = false" />
-            <br />
-            <q-input color="green-8" v-model="email1" label="Email"
-              @keyup.enter="inicioSecion = false" />
-            <br />
-            <q-input color="green-8" v-model="password1" label="Password"
-              @keyup.enter="inicioSecion = false" />
-            <br />
+            <q-input color="green-8" v-model="nombre1" label="Nombre" @keyup.enter="inicioSecion = false" :rules="[
+              (val) => (val && val.length > 0) || 'El nombre es  obligatorio']" />
+
+            <q-input color="green-8" v-model="email1" label="Email" @keyup.enter="inicioSecion = false" :rules="[
+              (val) => (val && val.length > 0) || 'El email es obligatorio']" />
+
+            <q-input color="green-8" v-model="password1" label="Password" @keyup.enter="inicioSecion = false" :rules="[
+              (val) => (val && val.length > 0) || 'La contraseña es obligatoria']" />
           </q-card-section>
 
           <q-card-actions align="right">
             <q-btn flat label="Cancelar" color="red" v-close-popup />
             <q-btn :loading="UseUsuario.loading" label="Registrar" color="green" @click="registrar()">
-              
+
               <template v-slot:loading>
                 <q-spinner color="white" size="1em" />
               </template>
@@ -43,10 +42,10 @@
                 @click="Abrir(props.row), (AbrirModal = true)">
                 <q-icon name="edit" style="color: green" />
               </q-btn>
-              <q-btn icon="close" round color="red"  @click="Activar(props.row._id)"
-               :loading="loading[props.row._id]" v-if="props.row.Estado == 1" />
-              <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)" 
-               :loading="loading[props.row._id]"  v-else />
+              <q-btn icon="close" round color="red" @click="Activar(props.row._id)" :loading="loading[props.row._id]"
+                v-if="props.row.Estado == 1" />
+              <q-btn icon="check" round color="green" @click="Desactivar(props.row._id)"
+                :loading="loading[props.row._id]" v-else />
             </q-td>
           </template>
 
@@ -73,18 +72,18 @@
           </div>
 
           <q-card-section class="q-pt-none">
-            <q-input dense v-model="email" placeholder="Editar" autofocus color="green" @keyup.enter="prompt = false" />
-            <br />
+            <q-input color="green-8" v-model="nombre" placeholder=" Nombre" :rules="[
+              (val) => (val && val.length > 0) || 'El nombre es obligatorio']" />
+            <q-input color="green-8" v-model="email" label="Email" :rules="[
+              (val) => (val && val.length > 0) || 'El email obligatorio']" />
 
-            <q-input dense v-model="nombre" placeholder=" Nombre" autofocus color="green"
-              @keyup.enter="prompt = false" />
-            <br />
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
 
-            <q-btn label="Enviar" :loading="UseUsuario.loading" color="green" @click="EditarUsuario()">
+            <q-btn label="Enviar" :loading="UseUsuario.loading" color="green"
+              @click="EditarUsuario(), (AbrirModal2 = true)">
             </q-btn>
           </q-card-actions>
         </q-card>
@@ -166,7 +165,7 @@ async function EditarUsuario() {
   const noSpacesRegex = /^[^\s]+$/;
 
   // Verificar si los campos están vacíos
-  if (!trimNombre || !trimEmail ) {
+  if (!trimNombre || !trimEmail) {
     Notify.create({
       color: "negative",
       message: "Los campos no pueden estar vacíos",
@@ -178,8 +177,7 @@ async function EditarUsuario() {
 
   // Verificar si los campos contienen espacios
   if (
-    !noSpacesRegex.test(trimEmail) || !noSpacesRegex.test(trimNombre) 
-  ) {
+    !noSpacesRegex.test(trimEmail)) {
     Notify.create({
       color: "negative",
       message: "Los campos no pueden contener espacios en blanco",
@@ -220,7 +218,7 @@ async function registrar() {
   const noSpacesRegex = /^[^\s]+$/;
 
   // Verificar si los campos están vacíos
-  if ( !trimEmail || !trimPassword) {
+  if (!trimEmail || !trimPassword) {
     Notify.create({
       color: "negative",
       message: "Los campos no pueden estar vacíos",
@@ -314,7 +312,7 @@ async function Activar(id) {
   loading.value[id] = true
   try {
     await axios.put(`
-      https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Desactivar/${id}`,{},
+      https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Desactivar/${id}`, {},
       {
         headers: {
           "x-token": UseUsuario.xtoken,
@@ -336,7 +334,7 @@ async function Activar(id) {
       icon: 'error',
       timeout: 2500
     })
-  }finally{
+  } finally {
     loading.value[id] = false
   }
 }
@@ -345,7 +343,7 @@ async function Desactivar(id) {
   loading.value[id] = true
   try {
     await axios.put(
-    ` https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`,{},
+      ` https://aprendices-asistencia-bd-3.onrender.com/api/Usuario/Activar/${id}`, {},
       {
         headers: {
           "x-token": UseUsuario.xtoken,
@@ -367,7 +365,7 @@ async function Desactivar(id) {
       icon: 'error',
       timeout: 2500
     })
-  }finally{
+  } finally {
     loading.value[id] = false
   }
 }
