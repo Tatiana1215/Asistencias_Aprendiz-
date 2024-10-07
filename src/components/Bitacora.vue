@@ -193,7 +193,7 @@ async function Buscar() {
   if (fechaInicial.value > today || fechaFinal.value > today) {
     Notify.create({
       type: "negative",
-      message: "Las fechas no pueden ser futuras.",
+      message: "La fecha no puede ser mayor a la actual.",
     });
     return; // Detener la ejecución
   }

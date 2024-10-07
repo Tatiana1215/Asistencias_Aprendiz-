@@ -13,7 +13,7 @@
           OBJETIVO (S)
         </td>
         <td colspan="9" class="objective-content">
-          Registro de asistencia de la ficha {{ fichaSeleccionada }}
+          Registro de asistencia de la ficha {{ ficha }}
         </td>
       </tr>
       <!-- Encabezados de la tabla -->

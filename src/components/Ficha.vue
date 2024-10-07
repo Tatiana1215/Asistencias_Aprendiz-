@@ -58,7 +58,7 @@
             {{ p == true ? "Editar Ficha" : "Agregar Ficha" }}
           </div>
           <q-card-section class="q-pt-none">
-            <q-input color="green-8" v-model="codigo" label="Código":rules="[
+            <q-input color="green-8" v-model="codigo" label="Código" :rules="[
               (val) => (val && val.length > 0) || 'El código es obligatorio']"/>
             <q-input color="green-8" v-model="nombre" label="Nombre"  :rules="[
               (val) => (val && val.length > 0) || 'El nombre es obligatorio']"/>
@@ -155,17 +155,15 @@ async function CrearFicha() {
   }
 
   // Verificar que no haya espacios intermedios
-  if (!noSpacesRegex.test(trimmedCodigo)
-  ) {
+  if (/\s/.test(codigo.value)) {
     Notify.create({
       color: "negative",
-      message: "Los campos no pueden contener espacios en blanco",
+      message: "El código no puede contener espacios en blanco",
       icon: "error",
       timeout: 2500,
     });
     return;
   }
-
 
   if (
     p.value &&
