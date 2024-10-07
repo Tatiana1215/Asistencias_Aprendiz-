@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
 import { useQuasar, Notify } from "quasar";
-import { UseUsuarioStore } from "./usuario.js"; 
+import { UseUsuarioStore } from "./usuario.js";
 
 
 
@@ -10,13 +10,17 @@ import { UseUsuarioStore } from "./usuario.js";
 
 export const UseInformeStore = defineStore("informes", () => {
     const UseUsuario = UseUsuarioStore();
-    let Bitacora = ref("");
-    let loading = ref(false); 
-    let fichaSeleccionada = ref(""); // Nueva referencia para la ficha seleccionada
-    let fechaSeleccionada = ref("");
+    // let Bitacora = ref("");
+    // let loading = ref(false);
+    const Bitacora = ref([]);
+    const loading = ref(false);
+    // let fichaSeleccionada = ref(""); // Nueva referencia para la ficha seleccionada
+    // let fechaSeleccionada = ref("");
+    const fichaSeleccionada = ref("");
+    const fechaSeleccionada = ref("");
 
     const listarAprediz = async () => {
-        loading.value = true; 
+        loading.value = true;
         try {
             let res = await axios.get('https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/ListarTodo', {
                 headers: {
@@ -29,7 +33,7 @@ export const UseInformeStore = defineStore("informes", () => {
             console.log(error);
             return error;
         } finally {
-            loading.value = false; 
+            loading.value = false;
         }
     };
 
@@ -60,7 +64,7 @@ export const UseInformeStore = defineStore("informes", () => {
                 message: "Búsqueda exitosa",
                 icon: "check_circle",
                 timeout: 2500,
-              });
+            });
             return res; // Devuelve las bitácoras para mostrarlas en la tabla
         } catch (error) {
             console.log('Error al obtener bitácoras', error);
@@ -72,9 +76,9 @@ export const UseInformeStore = defineStore("informes", () => {
                     timeout: 2500,
                 });
             }
-            return ;
+            return;
         } finally {
-            loading.value = false; 
+            loading.value = false;
         }
     };
 
@@ -85,13 +89,13 @@ export const UseInformeStore = defineStore("informes", () => {
     const setFechaSeleccionada = (fecha) => {
         fechaSeleccionada.value = fecha;
 
-};
-        const limpiarDatos = () => {
-            Bitacora.value = "";
-            fichaSeleccionada.value = "";
-            fechaSeleccionada.value = "";
-        };
-    
+    };
+    const limpiarDatos = () => {
+        Bitacora.value = "";
+        fichaSeleccionada.value = "";
+        fechaSeleccionada.value = "";
+    };
+
 
 
     return {
@@ -106,6 +110,6 @@ export const UseInformeStore = defineStore("informes", () => {
         limpiarDatos
     };
 },
-{
-  persist: true,
-},);
+    {
+        persist: true,
+    },);

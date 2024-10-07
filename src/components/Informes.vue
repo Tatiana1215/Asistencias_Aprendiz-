@@ -12,7 +12,9 @@
 
         <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
           option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
-          use-chips />
+          use-chips  :rules="[
+                  (val) => !!val || 'La ficha es obligatoria'  //Asegúrese de que haya un archivo seleccionado
+                ]"  />
 
         <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
 
@@ -20,11 +22,6 @@
           icon="print" to="/Tabla" />
       </div>
     </div>
-
-
-
-
-    
     <q-card-actions align="center">
       <q-btn :loading="UseStore.loading" color="green" @click="buscarAprendices()">
         Buscar
@@ -59,14 +56,6 @@
           </template>
   </q-table>
       </div>
-    </div>
-
-    <div class="q-gutter-y-md column" style="max-width: 300px">
-      <q-input color="green-8" v-model="text" label="Label">
-        <!-- <template v-slot:prepend> -->
-          <!-- <q-icon name="event" /> -->
-        <!-- </template> -->
-      </q-input>
     </div>
   </div>
 </template>
@@ -176,6 +165,10 @@ async function buscarAprendices() {
   console.log("Ficha seleccionada:", ficha.value);
   console.log("Fecha seleccionada:", fechaInicial.value);
   console.log(rows.value);
+
+  // Guardar en el store
+  UseStore.setFichaSeleccionada(ficha.value);
+  UseStore.setFechaSeleccionada(fechaInicial.value);
 
   // Continuar con la lógica de búsqueda de aprendices si la validación pasa
   // try {

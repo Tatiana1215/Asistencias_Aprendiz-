@@ -67,22 +67,16 @@
             <q-input color="green-8" v-model="telefono" label="Telefono" :rules="[
               (val) => (val && val.length > 0) || 'El teléfono es obligatorio'
             ]" />
-
-            <br>
             <q-input color="green-8" v-model="documento" label="Documento" :rules="[
               (val) => (val && val.length > 0) || 'El Numero de Documento es obligatorio']" />
-
-            <br>
             <q-input color="green-8" v-model="email" label="Email" :rules="[
               (val) => (val && val.length > 0) || 'El Email es obligatorio']" />
 
-            <br>
             <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
               option-label="Codigo" option-value="_id" use-input @filter="filterFunction" class="custom-select"
               use-chips :rules="[
                 (val) => (val && val.length > 0) || 'El numero de Ficha es obligatorio'
               ]">
-
               <template v-slot:option="scope">
                 <q-item v-bind="scope.itemProps">
                   <q-item-section>
@@ -91,11 +85,10 @@
                 </q-item>
               </template>
             </q-select>
-
             <div class="file-upload">
               <q-file v-model="Firma" label="Firma Virtual (Opcional)" filled accept="image/*"
                 @update:model-value="handleFileChange" :rules="[
-                  (val) => !!val || 'La firma es obligatoria'  // Ensure a file is selected
+                  (val) => !!val || 'La firma es obligatoria'  //Asegúrese de que haya un archivo seleccionado
                 ]">
                 <template v-slot:prepend>
                   <q-icon name="attach_file" />
@@ -503,5 +496,8 @@ const columns = ref([
 img {
   max-width: 100%;
   height: auto;
+}
+.file-upload{
+  margin-top: 10px;
 }
 </style>

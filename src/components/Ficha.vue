@@ -58,10 +58,10 @@
             {{ p == true ? "Editar Ficha" : "Agregar Ficha" }}
           </div>
           <q-card-section class="q-pt-none">
-            <!-- <label for="codigo">Nombre</label> -->
-            <q-input color="green-8" v-model="nombre" label="Nombre"/>
-            <br />
-            <q-input color="green-8" v-model="codigo" label="Código" />
+            <q-input color="green-8" v-model="codigo" label="Código":rules="[
+              (val) => (val && val.length > 0) || 'El código es obligatorio']"/>
+            <q-input color="green-8" v-model="nombre" label="Nombre"  :rules="[
+              (val) => (val && val.length > 0) || 'El nombre es obligatorio']"/>
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">

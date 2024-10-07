@@ -10,8 +10,10 @@
       <div class="q-gutter-md inline-flex align-center">
 
         <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
-          option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
-          use-chips />
+          option-label="formattedLabel" option-value="Codigo" use-input  @clear="onFichaClear" @filter="filterONE" class="custom-select"
+          use-chips :rules="[
+                  (val) => !!val || 'La ficha es obligatoria'  //Asegúrese de que haya un archivo seleccionado
+                ]" />
 
         <div class="Fecha">
           <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
@@ -29,16 +31,6 @@
     <div class="q-pa-md q-gutter-sm">
       <div class="table">
         <q-table :rows="rows" :columns="columns" row-key="name">
-          <!-- <template v-slot:body-cell-Estado="props">
-            <q-select v-model="props.row.Estado" :options="estadoOptions" :class="{
-              'estado-asistio': props.row.Estado === 'Asistio',
-              'estado-no-asistio': props.row.Estado === 'No Asistio',
-              'estado-excusa': props.row.Estado === 'Excusa',
-              'estado-pendiente': props.row.Estado === 'Pendiente',
-            }" label="Seleccione Estado" dense outlined @update:model-value="actualizarEstado(props.row)" emit-value
-              map-options></q-select>
-          </template> -->
-
           <template v-slot:body-cell-Estado="props">
   <q-select
     v-model="props.row.Estado"
@@ -129,6 +121,8 @@ async function fetchData() {
   }
 }
 
+
+
 // Filtrar las fichas según el input del usuario
 async function filterONE(val, update) {
   if (val === "") {
@@ -151,6 +145,9 @@ async function filterONE(val, update) {
 async function traer() {
   let res = await UseBitacora.listar();
   rows.value = res.data;
+}
+async function onFichaClear(){
+ await traer()
 }
 
 async function Buscar() {
