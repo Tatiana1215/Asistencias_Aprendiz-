@@ -1,27 +1,33 @@
 <template>
   <div class="table-container">
     <table>
+      <!-- Encabezado del Acta -->
       <tr>
-        <th colspan="11" class="title-row">
-          REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No- 002 DEL DÍA {{ fechaDia }} DEL MES DE {{ fechaMes }} DEL AÑO {{ fechaAnio }}
-        </th>
+        <td colspan="11" class="title-row">
+          REGISTRO DE ASISTENCIA Y APROBACIÓN DEL ACTA No- ______ DEL DÍA {{ fechaDia }} DEL MES DE {{ fechaMes }} DEL AÑO {{ fechaAnio }}
+        </td>
       </tr>
+      <!-- Fila para Objetivo y contenido -->
       <tr>
-        <th colspan="11" class="objective-row">
-          OBJETIVO (S) Registro de asistencia de la ficha {{ ficha }}
-        </th>
+        <td colspan="2" class="objective-title">
+          OBJETIVO (S)
+        </td>
+        <td colspan="9" class="objective-content">
+          Registro de asistencia de la ficha {{ fichaSeleccionada }}
+        </td>
       </tr>
+      <!-- Encabezados de la tabla -->
       <tr>
-        <th>No.</th>
-        <th>NOMBRES Y APELLIDOS</th>
-        <th>No. DOCUMENTO</th>
+        <th class="small-column">No.</th>
+        <th class="nombre">NOMBRES Y APELLIDOS</th>
+        <th class="documento">No. DOCUMENTO</th>
         <th>PLANTA</th>
         <th>CONTRATISTA</th>
         <th>OTRO ¿CUAL?</th>
-        <th>DEPENDENCIA/EMPRESA</th>
-        <th>CORREO ELECTRÓNICO</th>
-        <th>TELÉFONO/EXT. SENA</th>
-        <th>AUTORIZA GRABACIÓN</th>
+        <th class="dependencia">DEPENDENCIA/ EMPRESA</th>
+        <th class="correo">CORREO ELECTRÓNICO</th>
+        <th class="telefono">TELÉFONO/EXT. SENA</th>
+        <th class="autoriza">AUTORIZA GRABACIÓN</th>
         <th>FIRMA O PARTICIPACIÓN VIRTUAL</th>
       </tr>
       <!-- Filas de datos dinámicas -->
@@ -111,37 +117,84 @@ const fillRows = () => {
 </script>
 
 <style scoped>
+
 .table-container {
-  width: 100%;
-  margin: 0 auto;
-  display: grid;
-  place-items: center;
+  width: 1200px; /* Tamaño fijo del contenedor */
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+  padding-top: 20px;
 }
 
 table {
-  width: 90%; /* Ajusta el ancho para mejor presentación */
+  width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
 th, td {
   border: 1px solid black;
-  padding: 10px;
+  padding: 8px;
   text-align: center;
-  font-size: 15px;
+  font-size: 12px;
 }
 
 th {
-  background-color: #f2f2f2;
+  font-size: 12px;
+  white-space: pre-line; /* Permite múltiples líneas en encabezados */
+  word-wrap: break-word; /* Permite que se ajusten palabras largas */
 }
 
 .title-row {
-  font-size: 18px;
+  height: 80px;
+  font-size: 14px;
   font-weight: bold;
+  text-align: center;
 }
 
-.objective-row {
-  font-size: 16px;
+.objective-title {
+  height: 50px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 10px;
+}
+
+.objective-content {
+  font-size: 12px;
   text-align: left;
+  padding-left: 10px;
+}
+
+.small-column {
+  width: 40px; /* Ancho fijo para la columna No. */
+}
+
+.nombre {
+  width: 150px; /* Ancho fijo para nombres y apellidos */
+}
+
+.documento {
+  width: 120px; /* Ancho fijo para documento */
+}
+
+.planta,
+.contratista,
+.dependencia {
+  width: 90px; /* Ancho fijo para estas columnas */
+}
+
+.correo {
+  width: 150px; /* Ancho fijo para el correo */
+}
+
+.telefono {
+  width: 140px; /* Ancho fijo para el teléfono */
+}
+
+.autoriza{
+  width: 100px;
+}
+
+.firma {
+  max-width: 80px; /* Tamaño máximo para la firma */
+  max-height: 80px;
 }
 </style>
