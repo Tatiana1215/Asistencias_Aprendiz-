@@ -147,8 +147,22 @@ async function traer() {
   rows.value = res.data;
 }
 async function onFichaClear(){
- await traer()
+  try {
+    // Llamamos a la función traer() que lista todos los aprendices
+    await traer();
+    Notify.create({
+      type: "positive",
+      message: "Todos los aprendices han sido listados.",
+    });
+  } catch (error) {
+    console.error("Error al listar los aprendices:", error);
+    Notify.create({
+      type: "negative",
+      message: "Hubo un error al listar los aprendices.",
+    });
+  }
 }
+
 
 async function Buscar() {
   // Verificar si la ficha está vacía
