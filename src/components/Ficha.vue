@@ -84,6 +84,7 @@ import axios from "axios";
 import { UseFichaStore } from "../Stores/fichas";
 import { Notify } from "quasar";
 import { UseUsuarioStore } from "../Stores/usuario";
+import { watch } from "vue";
 
 let inf = ref("");
 let AbrirModal = ref(false);
@@ -131,18 +132,34 @@ async function Abrir(row) {
 }
 
 function AbrirCrear() {
-  limpiarCampos();   // Limpiar campos antes de abrir el modal
+  limpiarCampos();
   AbrirModal.value = true;
-  p.value = false;   // Indica que es un nuevo registro, no una edición
+  p.value = false;
+  originalCodigo.value = "";
+  originalNombre.value = "";
 }
 
 
 async function CrearFicha() {
+
+  function limpiarNotificacionesSilenciosamente() {
+  const configuracionOriginal = { ...Notify.getDefaults() };
+  Notify.setDefaults({
+    type: 'dismiss',
+    message: 'all',
+    position: 'top-right',
+    timeout: 0,
+    color: 'white',
+    textColor: 'white',
+    actions: []
+  });
+  Notify.create();
+  Notify.setDefaults(configuracionOriginal);
+}
+
   const trimmedNombre = nombre.value.trim();
   const trimmedCodigo = codigo.value.trim();
 
-  // Validar que no haya solo espacios
-  const noSpacesRegex = /^\S+$/;
 
   if (!trimmedNombre || !trimmedCodigo) {
     Notify.create({
@@ -260,6 +277,7 @@ async function Desactivar(id) {
     loading.value[id] = false;
   }
 }
+
 
 const columns = ref([
   { name: "Numero", align: "center", label: "N°", field: "Numero" },
