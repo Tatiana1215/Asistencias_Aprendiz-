@@ -7,9 +7,6 @@
 
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex">
-
-     
-
         <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
           option-label="formattedLabel" option-value="Codigo" use-input @filter="filterONE" class="custom-select"
           use-chips  :rules="[

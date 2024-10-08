@@ -57,12 +57,12 @@ export const UseFichaStore = defineStore("ficha", () => {
             loading.value=false
         }
     }
-    const EditarFicha = async (id,nombre,codigo) => {
+    const EditarFicha = async (id,codigo,nombre) => {
         loading.value=true
         try {
             let inf = await axios.put(`https://aprendices-asistencia-bd-3.onrender.com/api/Ficha/Actualizar/${id}`,{
-                Nombre:nombre,
                 Codigo:codigo,
+                Nombre:nombre
             },{
                 headers:{
                     "x-token": UseUsuario.xtoken

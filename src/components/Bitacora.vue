@@ -9,11 +9,29 @@
     <div class="q-pa-md centered-row">
       <div class="q-gutter-md inline-flex align-center">
 
-        <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
+        <!-- <q-select dense v-model="ficha" :options="filterOptions" label="Ficha" color="green" emit-value map-options
           option-label="formattedLabel" option-value="Codigo" use-input  @clear="onFichaClear" @filter="filterONE" class="custom-select"
           use-chips :rules="[
                   (val) => !!val || 'La ficha es obligatoria'  //Asegúrese de que haya un archivo seleccionado
-                ]" />
+                ]" /> -->
+                <q-select
+          dense
+          v-model="ficha"
+          :options="filterOptions"
+          label="Ficha"
+          color="green"
+          emit-value
+          map-options
+          option-label="formattedLabel"
+          option-value="Codigo"
+          use-input 
+          clearable
+          @clear="onFichaClear" 
+          @filter="filterONE"
+          class="custom-select"
+          use-chips
+          :rules="[(val) => !!val || 'La ficha es obligatoria']"
+        />
 
         <div class="Fecha">
           <input type="date" v-model="fechaInicial" name="fechaInicial" id="fechaInicial" />
@@ -108,6 +126,10 @@ async function fetchData() {
       }
     );
     const data = res.data;
+
+
+    console.log("Datos recibidos de la API:", data); // Para verificar datos
+    
     const activeFichas = data.filter((ficha) => ficha.Estado === 1);
 
     activeFichas.forEach(ficha => {
@@ -121,6 +143,8 @@ async function fetchData() {
   }
 }
 
+
+// Método que se activa al hacer clic en 'x' para limpiar la selección
 
 
 // Filtrar las fichas según el input del usuario
@@ -146,9 +170,35 @@ async function traer() {
   let res = await UseBitacora.listar();
   rows.value = res.data;
 }
-async function onFichaClear(){
+
+
+async function onFichaClear() {
  await traer()
-}
+ console.log('clear:funcion activada',traer);
+   // ficha.value = ""; // Restablece el valor del modelo
+   // console.log('ficha después de limpiar:', ficha.value);
+ }
+//  function onFichaClear(){
+//   console.log("onFichaClear se ha llamado");
+//   try {
+//     // Llamamos a la función traer() que lista todos los aprendices
+//     // await traer();}
+//     console.log("Llamando a traer() para listar todos los aprendices...");
+//      traer();
+//     console.log("Todos los aprendices han sido listados.");
+//     Notify.create({
+//       type: "positive",
+//       message: "Todos los aprendices han sido listados.",
+//     });
+//   } catch (error) {
+//     console.error("Error al listar los aprendices:", error);
+//     Notify.create({
+//       type: "negative",
+//       message: "Hubo un error al listar los aprendices.",
+//     });
+//   }
+// }
+
 
 async function Buscar() {
   // Verificar si la ficha está vacía
@@ -396,4 +446,8 @@ const columns = ref([
 .estado-pendiente {
   background-color: rgb(253, 230, 83);
 }
+.no-clear .q-field__append .q-icon {
+  display: none;
+}
+
 </style>

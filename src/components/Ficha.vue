@@ -60,6 +60,7 @@
           <q-card-section class="q-pt-none">
             <q-input color="green-8" v-model="codigo" label="Código" :rules="[
               (val) => (val && val.length > 0) || 'El código es obligatorio']"/>
+
             <q-input color="green-8" v-model="nombre" label="Nombre"  :rules="[
               (val) => (val && val.length > 0) || 'El nombre es obligatorio']"/>
           </q-card-section>
@@ -199,10 +200,10 @@ async function CrearFicha() {
   let res;
   if (p.value === true) {
     // Editar ficha
-    res = await useFicha.EditarFicha(id.value, trimmedNombre, trimmedCodigo);
+    res = await useFicha.EditarFicha(id.value,trimmedCodigo, trimmedNombre);
   } else {
     // Crear nueva ficha
-    res = await useFicha.crearFicha(trimmedNombre, trimmedCodigo);
+    res = await useFicha.crearFicha(trimmedCodigo, trimmedNombre);
   }
 
   // Verificar el estado de la respuesta
