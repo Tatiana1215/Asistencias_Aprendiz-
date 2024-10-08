@@ -83,7 +83,7 @@
             <q-btn flat label="Cancelar" @click="p = false" color="red" v-close-popup />
 
             <q-btn label="Enviar" :loading="UseUsuario.loading" color="green"
-              @click="EditarUsuario(), (AbrirModal2 = true)">
+              @click="EditarUsuario()">
             </q-btn>
           </q-card-actions>
         </q-card>
@@ -192,7 +192,7 @@ async function EditarUsuario() {
     nombre.value,
     email.value
   );
-  if (res) {
+  if (res && res.status === 200) {
     AbrirModal.value = false;
     limpiarCampos();
     await traer();
@@ -210,6 +210,8 @@ function limpiarCampos2() {
 
 
 //Registro de usuario
+
+
 async function registrar() {
   const trimEmail = email1.value.trim();
   const trimPassword = password1.value.trim();
@@ -250,13 +252,68 @@ async function registrar() {
   );
 
   if (registroUsuario && registroUsuario.status === 200) {
-    AbrirModal2.value = false;
+    console.log("Registro exitoso"); // Mensaje de depuración
+    AbrirModal2.value = false; // Cerrar el modal
     limpiarCampos2(); // Limpiar campos tras un registro exitoso
     await traer(); // Actualizar la lista de usuarios
   } else {
+    console.log("Error en el registro"); // Mensaje de depuración
+    Notify.create({
+      color: "negative",
+      message: "Error al registrar usuario",
+      icon: "error",
+      timeout: 2500,
+    });
     AbrirModal2.value = true;
   }
 }
+// async function registrar() {
+//   const trimEmail = email1.value.trim();
+//   const trimPassword = password1.value.trim();
+
+//   // Regex para evitar cualquier espacio dentro de los campos
+//   const noSpacesRegex = /^[^\s]+$/;
+
+//   // Verificar si los campos están vacíos
+//   if (!trimEmail || !trimPassword) {
+//     Notify.create({
+//       color: "negative",
+//       message: "Los campos no pueden estar vacíos",
+//       icon: "error",
+//       timeout: 2500,
+//     });
+//     return;
+//   }
+
+//   // Verificar si los campos contienen espacios
+//   if (
+//     !noSpacesRegex.test(trimEmail) ||
+//     !noSpacesRegex.test(trimPassword)
+//   ) {
+//     Notify.create({
+//       color: "negative",
+//       message: "Los campos no pueden contener espacios en blanco",
+//       icon: "error",
+//       timeout: 2500,
+//     });
+//     return;
+//   }
+
+//   // Proceder con el registro del usuario
+//   let registroUsuario = await UseUsuario.registrar(
+//     nombre1.value, // Usar los valores ya recortados
+//     email1.value,
+//     password1.value
+//   );
+
+//   if (registroUsuario && registroUsuario.status === 200) {
+//     AbrirModal2.value = false;
+//     limpiarCampos2(); // Limpiar campos tras un registro exitoso
+//     await traer(); // Actualizar la lista de usuarios
+//   } else {
+//     AbrirModal2.value = true;
+//   }
+// }
 
 //Registro de usuario
 // async function registrar() {
